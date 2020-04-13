@@ -18,7 +18,7 @@ $(OBJ_DIR)/documentary.o: $(SRC_DIR)/documentary.c
 		gcc -Wall -Wextra -c  $(SRC_DIR)/documentary.c -o  $(OBJ_DIR)/documentary.o  $(FLAGS)
 
 $(OBJ_DIR)/handler.o: $(SRC_DIR)/handler.c
-	gcc -Wall -Wextra -c  $(SRC_DIR)/processing.c -o  $(OBJ_DIR)/processing.o $(FLAGS)
+	gcc -Wall -Wextra -c  $(SRC_DIR)/handler.c -o  $(OBJ_DIR)/handler.o $(FLAGS)
 
 $(BIN_DIR)/testing: $(OBJ_TEST_DIR)/main.o $(OBJ_TEST_DIR)/handler_test.o $(OBJ_TEST_DIR)/documentary_test.o $(OBJ_DIR)/documentary.o $(OBJ_DIR)/handler.o
 	gcc   $(OBJ_TEST_DIR)/main.o  $(OBJ_TEST_DIR)/documentary_test.o  $(OBJ_TEST_DIR)/handler_test.o $(OBJ_DIR)/documentary.o $(OBJ_DIR)/handler.o -o $(BIN_DIR)/testing  $(FLAG)
