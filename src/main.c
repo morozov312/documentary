@@ -17,5 +17,6 @@ int main()
         }
     }
     paths = path_reading(path, paths);
+    document_handle(paths);
     return 0;
 }
