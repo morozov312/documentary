@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #define N 3
-char* expansion_handle(char str[])
+char* expansion_handle(char str[])// need testuing
 {
     int max_len_expan = 4;
     char* temp = (char*)malloc(max_len_expan * sizeof(char));
     int counter = 0;
-    for (int i = 1; str[i] != '\0'; i++) {
+    for (int i = 1; str[i] != '\0'; i++) {// need fixed
         if (str[i] == '.') {
             counter++;
             unsigned long int j = 0;
@@ -25,7 +25,7 @@ char* expansion_handle(char str[])
         return 0;
     }
 }
-int expan_check(char str[])
+int expan_check(char str[])// need testing
 {
     int bool = 0;
     // doing code
@@ -49,7 +49,6 @@ char** path_reading(char path[], char** paths)
     const int max_quan_str = 100;
     int quan_str = 0;
     int num_valid_path = 0;
-
     while (quan_str < max_quan_str) {
         quan_str++;
         temp = (char*)malloc(max_len_inp_str * sizeof(char));
@@ -72,4 +71,20 @@ char** path_reading(char path[], char** paths)
     }
     fclose(myfile);
     return paths;
+}
+int single_comment_check(){
+    // doing code,if str have single comment return 1
+    // if have a nested comments printf error 
+    // need testing
+    return 0;
+}
+int muitiline_comment_begin_check(){
+    // doing code
+    // need testing
+    return 0;
+}
+int muitiline_comment_end_check(){
+    // doing code
+    // need testing
+    return 0;
 }
