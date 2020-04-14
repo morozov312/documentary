@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+<<<<<<< HEAD
 #include <string.h>
 
 #define N 3
@@ -26,3 +27,30 @@ char* expansion_handle(char str[])
         return 0;
     }
 }
+=======
+int path_reading()
+{
+    FILE* myfile;
+    myfile = fopen("./path/path.txt", "r");
+    if (myfile == NULL) {
+        printf("File open error!");
+        return 0;
+    }
+    char *temp, *ptrFile;
+    while (1) {
+        temp = (char*)malloc(1000 * sizeof(char));
+        ptrFile = fgets(temp, 1000, myfile);
+        if (ptrFile == NULL) {
+            if (feof(myfile) != 0) {
+                break;
+            } else {
+                continue;
+            }
+        }
+        printf("%s\n", temp);
+    }
+
+    fclose(myfile);
+    return 0;
+}
+>>>>>>> 20c19b24cd61b5c506b4b01bfaaf130c86bc0ded
