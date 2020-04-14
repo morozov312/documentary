@@ -1,1 +1,1 @@
-../example/ComponentDemo.h
+./example/ComponentDemo.h
