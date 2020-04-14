@@ -91,6 +91,7 @@ int muitiline_comment_end_check()
     // need testing
     return 0;
 }
+// create a way to get comments and code blocks !!!)))
 int document_handle(char** paths)
 {
     int quan_of_paths = sizeof(paths) / sizeof(paths[0]);
