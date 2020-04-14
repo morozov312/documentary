@@ -2,7 +2,3 @@
 *.html
 bin/testing
 bin/documentary
-example/*.c
-example/*.cpp
-example/*.cp
-example/*.h
