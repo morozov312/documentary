@@ -4,8 +4,8 @@
 #define N 3
 char* expansion_handle(char str[])
 {
-    int max_len_expan=4;
-    char* temp=(char*)malloc(max_len_expan*sizeof(char));
+    int max_len_expan = 4;
+    char* temp = (char*)malloc(max_len_expan * sizeof(char));
     int counter = 0;
     for (int i = 1; str[i] != '\0'; i++) {
         if (str[i] == '.') {
@@ -25,20 +25,33 @@ char* expansion_handle(char str[])
         return 0;
     }
 }
-int path_reading()
+int expan_check(char str[])
+{
+    int bool = 0;
+    // doing code
+    if (bool) {
+        return 0;
+    } else {
+        return 1;
+    }
+    return 0;
+}
+char** path_reading(char path[], char** paths)
 {
     FILE* myfile;
-    myfile = fopen("./path/path.txt", "r");
+    myfile = fopen(path, "r");
     if (myfile == NULL) {
         printf("File path.txt not found!");
         return 0;
     }
     char *temp, *ptrFile;
-    int max_len_inp_str=1000;
-    int max_quan_str=100;
-    int i=0;
-    while (i<max_quan_str) {
-        i++;
+    const int max_len_inp_str = 1000;
+    const int max_quan_str = 100;
+    int quan_str = 0;
+    int num_valid_path = 0;
+
+    while (quan_str < max_quan_str) {
+        quan_str++;
         temp = (char*)malloc(max_len_inp_str * sizeof(char));
         ptrFile = fgets(temp, max_len_inp_str, myfile);
         if (ptrFile == NULL) {
@@ -48,10 +61,15 @@ int path_reading()
                 continue;
             }
         }
-        temp=expansion_handle(temp);
-        printf("%s\n", temp);
+        int check = expan_check(expansion_handle(temp));
+        if (check) {
+            paths[num_valid_path] = temp;
+            num_valid_path++;
+        } else {
+            printf("%s%s\n", "Error, unsupported format file on ", temp);
+            continue;
+        }
     }
-
     fclose(myfile);
-    return 0;
+    return paths;
 }
