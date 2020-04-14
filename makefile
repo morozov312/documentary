@@ -15,7 +15,7 @@ $(OBJ_DIR)/main.o: $(SRC_DIR)/main.c
 	gcc -Wall -Wextra -c  $(SRC_DIR)/main.c -o  $(OBJ_DIR)/main.o $(FLAGS)
 
 $(OBJ_DIR)/documentary.o: $(SRC_DIR)/documentary.c
-		gcc -Wall -Wextra -c  $(SRC_DIR)/documentary.c -o  $(OBJ_DIR)/documentary.o  $(FLAGS)
+	gcc -Wall -Wextra -c  $(SRC_DIR)/documentary.c -o  $(OBJ_DIR)/documentary.o  $(FLAGS)
 
 $(OBJ_DIR)/handler.o: $(SRC_DIR)/handler.c
 	gcc -Wall -Wextra -c  $(SRC_DIR)/handler.c -o  $(OBJ_DIR)/handler.o $(FLAGS)
@@ -44,5 +44,4 @@ run:
 check: 
 	$(BIN_DIR)/testing
 
-rebuild:
-	clean all
+rebuild:clean all
