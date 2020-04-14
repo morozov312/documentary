@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-<<<<<<< HEAD
 #include <string.h>
 
 #define N 3
@@ -27,7 +26,6 @@ char* expansion_handle(char str[])
         return 0;
     }
 }
-=======
 int path_reading()
 {
     FILE* myfile;
@@ -53,4 +51,3 @@ int path_reading()
     fclose(myfile);
     return 0;
 }
->>>>>>> 20c19b24cd61b5c506b4b01bfaaf130c86bc0ded
