@@ -1,19 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #define N 3
-
 char* expansion_handle(char str[])
 {
-    char temp[4];
+    int max_len=4;
+    char* temp=(char*)malloc(max_len*sizeof(char));
     int counter = 0;
-    for (int i = 0; str[i] != "\0"; i++) {
-        if (str[i] == ".") {
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (str[i] == '.') {
             counter++;
             int j = 0;
             int k = i + 1;
-            while (j <= 4) {
+            while (j <= strlen(temp)) {
                 temp[j] = str[k];
                 k++;
                 j++;
