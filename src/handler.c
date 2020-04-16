@@ -2,28 +2,35 @@
 #include <stdlib.h>
 #include <string.h>
 #define N 3
-char* expansion_handle(char str[]) // need testuing
+#define max_len_expan 4
+
+char* expansion_handle(char str[])
 {
-    int max_len_expan = 4;
-    char* temp = (char*)malloc(max_len_expan * sizeof(char));
-    int counter = 0;
-    for (int i = 1; str[i] != '\0'; i++) { // need fixed
-        if (str[i] == '.') {
-            counter++;
-            unsigned long int j = 0;
-            int k = i + 1;
-            while (j <= strlen(temp)) {
-                temp[j] = str[k];
-                k++;
-                j++;
-            }
+    int str_len = strlen(str);
+    char temp[max_len_expan];
+    char* temp_reversed = (char*)malloc(max_len_expan * sizeof(char));
+    for (int i = 0; i < str_len; i++) {
+        if (str[i] == '#' || str[i] == '&' || str[i] == '?' || str[i] == '!'
+            || str[i] == '$' || str[i] == '@' || str[i] == '*') {
+            return 0;
         }
     }
-    if (counter == 1) {
-        return temp;
-    } else {
-        return 0;
+    int j = 0;
+    for (int i = str_len - 1; i > 0; i--) {
+        if (str[i] == '.') {
+            break;
+        }
+        temp[j] = str[i];
+        j++;
     }
+    int k = 0;
+    char buff = 0;
+    for (int i = max_len_expan - 2; i >= 0; i--) {
+        buff = temp[i];
+        temp_reversed[k] = buff;
+        k++;
+    }
+    return temp_reversed;
 }
 int expan_check(char str[]) // need testing
 {
