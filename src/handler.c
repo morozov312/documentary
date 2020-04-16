@@ -72,11 +72,22 @@ char** path_reading(char path[], char** paths)
     fclose(myfile);
     return paths;
 }
-int single_comment_check()
+int single_comment_check(char str[])
 {
-    // doing code,if str have single comment return 1
-    // if have a nested comments printf error
-    // need testing
+    int len = strlen(str);
+    int flag = 0;
+    for (int i = 0; i < len; i++) {
+        if (str[i] == '/' && str[i + 1] == '/') {
+            flag++;
+        }
+    }
+    if (flag == 1) {
+        return 1;
+    }
+    if (flag > 1) {
+        printf("%s", "Error,don't use nested comments");
+        return 0;
+    }
     return 0;
 }
 int muitiline_comment_begin_check()
