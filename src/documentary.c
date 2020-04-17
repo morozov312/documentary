@@ -1,10 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-int del_single_comment()
+char* del_single_comment(char* str)
 {
     // may be on '//' symbols writing ' '
-    return 0;
+    for (int i = 0; i < strlen(str); i++) {
+        if (str[i] == '/' && str[i + 1] == '/') {
+            str[i] = ' ';
+            str[i + 1] = ' ';
+            break;
+        }
+    }
+    return str;
 }
 int del_multiline_comment_begin()
 {
