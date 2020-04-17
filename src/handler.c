@@ -135,34 +135,43 @@ int muitiline_comment_end_check(char str[])
     }
     return 0;
 }
-int document_handle(char** paths)
+char** document_handle(char* paths)
 {
-    int quan_of_paths = sizeof(paths) / sizeof(paths[0]);
-    for (int i = 0; i < quan_of_paths; i++) {
-        FILE* myfile;
-        myfile = fopen(paths[i], "r");
-        if (myfile == NULL) {
-            printf("%s%s%s\n", "On path ", paths[i], " file not found!");
-            return 0;
-        }
-        char *temp, *ptrFile;
-        const int max_len_inp_str = 1000;
-        const int max_quan_str = 100 * 1000;
-        int quan_str = 0;
-        while (quan_str < max_quan_str) {
-            quan_str++;
-            temp = (char*)malloc(max_len_inp_str * sizeof(char));
-            ptrFile = fgets(temp, max_len_inp_str, myfile);
-            if (ptrFile == NULL) {
-                if (feof(myfile) != 0) {
-                    break;
-                } else {
-                    continue;
-                }
-            }
-            printf("%s\n", temp);
-        }
-        fclose(myfile);
+    FILE* myfile;
+    myfile = fopen(paths, "r");
+    if (myfile == NULL) {
+        printf("%s%s%s\n", "On path ", paths, " file not found!");
+        return 0;
     }
-    return 0;
+    char *temp, *ptrFile;
+    const int max_len_inp_str = 1000;
+    const int max_quan_str = 100 * 1000;
+    int quan_str = 0;
+    char** data = (char**)malloc(max_quan_str * sizeof(char*));
+    for (int i = 0; i < max_quan_str; i++) {
+        data[i] = (char*)malloc(max_len_inp_str * sizeof(char));
+    }
+    for (int i = 0; i < max_quan_str; i++) {
+        for (int j = 0; j < max_len_inp_str; j++) {
+            data[i][j] = 0;
+        }
+    }
+    while (quan_str < max_quan_str) {
+        temp = (char*)malloc(max_len_inp_str * sizeof(char));
+        ptrFile = fgets(temp, max_len_inp_str, myfile);
+        if (ptrFile == NULL) {
+            if (feof(myfile) != 0) {
+                break;
+            } else {
+                continue;
+            }
+        }
+        if (strlen(temp) == 0) {
+            continue;
+        }
+        data[quan_str]=temp;
+        quan_str++;
+    }
+    fclose(myfile);
+    return data;
 }

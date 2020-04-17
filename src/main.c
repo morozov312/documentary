@@ -17,7 +17,12 @@ int main()
         }
     }
     paths = path_reading(path, paths);
-    document_handle(paths);
+    int quan_of_paths = sizeof(paths) / sizeof(paths[0]);
+    char** file_data;
+    for (int i = 0; i < quan_of_paths; i++) {
+        file_data = document_handle(paths[i]);
+        // html
+    }
     for (int i = 0; i < max_quan_str; i++) {
         free(paths[i]);
     }
