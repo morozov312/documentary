@@ -22,22 +22,38 @@ char* del_single_comment(char* str)
     }
     return str;
 }
-int del_multiline_comment_begin()
+char* del_multiline_comment_begin(char str[])
 {
-    // may be on '/*' symbols writing ' '
-    return 0;
+    for (int i = 0; str[i] != '\0'; i++) {
+        if(str[i] =='/' && str[i+1] =='*'){
+            str[i] =' ';
+            str[i+1]=' ';
+        }
+    }
+    return str;
 }
-int del_multiline_comment_end()
+char*  del_multiline_comment_end(char str[])
 {
-    // may be on '*/' symbols writing ' '
-    return 0;
+    for (int i = 0; str[i] != '\0'; i++) {
+        if(str[i] =='/' && str[i+1] =='*'){
+            str[i] =' ';
+            str[i+1]=' ';
+        }
+    }
+    return str;
 }
-int del_multiline_comment_stars()
+char* del_multiline_comment_stars(char str[])
 {
-    // may be on '*' symbols writing ' '
-    // often in multiline comments strings begining with *
-    // must be del only first star on string
-    return 0;
+    int flag=0;
+    for (int i = 0; str[i] != '\0'; i++) {
+        if(str[i] != ' ' && str[i] != '*'){
+            flag ++;
+        }
+        if(str[i] =='*' && !flag){
+            str[i] =' ';
+        }
+    }
+    return str;
 }
 
 char* file_name_generator(char* path) // not finished
