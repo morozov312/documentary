@@ -95,7 +95,7 @@ int single_comment_check(char str[])
     }
     if (flag > 1) {
         printf("%s", "Error,don't use nested comments");
-        return 0;
+        return -1;
     }
     return 0;
 }
