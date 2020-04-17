@@ -37,3 +37,22 @@ CTEST(handle, expansion_handler)
     ASSERT_STR(exception_second, res_second);
     ASSERT_STR(exception_third, res_third);
 }
+
+CTEST(handle, expantion_check)
+{
+    // Given
+    const char str_first[] = "./myprogram/main.cpp";
+    const char str_second[] = "./src/grab.h";
+    const char str_third[] = "nothing";
+    // When
+    int res_first = expan_check(str_first);
+    int res_second = expan_check(str_second);
+    int res_third = expan_check(str_third);
+    // Then
+    int exception_first = 1;
+    int exception_second = 1;
+    int exception_third = 0;
+    ASSERT_EQUAL(res_first,exception_first);
+    ASSERT_EQUAL(res_second,exception_second);
+    ASSERT_EQUAL(res_third, exception_third);
+}
