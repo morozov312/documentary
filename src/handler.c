@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define N 3
-
 char* expansion_handle(char str[])
 {
     int max_len_expan = 4;
@@ -47,7 +45,7 @@ char** path_reading(char path[], char** paths)
     myfile = fopen(path, "r");
     if (myfile == NULL) {
         printf("File path.txt not found!");
-        return 0;
+        return paths;
     }
     char *temp, *ptrFile;
     const int max_len_inp_str = 1000;
@@ -65,7 +63,13 @@ char** path_reading(char path[], char** paths)
                 continue;
             }
         }
-        int check = expan_check(expansion_handle(temp));
+        int inp_str_len = strlen(temp) + 1;
+        for (int i = 0; i < inp_str_len; i++) {
+            if (temp[i] == '\n') {
+                temp[i] = '\0';
+            }
+        }
+        int check = expan_check(temp);
         if (check) {
             paths[num_valid_path] = temp;
             num_valid_path++;
@@ -131,7 +135,6 @@ int muitiline_comment_end_check(char str[])
     }
     return 0;
 }
-// create a way to get comments and code blocks !!!)))
 int document_handle(char** paths)
 {
     int quan_of_paths = sizeof(paths) / sizeof(paths[0]);
@@ -143,8 +146,8 @@ int document_handle(char** paths)
             return 0;
         }
         char *temp, *ptrFile;
-        const int max_len_inp_str = 100 * 1000;
-        const int max_quan_str = 1000 * 1000;
+        const int max_len_inp_str = 1000;
+        const int max_quan_str = 100 * 1000;
         int quan_str = 0;
         while (quan_str < max_quan_str) {
             quan_str++;
