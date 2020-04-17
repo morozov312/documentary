@@ -54,7 +54,8 @@ CTEST(documentary, del_multiline_comment_begin)
     char* res_fourth = del_multiline_comment_begin(str_fourth);
     // Then
     char exp_first[] = "    comment begin ";
-    char exp_second[] = " not comment";;
+    char exp_second[] = " not comment";
+    ;
     char exp_thrid[] = "    comment     nested";
     char exp_fourth[] = "   comment */";
     ASSERT_STR(res_first, exp_first);

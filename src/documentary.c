@@ -3,13 +3,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-
 struct comment {
     int type; // 0 - single comment , 1 - multiline comment
     char** comment_data;
     char* code_temp_string;
 };
-
 char* del_single_comment(char* str)
 {
     // may be on '//' symbols writing ' '
@@ -55,7 +53,6 @@ char* del_multiline_comment_stars(char str[])
     }
     return str;
 }
-
 char* file_name_generator(char* path) // not finished
 {
     int last_index;
@@ -77,7 +74,6 @@ char* file_name_generator(char* path) // not finished
         }
     }
 }
-
 int docs_gen(char** array, char* path) // not finished
 {
     int count_of_lines;
@@ -92,7 +88,7 @@ int docs_gen(char** array, char* path) // not finished
     int struct_line_number = 0;
     for (int i = 0; i < count_of_lines; i++) {
         if (single_comment_check(array[i]) == -1) { // switch for more cases
-            continue;
+            break;
         } else if (single_comment_check(array[i]) == 1) {
             temp_array[struct_line_number] = del_single_comment(array[i]);
             comments_array[struct_line_number].type = 0;
