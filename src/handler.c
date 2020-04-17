@@ -1,45 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define N 3
-#define max_len_expan 4
 char* expansion_handle(char str[])
 {
-    int str_len = strlen(str);
-    char temp[max_len_expan];
-    char* temp_reversed = (char*)malloc(max_len_expan * sizeof(char));
-    for (int i = 0; i < str_len; i++) {
-        if (str[i] == '#' || str[i] == '&' || str[i] == '?' || str[i] == '!'
-            || str[i] == '$' || str[i] == '@' || str[i] == '*') {
-            return 0;
-        }
-    }
-    int j = 0;
-    for (int i = str_len - 1; i > 0; i--) {
-        if (str[i] == '.') {
-            break;
-        }
-        temp[j] = str[i];
-        j++;
-    }
-    int k = 0;
-    char buff = 0;
-    for (int i = max_len_expan - 2; i >= 0; i--) {
-        buff = temp[i];
-        temp_reversed[k] = buff;
-        k++;
-    }
-    return temp_reversed;
+    int max_len_expan = 4;
+    char* expantion = (char*)malloc(max_len_expan * sizeof(char));
+    return expantion;
 }
-int expan_check(char str[]) // need testing
+int expan_check(char filepath[])
 {
-    int bool = 0;
-    // doing code
-    if (bool) {
-        return 0;
-    } else {
-        return 1;
-    }
+    
     return 0;
 }
 char** path_reading(char path[], char** paths)
@@ -66,10 +36,10 @@ char** path_reading(char path[], char** paths)
                 continue;
             }
         }
-        int inp_str_len=strlen(temp);
-        for(int i=0;i<inp_str_len;i++){
-            if(temp[i] == '\n'){
-                temp[i]='\0';
+        int inp_str_len = strlen(temp) + 1;
+        for (int i = 0; i < inp_str_len; i++) {
+            if (temp[i] == '\n') {
+                temp[i] = '\0';
             }
         }
         int check = expan_check(expansion_handle(temp));
@@ -149,8 +119,8 @@ int document_handle(char** paths)
             return 0;
         }
         char *temp, *ptrFile;
-        const int max_len_inp_str = 100 * 1000;
-        const int max_quan_str = 1000 * 1000;
+        const int max_len_inp_str = 1000;
+        const int max_quan_str = 100 * 1000;
         int quan_str = 0;
         while (quan_str < max_quan_str) {
             quan_str++;
