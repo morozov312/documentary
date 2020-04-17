@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 struct comment {
     int type; // 0 - single comment , 1 - multiline comment
@@ -39,7 +40,29 @@ int del_multiline_comment_stars()
     return 0;
 }
 
-int docs_gen(char** array)
+char* file_name_generator(char* path) // not finished
+{
+    int last_index;
+    int temp = 0;
+    int filename_estimate_lengh = strlen(path);
+    char* temp_filename = (char*)malloc(
+            (filename_estimate_lengh + 12)
+            * sizeof(char)); // 12 is estimated count of chars for time
+    for (int i = 0; i < filename_estimate_lengh; i++) {
+        if (path[i] == '/') {
+            last_index = i;
+        }
+    }
+
+    for (int i = last_index; i < filename_estimate_lengh; i++) {
+        if (path[i] != '.') {
+            temp_filename[temp] = path[i];
+            temp++;
+        }
+    }
+}
+
+int docs_gen(char** array, char* path) // not finished
 {
     int count_of_lines;
     const int MAX_STR_LEN = 1000;
