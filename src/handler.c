@@ -9,7 +9,6 @@ char* expansion_handle(char str[])
 }
 int expan_check(char filepath[])
 {
-    
     return 0;
 }
 char** path_reading(char path[], char** paths)
