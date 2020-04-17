@@ -3,7 +3,6 @@
 #include <string.h>
 #define N 3
 #define max_len_expan 4
-
 char* expansion_handle(char str[])
 {
     int str_len = strlen(str);
@@ -49,7 +48,7 @@ char** path_reading(char path[], char** paths)
     myfile = fopen(path, "r");
     if (myfile == NULL) {
         printf("File path.txt not found!");
-        return 0;
+        return paths;
     }
     char *temp, *ptrFile;
     const int max_len_inp_str = 1000;
@@ -65,6 +64,12 @@ char** path_reading(char path[], char** paths)
                 break;
             } else {
                 continue;
+            }
+        }
+        int inp_str_len=strlen(temp);
+        for(int i=0;i<inp_str_len;i++){
+            if(temp[i] == '\n'){
+                temp[i]='\0';
             }
         }
         int check = expan_check(expansion_handle(temp));
@@ -133,7 +138,6 @@ int muitiline_comment_end_check(char str[])
     }
     return 0;
 }
-// create a way to get comments and code blocks !!!)))
 int document_handle(char** paths)
 {
     int quan_of_paths = sizeof(paths) / sizeof(paths[0]);
