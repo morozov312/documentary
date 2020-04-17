@@ -5,10 +5,38 @@ char* expansion_handle(char str[])
 {
     int max_len_expan = 4;
     char* expantion = (char*)malloc(max_len_expan * sizeof(char));
-    return expantion;
+    int len_path = strlen(str);
+    int j = 0;
+    for (int i = len_path - 1; i != 0; i--) {
+        expantion[j] = str[i];
+        j++;
+        if (str[i - 1] == '.' || j == 3) {
+            break;
+        }
+    }
+    int exp_temp_len = strlen(expantion);
+    char* reversed_str = (char*)malloc(exp_temp_len * sizeof(char));
+    char buff;
+    int k = 0;
+    for (int i = exp_temp_len - 1; i >= 0; i--) {
+        buff = expantion[i];
+        reversed_str[k] = buff;
+        k++;
+    }
+    return reversed_str;
 }
 int expan_check(char filepath[])
 {
+    const int quan_of_expan = 3;
+    const char exps[3][4] = {"cpp", "c", "h"};
+    int flag = 0;
+    char* temp = expansion_handle(filepath);
+    for (int i = 0; i < quan_of_expan; i++) {
+        flag = strcmp(temp, exps[i]);
+        if (flag == 0) {
+            return 1;
+        }
+    }
     return 0;
 }
 char** path_reading(char path[], char** paths)
@@ -41,7 +69,7 @@ char** path_reading(char path[], char** paths)
                 temp[i] = '\0';
             }
         }
-        int check = expan_check(expansion_handle(temp));
+        int check = expan_check(temp);
         if (check) {
             paths[num_valid_path] = temp;
             num_valid_path++;
