@@ -25,32 +25,32 @@ char* del_single_comment(char* str)
 char* del_multiline_comment_begin(char str[])
 {
     for (int i = 0; str[i] != '\0'; i++) {
-        if(str[i] =='/' && str[i+1] =='*'){
-            str[i] =' ';
-            str[i+1]=' ';
+        if (str[i] == '/' && str[i + 1] == '*') {
+            str[i] = ' ';
+            str[i + 1] = ' ';
         }
     }
     return str;
 }
-char*  del_multiline_comment_end(char str[])
+char* del_multiline_comment_end(char str[])
 {
     for (int i = 0; str[i] != '\0'; i++) {
-        if(str[i] =='/' && str[i+1] =='*'){
-            str[i] =' ';
-            str[i+1]=' ';
+        if (str[i] == '*' && str[i + 1] == '/') {
+            str[i] = ' ';
+            str[i + 1] = ' ';
         }
     }
     return str;
 }
 char* del_multiline_comment_stars(char str[])
 {
-    int flag=0;
+    int flag = 0;
     for (int i = 0; str[i] != '\0'; i++) {
-        if(str[i] != ' ' && str[i] != '*'){
-            flag ++;
+        if (str[i] != ' ' && str[i] != '*') {
+            flag++;
         }
-        if(str[i] =='*' && !flag){
-            str[i] =' ';
+        if (str[i] == '*' && !flag) {
+            str[i] = ' ';
         }
     }
     return str;
