@@ -16,12 +16,21 @@ char* expansion_handle(char str[])
             break;
         }
     }
-    return expantion;
+    int exp_temp_len = strlen(expantion);
+    char* reversed_str = (char*)malloc(exp_temp_len * sizeof(char));
+    char buff;
+    int k = 0;
+    for (int i = exp_temp_len - 1; i >= 0; i--) {
+        buff = expantion[i];
+        reversed_str[k] = buff;
+        k++;
+    }
+    return reversed_str;
 }
 int expan_check(char filepath[])
 {
     const int quan_of_expan = 3;
-    const char exps[3][4] = {".cpp", ".c", ".h"};
+    const char exps[3][4] = {"cpp", "c", "h"};
     int flag = 0;
     char* temp = expansion_handle(filepath);
     for (int i = 0; i < quan_of_expan; i++) {
