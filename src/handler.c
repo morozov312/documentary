@@ -2,44 +2,33 @@
 #include <stdlib.h>
 #include <string.h>
 #define N 3
-#define max_len_expan 4
 
 char* expansion_handle(char str[])
 {
-    int str_len = strlen(str);
-    char temp[max_len_expan];
-    char* temp_reversed = (char*)malloc(max_len_expan * sizeof(char));
-    for (int i = 0; i < str_len; i++) {
-        if (str[i] == '#' || str[i] == '&' || str[i] == '?' || str[i] == '!'
-            || str[i] == '$' || str[i] == '@' || str[i] == '*') {
-            return 0;
-        }
-    }
+    int max_len_expan = 4;
+    char* expantion = (char*)malloc(max_len_expan * sizeof(char));
+    int len_path = strlen(str);
     int j = 0;
-    for (int i = str_len - 1; i > 0; i--) {
-        if (str[i] == '.') {
+    for (int i = len_path - 1; i != 0; i--) {
+        expantion[j] = str[i];
+        j++;
+        if (str[i - 1] == '.' || j == 3) {
             break;
         }
-        temp[j] = str[i];
-        j++;
     }
-    int k = 0;
-    char buff = 0;
-    for (int i = max_len_expan - 2; i >= 0; i--) {
-        buff = temp[i];
-        temp_reversed[k] = buff;
-        k++;
-    }
-    return temp_reversed;
+    return expantion;
 }
-int expan_check(char str[]) // need testing
+int expan_check(char filepath[])
 {
-    int bool = 0;
-    // doing code
-    if (bool) {
-        return 0;
-    } else {
-        return 1;
+    const int quan_of_expan = 3;
+    const char exps[3][4] = {".cpp", ".c", ".h"};
+    int flag = 0;
+    char* temp = expansion_handle(filepath);
+    for (int i = 0; i < quan_of_expan; i++) {
+        flag = strcmp(temp, exps[i]);
+        if (flag == 0) {
+            return 1;
+        }
     }
     return 0;
 }
