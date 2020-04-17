@@ -52,7 +52,7 @@ CTEST(handle, expantion_check)
     int exception_first = 1;
     int exception_second = 1;
     int exception_third = 0;
-    ASSERT_EQUAL(res_first,exception_first);
-    ASSERT_EQUAL(res_second,exception_second);
+    ASSERT_EQUAL(res_first, exception_first);
+    ASSERT_EQUAL(res_second, exception_second);
     ASSERT_EQUAL(res_third, exception_third);
 }
