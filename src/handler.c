@@ -169,7 +169,7 @@ char** document_handle(char* paths)
         if (strlen(temp) == 0) {
             continue;
         }
-        data[quan_str]=temp;
+        data[quan_str] = temp;
         quan_str++;
     }
     fclose(myfile);
