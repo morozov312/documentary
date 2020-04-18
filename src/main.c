@@ -21,7 +21,7 @@ int main()
     char** file_data;
     for (int i = 0; i < quan_of_paths; i++) {
         file_data = document_handle(paths[i]);
-        // html
+        docs_gen(file_data, paths[i]);
     }
     for (int i = 0; i < max_quan_str; i++) {
         free(paths[i]);

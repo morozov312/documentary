@@ -10,7 +10,6 @@ struct comment {
 };
 char* del_single_comment(char* str)
 {
-    // may be on '//' symbols writing ' '
     for (int i = 0; i < strlen(str); i++) {
         if (str[i] == '/' && str[i + 1] == '/') {
             str[i] = ' ';
@@ -90,7 +89,15 @@ char* file_name_generator(char* path)
     char* generated_filename = strcat(temp_filename, str_time);
     return generated_filename;
 }
-
+void html_generator(struct comment array[], char* path){
+    FILE *txt_one;
+    char* name=file_name_generator(path);
+    txt_one=fopen(name,"w");
+    //for(int i=0;i<n+1;i++){
+       // fputs(temp,txt_one);
+    //}
+    fclose(txt_one);
+}
 int docs_gen(char** array, char* path) // not finished
 {
     int count_of_lines;
@@ -160,4 +167,5 @@ int docs_gen(char** array, char* path) // not finished
             }
         }
     }
+    return 0;
 }
