@@ -95,15 +95,28 @@ void html_generator(struct comment list[], char* path, int quan_structs)
     FILE* documentary;
     char* name = file_name_generator(path);
     documentary = fopen(name, "w");
+    int flag = 0;
+    for (int i = 0; i < quan_structs; i++) {
+        if (list[i].type) { // check presence of multiline comment in document
+            flag++;
+        }
+    }
+    fputs("<h2><b>HOME</b><h2></br>", documentary);
+    if (flag) {
+        fputs("Oficial</br>", documentary);
+    } else {
+        fputs("Not</br>", documentary);
+    }
     for (int i = 0; i < quan_structs; i++) {
         int j = 0;
         while (strlen(list[i].comment_data[j])) {
             fputs(list[i].comment_data[j], documentary);
+            fputs("</br>", documentary);
             j++;
         }
-        fputs("\n", documentary);
+        fputs("</br>", documentary);
         fputs(list[i].code_temp_string, documentary);
-        fputs("\n", documentary);
+        fputs("</br>", documentary);
     }
     fclose(documentary);
 }
@@ -175,7 +188,7 @@ int docs_gen(char** array, char* path) // not finished
                 }
             }
         }
-        html_generator(comments_array, path, struct_line_number);
+        // html_generator(comments_array, path, struct_line_number);
     }
     return 0;
 }
