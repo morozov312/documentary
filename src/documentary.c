@@ -87,15 +87,17 @@ char* file_name_generator(char* path)
         temp_filename[i] = '_';
     }
     char* generated_filename = strcat(temp_filename, str_time);
-    return generated_filename;
+    char* filename_html = strcat(generated_filename, ".html");
+    return filename_html;
 }
-void html_generator(struct comment array[], char* path){
-    FILE *txt_one;
-    char* name=file_name_generator(path);
-    txt_one=fopen(name,"w");
-    //for(int i=0;i<n+1;i++){
-       // fputs(temp,txt_one);
-    //}
+void html_generator(struct comment array[], char* path, int quan_structs)
+{
+    FILE* txt_one;
+    char* name = file_name_generator(path);
+    txt_one = fopen(name, "w");
+    for (int i = 0; i < quan_structs; i++) {
+        fputs(" ", txt_one);
+    }
     fclose(txt_one);
 }
 int docs_gen(char** array, char* path) // not finished
