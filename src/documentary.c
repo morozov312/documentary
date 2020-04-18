@@ -10,7 +10,6 @@ struct comment {
 };
 char* del_single_comment(char* str)
 {
-    // may be on '//' symbols writing ' '
     for (int i = 0; i < strlen(str); i++) {
         if (str[i] == '/' && str[i + 1] == '/') {
             str[i] = ' ';
@@ -88,9 +87,39 @@ char* file_name_generator(char* path)
         temp_filename[i] = '_';
     }
     char* generated_filename = strcat(temp_filename, str_time);
-    return generated_filename;
+    char* filename_html = strcat(generated_filename, ".html");
+    return filename_html;
 }
-
+void html_generator(struct comment list[], char* path, int quan_structs)
+{
+    FILE* documentary;
+    char* name = file_name_generator(path);
+    documentary = fopen(name, "w");
+    int flag = 0;
+    for (int i = 0; i < quan_structs; i++) {
+        if (list[i].type) { // check presence of multiline comment in document
+            flag++;
+        }
+    }
+    fputs("<h2><b>HOME</b><h2></br>", documentary);
+    if (flag) {
+        fputs("Oficial</br>", documentary);
+    } else {
+        fputs("Not</br>", documentary);
+    }
+    for (int i = 0; i < quan_structs; i++) {
+        int j = 0;
+        while (strlen(list[i].comment_data[j])) {
+            fputs(list[i].comment_data[j], documentary);
+            fputs("</br>", documentary);
+            j++;
+        }
+        fputs("</br>", documentary);
+        fputs(list[i].code_temp_string, documentary);
+        fputs("</br>", documentary);
+    }
+    fclose(documentary);
+}
 int docs_gen(char** array, char* path) // not finished
 {
     int count_of_lines;
@@ -159,5 +188,7 @@ int docs_gen(char** array, char* path) // not finished
                 }
             }
         }
+        // html_generator(comments_array, path, struct_line_number);
     }
+    return 0;
 }
