@@ -90,9 +90,12 @@ char* file_name_generator(char* path)
     char* generated_filename = strcat(temp_filename, str_time);
     return generated_filename;
 }
+
 int docs_gen(char** array, char* path) // not finished
 {
     int count_of_lines;
+    int index_of_end;
+    int j, k;
     const int MAX_STR_LEN = 1000;
     count_of_lines = sizeof(array) / sizeof(array[0]);
     struct comment* comments_array
@@ -102,21 +105,59 @@ int docs_gen(char** array, char* path) // not finished
         temp_array[i] = (char*)malloc(MAX_STR_LEN * sizeof(char));
     }
     int struct_line_number = 0;
-    for (int i = 0; i < count_of_lines; i++) {
+    for (int i = 0; i < count_of_lines - 1; i++) {
         if (single_comment_check(array[i]) == -1) { // switch for more cases
-            break;
+            return 1;                               // exit after nested comment
         } else if (single_comment_check(array[i]) == 1) {
             temp_array[struct_line_number] = del_single_comment(array[i]);
             comments_array[struct_line_number].type = 0;
             comments_array[struct_line_number].comment_data[0]
                     = temp_array[struct_line_number];
-            if (single_comment_check(array[i + 1]) == 0) {
-                temp_array[struct_line_number]
-                        = del_single_comment(array[i + 1]);
+            if (single_comment_check(array[i + 1]) == 0
+                && muitiline_comment_begin_check(array[i + 1]) == 0) {
+                temp_array[struct_line_number] = array[i + 1];
                 comments_array[struct_line_number].code_temp_string
                         = temp_array[struct_line_number];
             }
             struct_line_number++;
+            continue;
+        } else if (muitiline_comment_begin_check(array[i]) == 1) {
+            j = i;
+            while (muitiline_comment_end_check(array[j + 1]) != 1) {
+                if (single_comment_check(array[j + 1]) == 1) {
+                    return 2; // single comment in multiline comment
+                } else if (muitiline_comment_begin_check(array[j + 1]) == 1) {
+                    return 3; // nested comment
+                }
+                j++;
+            }
+            for (k = i; i < j + 1; k++) {
+                if (muitiline_comment_begin_check(array[k] == 1)) {
+                    temp_array[struct_line_number]
+                            = del_multiline_comment_begin(array[k]);
+                    comments_array[struct_line_number].type = 1;
+                    comments_array[struct_line_number].comment_data
+                            = temp_array[struct_line_number];
+                    struct_line_number++;
+                } else if (muitiline_comment_end_check(array[k] == 1)) {
+                    temp_array[struct_line_number]
+                            = del_multiline_comment_end(array[k]);
+                    comments_array[struct_line_number].type = 1;
+                    comments_array[struct_line_number].comment_data
+                            = temp_array[struct_line_number];
+                    temp_array[struct_line_number] = array[k + 1];
+                    comments_array[struct_line_number].code_temp_string
+                            = temp_array[struct_line_number];
+                    struct_line_number++;
+
+                } else {
+                    temp_array[struct_line_number] = array[k];
+                    comments_array[struct_line_number].type = 1;
+                    comments_array[struct_line_number].comment_data
+                            = temp_array[struct_line_number];
+                    struct_line_number++;
+                }
+            }
         }
     }
 }
