@@ -53,26 +53,42 @@ char* del_multiline_comment_stars(char str[])
     }
     return str;
 }
-char* file_name_generator(char* path) // not finished
+char* file_name_generator(char* path)
 {
     int last_index;
     int temp = 0;
     int filename_estimate_lengh = strlen(path);
+    long int s_time;
+    struct tm* m_time;
+    int last_index_dot = 0;
+    s_time = time(NULL);
+    m_time = localtime(&s_time);
+    char* str_time = asctime(m_time);
+    for (int i = 0; i < strlen(str_time); i++) {
+        if (str_time[i] == ' ') {
+            str_time[i] = '_';
+        }
+    }
     char* temp_filename = (char*)malloc(
-            (filename_estimate_lengh + 12)
+            (filename_estimate_lengh + 5)
             * sizeof(char)); // 12 is estimated count of chars for time
     for (int i = 0; i < filename_estimate_lengh; i++) {
         if (path[i] == '/') {
             last_index = i;
+        } else if (path[i] == '.') {
+            last_index_dot = i;
         }
     }
-
-    for (int i = last_index; i < filename_estimate_lengh; i++) {
-        if (path[i] != '.') {
-            temp_filename[temp] = path[i];
-            temp++;
-        }
+    for (int i = last_index + 1; i < last_index_dot; i++) {
+        temp_filename[temp] = path[i];
+        temp++;
     }
+    for (int i = (last_index_dot - last_index); i < strlen(temp_filename);
+         i++) {
+        temp_filename[i] = '_';
+    }
+    char* generated_filename = strcat(temp_filename, str_time);
+    return generated_filename;
 }
 int docs_gen(char** array, char* path) // not finished
 {
