@@ -90,15 +90,22 @@ char* file_name_generator(char* path)
     char* filename_html = strcat(generated_filename, ".html");
     return filename_html;
 }
-void html_generator(struct comment array[], char* path, int quan_structs)
+void html_generator(struct comment list[], char* path, int quan_structs)
 {
-    FILE* txt_one;
+    FILE* documentary;
     char* name = file_name_generator(path);
-    txt_one = fopen(name, "w");
+    documentary = fopen(name, "w");
     for (int i = 0; i < quan_structs; i++) {
-        fputs(" ", txt_one);
+        int j = 0;
+        while (strlen(list[i].comment_data[j])) {
+            fputs(list[i].comment_data[j], documentary);
+            j++;
+        }
+        fputs("\n", documentary);
+        fputs(list[i].code_temp_string, documentary);
+        fputs("\n", documentary);
     }
-    fclose(txt_one);
+    fclose(documentary);
 }
 int docs_gen(char** array, char* path) // not finished
 {
@@ -168,6 +175,7 @@ int docs_gen(char** array, char* path) // not finished
                 }
             }
         }
+        html_generator(comments_array, path, struct_line_number);
     }
     return 0;
 }
