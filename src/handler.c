@@ -113,7 +113,7 @@ int muitiline_comment_begin_check(char str[])
     }
     if (flag > 1) {
         printf("%s", "Error,don't use nested comments");
-        return 0;
+        return -1;
     }
     return 0;
 }
@@ -131,7 +131,7 @@ int muitiline_comment_end_check(char str[])
     }
     if (flag > 1) {
         printf("%s", "Error,don't use nested comments");
-        return 0;
+        return -1;
     }
     return 0;
 }

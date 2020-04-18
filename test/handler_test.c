@@ -31,7 +31,7 @@ CTEST(handle, mult_comment_check_b)
     // Then
     int exp_first = 1;
     int exp_second = 0;
-    int exp_thrid = 0;
+    int exp_thrid = -1;
     ASSERT_EQUAL(res_first, exp_first);
     ASSERT_EQUAL(res_second, exp_second);
     ASSERT_EQUAL(res_thrid, exp_thrid);
@@ -49,7 +49,7 @@ CTEST(handle, mult_comment_check_e)
     // Then
     int exp_first = 1;
     int exp_second = 0;
-    int exp_thrid = 0;
+    int exp_thrid = -1;
     ASSERT_EQUAL(res_first, exp_first);
     ASSERT_EQUAL(res_second, exp_second);
     ASSERT_EQUAL(res_thrid, exp_thrid);
