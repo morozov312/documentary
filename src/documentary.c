@@ -10,7 +10,7 @@ struct comment {
 };
 char* del_single_comment(char* str)
 {
-    for (int i = 0; i < strlen(str); i++) {
+    for (int i = 0; str[i] != '\0'; i++) {
         if (str[i] == '/' && str[i + 1] == '/') {
             str[i] = ' ';
             str[i + 1] = ' ';
@@ -54,24 +54,32 @@ char* del_multiline_comment_stars(char str[])
 }
 char* file_name_generator(char* path)
 {
-    int last_index;
+    int last_index = 0;
     int temp = 0;
-    int filename_estimate_lengh = strlen(path);
-    long int s_time;
+    int filename_estimate_lenght = strlen(path);
+    long int s_time = 0;
     struct tm* m_time;
     int last_index_dot = 0;
     s_time = time(NULL);
     m_time = localtime(&s_time);
     char* str_time = asctime(m_time);
-    for (int i = 0; i < strlen(str_time); i++) {
+    for (int i = 0; i < str_time[i] != '\0'; i++) {
         if (str_time[i] == ' ') {
             str_time[i] = '_';
         }
     }
+    int len = strlen(str_time) - 1;
+    if (str_time[len] == '\n') {
+        str_time[len] = '\0';
+    }
     char* temp_filename = (char*)malloc(
-            (filename_estimate_lengh + 5)
+            (filename_estimate_lenght + 5)
             * sizeof(char)); // 12 is estimated count of chars for time
-    for (int i = 0; i < filename_estimate_lengh; i++) {
+    for (int i = 0; i < filename_estimate_lenght + 5; i++) {
+        temp_filename[i] = 0;
+    }
+
+    for (int i = 0; i < filename_estimate_lenght; i++) {
         if (path[i] == '/') {
             last_index = i;
         } else if (path[i] == '.') {
@@ -82,20 +90,24 @@ char* file_name_generator(char* path)
         temp_filename[temp] = path[i];
         temp++;
     }
-    for (int i = (last_index_dot - last_index); i < strlen(temp_filename);
-         i++) {
+    for (int i = (last_index_dot - last_index); temp_filename[i] != '\0'; i++) {
         temp_filename[i] = '_';
     }
     char* generated_filename = strcat(temp_filename, str_time);
     char* filename_html = strcat(generated_filename, ".html");
     return filename_html;
 }
-void html_generator(struct comment list[], char* path, int quan_structs)
+int html_generator(struct comment* list, char* path, int quan_structs)
 {
     FILE* documentary;
     char* name = file_name_generator(path);
     documentary = fopen(name, "w");
+    if (documentary == NULL) {
+        printf("%s\n", "Some ERROR");
+        return 0;
+    }
     int flag = 0;
+    int max_quan_str = 50 * 1000;
     for (int i = 0; i < quan_structs; i++) {
         if (list[i].type) { // check presence of multiline comment in document
             flag++;
@@ -109,7 +121,12 @@ void html_generator(struct comment list[], char* path, int quan_structs)
     }
     for (int i = 0; i < quan_structs; i++) {
         int j = 0;
-        while (strlen(list[i].comment_data[j])) {
+        char** text_comment = list[i].comment_data;
+        while (j < max_quan_str) {
+            int len = strlen(text_comment[j]);
+            if (len == 0) {
+                break;
+            }
             fputs(list[i].comment_data[j], documentary);
             fputs("</br>", documentary);
             j++;
@@ -119,76 +136,46 @@ void html_generator(struct comment list[], char* path, int quan_structs)
         fputs("</br>", documentary);
     }
     fclose(documentary);
+    return 0;
 }
-int docs_gen(char** array, char* path) // not finished
+int docs_gen(char** document_data, char* path)
 {
-    int count_of_lines;
-    int index_of_end;
-    int j, k;
-    const int MAX_STR_LEN = 1000;
-    count_of_lines = sizeof(array) / sizeof(array[0]);
+    int count_of_lines = 0;
+    int max_quan_str = 50 * 1000;
+    for (int i = 0; i < max_quan_str; i++) {
+        if (strlen(document_data[i]) != 0) {
+            count_of_lines++;
+        }
+    }
+    int quan_struct = 0;
+    const int MAX_STR_LEN = 500;
     struct comment* comments_array
             = (struct comment*)malloc(count_of_lines * sizeof(struct comment));
-    char** temp_array = (char**)malloc(count_of_lines * sizeof(char*));
-    for (int i = 0; i < count_of_lines; i++) {
-        temp_array[i] = (char*)malloc(MAX_STR_LEN * sizeof(char));
-    }
-    int struct_line_number = 0;
-    for (int i = 0; i < count_of_lines - 1; i++) {
-        if (single_comment_check(array[i]) == -1) { // switch for more cases
-            return 1;                               // exit after nested comment
-        } else if (single_comment_check(array[i]) == 1) {
-            temp_array[struct_line_number] = del_single_comment(array[i]);
-            comments_array[struct_line_number].type = 0;
-            comments_array[struct_line_number].comment_data[0]
-                    = temp_array[struct_line_number];
-            if (single_comment_check(array[i + 1]) == 0
-                && muitiline_comment_begin_check(array[i + 1]) == 0) {
-                temp_array[struct_line_number] = array[i + 1];
-                comments_array[struct_line_number].code_temp_string
-                        = temp_array[struct_line_number];
-            }
-            struct_line_number++;
-            continue;
-        } else if (muitiline_comment_begin_check(array[i]) == 1) {
-            j = i;
-            while (muitiline_comment_end_check(array[j + 1]) != 1) {
-                if (single_comment_check(array[j + 1]) == 1) {
-                    return 2; // single comment in multiline comment
-                } else if (muitiline_comment_begin_check(array[j + 1]) == 1) {
-                    return 3; // nested comment
+    for (int i = 0; i < count_of_lines - 2; i++) {
+        if (single_comment_check(document_data[i])) {
+            if (!muitiline_comment_begin_check(document_data[i + 1])
+                && !muitiline_comment_end_check(document_data[i + 1])) {
+                comments_array[quan_struct].code_temp_string
+                        = document_data[i + 1];
+                char** comment_text
+                        = (char**)malloc(max_quan_str * sizeof(char*));
+                for (int j = 0; j < max_quan_str; j++) {
+                    comment_text[j] = (char*)malloc(MAX_STR_LEN * sizeof(char));
                 }
-                j++;
-            }
-            for (k = i; i < j + 1; k++) {
-                if (muitiline_comment_begin_check(array[k] == 1)) {
-                    temp_array[struct_line_number]
-                            = del_multiline_comment_begin(array[k]);
-                    comments_array[struct_line_number].type = 1;
-                    comments_array[struct_line_number].comment_data
-                            = temp_array[struct_line_number];
-                    struct_line_number++;
-                } else if (muitiline_comment_end_check(array[k] == 1)) {
-                    temp_array[struct_line_number]
-                            = del_multiline_comment_end(array[k]);
-                    comments_array[struct_line_number].type = 1;
-                    comments_array[struct_line_number].comment_data
-                            = temp_array[struct_line_number];
-                    temp_array[struct_line_number] = array[k + 1];
-                    comments_array[struct_line_number].code_temp_string
-                            = temp_array[struct_line_number];
-                    struct_line_number++;
-
-                } else {
-                    temp_array[struct_line_number] = array[k];
-                    comments_array[struct_line_number].type = 1;
-                    comments_array[struct_line_number].comment_data
-                            = temp_array[struct_line_number];
-                    struct_line_number++;
+                for (int ii = 0; ii < max_quan_str; ii++) {
+                    for (int j = 0; j < MAX_STR_LEN; j++) {
+                        comment_text[ii][j] = 0;
+                    }
                 }
+                int num_of_st_comment = 0;
+                comment_text[num_of_st_comment] = document_data[i];
+                comments_array[quan_struct].comment_data = comment_text;
+                comments_array[quan_struct].type = 0;
+                quan_struct++;
             }
         }
-        // html_generator(comments_array, path, struct_line_number);
     }
+    html_generator(comments_array, path, quan_struct);
+    free(comments_array);
     return 0;
 }

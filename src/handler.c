@@ -48,8 +48,8 @@ char** path_reading(char path[], char** paths)
         return paths;
     }
     char *temp, *ptrFile;
-    const int max_len_inp_str = 1000;
-    const int max_quan_str = 100;
+    const int max_len_inp_str = 500;
+    const int max_quan_str = 10;
     int quan_str = 0;
     int num_valid_path = 0;
     while (quan_str < max_quan_str) {
@@ -63,11 +63,9 @@ char** path_reading(char path[], char** paths)
                 continue;
             }
         }
-        int inp_str_len = strlen(temp) + 1;
-        for (int i = 0; i < inp_str_len; i++) {
-            if (temp[i] == '\n') {
-                temp[i] = '\0';
-            }
+        unsigned int len = strlen(temp) - 1;
+        if (temp[len] == '\n') {
+            temp[len] = '\0';
         }
         int check = expan_check(temp);
         if (check) {
@@ -144,8 +142,8 @@ char** document_handle(char* paths)
         return 0;
     }
     char *temp, *ptrFile;
-    const int max_len_inp_str = 1000;
-    const int max_quan_str = 100 * 1000;
+    const int max_len_inp_str = 500;
+    const int max_quan_str = 50 * 1000;
     int quan_str = 0;
     char** data = (char**)malloc(max_quan_str * sizeof(char*));
     for (int i = 0; i < max_quan_str; i++) {
