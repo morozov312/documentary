@@ -104,7 +104,7 @@ int html_generator(struct comment* list, char* path, int quan_structs)
     char* name = file_name_generator(path);
     documentary = fopen(name, "w");
     if (documentary == NULL) {
-        printf("%s\n", "Some ERROR");
+        printf("%s\n", "Error! Not enough free memory to create html page!");
         return 0;
     }
     int flag = 0;
