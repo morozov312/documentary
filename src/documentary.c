@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#define max_len_inp_str 500
+#define max_quan_str 50 * 1000
 struct comment {
     int type; // 0 - single comment , 1 - multiline comment
     char** comment_data;
@@ -108,7 +110,6 @@ int html_generator(struct comment* list, char* path, int quan_structs)
         return 0;
     }
     int flag = 0;
-    int max_quan_str = 50 * 1000;
     for (int i = 0; i < quan_structs; i++) {
         if (list[i].type) { // check presence of multiline comment in document
             flag++;
@@ -142,14 +143,12 @@ int html_generator(struct comment* list, char* path, int quan_structs)
 int docs_gen(char** document_data, char* path)
 {
     int count_of_lines = 0;
-    int max_quan_str = 50 * 1000;
     for (int i = 0; i < max_quan_str; i++) {
         if (strlen(document_data[i]) != 0) {
             count_of_lines++;
         }
     }
     int quan_struct = 0;
-    const int MAX_STR_LEN = 500;
     struct comment* comments_array
             = (struct comment*)malloc(count_of_lines * sizeof(struct comment));
     for (int i = 0; i < count_of_lines - 2; i++) {
@@ -161,10 +160,11 @@ int docs_gen(char** document_data, char* path)
                 char** comment_text
                         = (char**)malloc(max_quan_str * sizeof(char*));
                 for (int j = 0; j < max_quan_str; j++) {
-                    comment_text[j] = (char*)malloc(MAX_STR_LEN * sizeof(char));
+                    comment_text[j]
+                            = (char*)malloc(max_len_inp_str * sizeof(char));
                 }
                 for (int ii = 0; ii < max_quan_str; ii++) {
-                    for (int j = 0; j < MAX_STR_LEN; j++) {
+                    for (int j = 0; j < max_len_inp_str; j++) {
                         comment_text[ii][j] = 0;
                     }
                 }
