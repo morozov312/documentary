@@ -38,14 +38,18 @@ char* filename_without_expan(char* path)
             last_dot_index = i;
         }
     }
-    int len_of_filename = last_dot_index - last_slash_index + 1;
+    int len_of_filename = last_dot_index - last_slash_index;
     char* filename = (char*)malloc(len_of_filename * sizeof(char));
     int counter = 0;
     for (unsigned int i = last_slash_index; i < last_dot_index; i++) {
         filename[counter] = path[i];
         counter++;
     }
-    return filename;
+    if (strlen(filename) == 0) {
+        return 0;
+    } else {
+        return filename;
+    }
 }
 
 int expan_check(char* filepath)
