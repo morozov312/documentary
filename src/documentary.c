@@ -74,13 +74,8 @@ char* file_name_generator(char* path)
     if (str_time[len] == '\n') {
         str_time[len] = '\0';
     }
-    char* temp_filename = (char*)malloc(
-            (filename_estimate_lenght + 5)
-            * sizeof(char)); // 12 is estimated count of chars for time
-    for (int i = 0; i < filename_estimate_lenght + 5; i++) {
-        temp_filename[i] = 0;
-    }
-
+    char* temp_filename
+            = (char*)calloc((filename_estimate_lenght + 20), sizeof(char));
     for (int i = 0; i < filename_estimate_lenght; i++) {
         if (path[i] == '/') {
             last_index = i;
@@ -97,7 +92,6 @@ char* file_name_generator(char* path)
     }
     char* generated_filename = strcat(temp_filename, str_time);
     char* filename_html = strcat(generated_filename, ".html");
-    free(temp_filename);
     return filename_html;
 }
 int html_generator(struct comment* list, char* path, int quan_structs)
@@ -106,16 +100,17 @@ int html_generator(struct comment* list, char* path, int quan_structs)
     char* name = file_name_generator(path);
     documentary = fopen(name, "w");
     if (documentary == NULL) {
-        printf("%s\n", "Error! Not enough free memory to create html page!");
+        printf("%s\n", "Error create html page!");
         return 0;
     }
     int flag = 0;
     for (int i = 0; i < quan_structs; i++) {
-        if (list[i].type) { // check presence of multiline comment in document
+        if (list[i].type) { // check presence of multiline comment indocument
             flag++;
         }
     }
-    fputs("<h2><b>HOME</b><h2></br>", documentary);
+    char str[] = "<h2><b>HOME</b><h2></br>";
+    fwrite(&str, sizeof(char), strlen(str), documentary);
     if (flag) {
         fputs("Oficial</br>", documentary);
     } else {
@@ -150,7 +145,7 @@ int docs_gen(char** document_data, char* path)
     }
     int quan_struct = 0;
     struct comment* comments_array
-            = (struct comment*)malloc(count_of_lines * sizeof(struct comment));
+            = (struct comment*)calloc(count_of_lines, sizeof(struct comment));
     for (int i = 0; i < count_of_lines - 2; i++) {
         if (single_comment_check(document_data[i])) {
             if (!muitiline_comment_begin_check(document_data[i + 1])
@@ -158,15 +153,10 @@ int docs_gen(char** document_data, char* path)
                 comments_array[quan_struct].code_temp_string
                         = document_data[i + 1];
                 char** comment_text
-                        = (char**)malloc(max_quan_str * sizeof(char*));
+                        = (char**)calloc(max_quan_str, sizeof(char*));
                 for (int j = 0; j < max_quan_str; j++) {
                     comment_text[j]
-                            = (char*)malloc(max_len_inp_str * sizeof(char));
-                }
-                for (int ii = 0; ii < max_quan_str; ii++) {
-                    for (int j = 0; j < max_len_inp_str; j++) {
-                        comment_text[ii][j] = 0;
-                    }
+                            = (char*)calloc(max_len_inp_str, sizeof(char));
                 }
                 int num_of_st_comment = 0;
                 comment_text[num_of_st_comment] = document_data[i];
@@ -177,6 +167,5 @@ int docs_gen(char** document_data, char* path)
         }
     }
     html_generator(comments_array, path, quan_struct);
-    free(comments_array);
     return 0;
 }
