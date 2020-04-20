@@ -26,6 +26,28 @@ char* expansion_handle(char* str)
     }
     return reversed_str;
 }
+
+char* filename_without_expan(char* path)
+{
+    int last_slash_index;
+    int last_dot_index;
+    for (unsigned int i = 0; i < strlen(path); i++) {
+        if (path[i] == '/') {
+            last_slash_index = i;
+        } else if (path[i] == '.') {
+            last_dot_index = i;
+        }
+    }
+    int len_of_filename = last_dot_index - last_slash_index + 1;
+    char* filename = (char*)malloc(len_of_filename * sizeof(char));
+    int counter = 0;
+    for (unsigned int i = last_slash_index; i < last_dot_index; i++) {
+        filename[counter] = path[i];
+        counter++;
+    }
+    return filename;
+}
+
 int expan_check(char* filepath)
 {
     const int quan_of_expan = 3;
