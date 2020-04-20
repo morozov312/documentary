@@ -57,17 +57,17 @@ CTEST(handle, mult_comment_check_e)
 CTEST(handle, expansion_handler)
 {
     // Given
-    const char str_first[] = "handler.h";
-    const char str_second[] = ".h";
-    const char str_third[] = "src/main.cpp";
+    char str_first[] = "handler.h";
+    char str_second[] = ".h";
+    char str_third[] = "src/main.cpp";
     // When
     char* res_first = expansion_handle(str_first);
     char* res_second = expansion_handle(str_second);
     char* res_third = expansion_handle(str_third);
     // Then
-    const char exception_first[] = "h";
-    const char exception_second[] = "h";
-    const char exception_third[] = "cpp";
+    char exception_first[] = "h";
+    char exception_second[] = "h";
+    char exception_third[] = "cpp";
     ASSERT_STR(exception_first, res_first);
     ASSERT_STR(exception_second, res_second);
     ASSERT_STR(exception_third, res_third);
@@ -75,9 +75,9 @@ CTEST(handle, expansion_handler)
 CTEST(handle, expantion_check)
 {
     // Given
-    const char str_first[] = "./myprogram/main.cpp";
-    const char str_second[] = "./src/grab.h";
-    const char str_third[] = "nothing";
+    char str_first[] = "./myprogram/main.cpp";
+    char str_second[] = "./src/grab.h";
+    char str_third[] = "nothing";
     // When
     int res_first = expan_check(str_first);
     int res_second = expan_check(str_second);

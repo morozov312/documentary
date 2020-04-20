@@ -3,11 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#define max_len_inp_str 500
+#define max_quan_str 10
 int main()
 {
     char path[] = "./path/path.txt";
-    const int max_len_inp_str = 500;
-    const int max_quan_str = 10;
     char** paths = (char**)malloc(max_quan_str * sizeof(char*));
     for (int i = 0; i < max_quan_str; i++) {
         paths[i] = (char*)malloc(max_len_inp_str * sizeof(char));

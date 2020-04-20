@@ -19,7 +19,7 @@ char* del_single_comment(char* str)
     }
     return str;
 }
-char* del_multiline_comment_begin(char str[])
+char* del_multiline_comment_begin(char* str)
 {
     for (int i = 0; str[i] != '\0'; i++) {
         if (str[i] == '/' && str[i + 1] == '*') {
@@ -29,7 +29,7 @@ char* del_multiline_comment_begin(char str[])
     }
     return str;
 }
-char* del_multiline_comment_end(char str[])
+char* del_multiline_comment_end(char* str)
 {
     for (int i = 0; str[i] != '\0'; i++) {
         if (str[i] == '*' && str[i + 1] == '/') {
@@ -39,7 +39,7 @@ char* del_multiline_comment_end(char str[])
     }
     return str;
 }
-char* del_multiline_comment_stars(char str[])
+char* del_multiline_comment_stars(char* str)
 {
     int flag = 0;
     for (int i = 0; str[i] != '\0'; i++) {
@@ -63,7 +63,7 @@ char* file_name_generator(char* path)
     s_time = time(NULL);
     m_time = localtime(&s_time);
     char* str_time = asctime(m_time);
-    for (int i = 0; i < str_time[i] != '\0'; i++) {
+    for (int i = 0; str_time[i] != '\0'; i++) {
         if (str_time[i] == ' ') {
             str_time[i] = '_';
         }
@@ -95,6 +95,7 @@ char* file_name_generator(char* path)
     }
     char* generated_filename = strcat(temp_filename, str_time);
     char* filename_html = strcat(generated_filename, ".html");
+    free(temp_filename);
     return filename_html;
 }
 int html_generator(struct comment* list, char* path, int quan_structs)
