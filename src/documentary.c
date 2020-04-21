@@ -103,19 +103,42 @@ int html_generator(struct comment* list, char* path, int quan_structs)
         printf("%s\n", "Error create html page!");
         return 0;
     }
+    // ======================= Header ===========================
+    fputs("<h2>This documentation is based on a file -", documentary);
+    // char* filename = filename_handle();
+    // fputs(filename, documentary);
+    fputs("</h2>", documentary);
     int flag = 0;
     for (int i = 0; i < quan_structs; i++) {
         if (list[i].type) { // check presence of multiline comment indocument
             flag++;
         }
     }
-    char str[] = "<h2><b>HOME</b><h2></br>";
-    fwrite(&str, sizeof(char), strlen(str), documentary);
-    if (flag) {
-        fputs("Oficial</br>", documentary);
-    } else {
-        fputs("Not</br>", documentary);
+    char* expantion = expansion_handle(path);
+    if (!strcmp(expantion, "h")) {
+        fputs("<i>Header file to program code on С/С++</i></br></br>",
+              documentary);
     }
+    if (!strcmp(expantion, "c")) {
+        fputs("<i>Program code in language C</i></br></br>", documentary);
+    }
+    if (!strcmp(expantion, "cpp")) {
+        fputs("<i>Program code in language C++</i></br></br>", documentary);
+    }
+    fputs("<b>Warning</b></br></br><i>This documentation is based on the "
+          "program code containing </br> ",
+          documentary);
+    if (flag) {
+        fputs("documentary comments and is <u>officially</u> confirmed by",
+              documentary);
+    } else {
+        fputs("only one-line comments and <u>may not be officially</u> "
+              "confirmed by ",
+              documentary);
+    }
+    fputs("the developer this program.</i></br></br>", documentary);
+    // ======================= Header ===========================
+    // ====================== main content =====================
     for (int i = 0; i < quan_structs; i++) {
         int j = 0;
         char** text_comment = list[i].comment_data;
@@ -128,10 +151,13 @@ int html_generator(struct comment* list, char* path, int quan_structs)
             fputs("</br>", documentary);
             j++;
         }
-        fputs("</br>", documentary);
+        fputs("<code>", documentary);
         fputs(list[i].code_temp_string, documentary);
-        fputs("</br>", documentary);
+        fputs("</code></br></br>", documentary);
     }
+    // ====================== main content =====================
+    // =======================   footer =========================
+    // =======================   footer =========================
     fclose(documentary);
     return 0;
 }
