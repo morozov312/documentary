@@ -91,7 +91,16 @@ char* file_name_generator(char* path)
         temp_filename[i] = '_';
     }
     char* generated_filename = strcat(temp_filename, str_time);
-    char* filename_html = strcat(generated_filename, ".html");
+    char* folder_name = (char*)calloc(550, sizeof(char));
+    folder_name[0] = '.';
+    folder_name[1] = '/';
+    folder_name[2] = 'd';
+    folder_name[3] = 'o';
+    folder_name[4] = 'c';
+    folder_name[5] = 's';
+    folder_name[6] = '/';
+    char* folder = strcat(folder_name, generated_filename);
+    char* filename_html = strcat(folder, ".html");
     return filename_html;
 }
 int html_generator(struct comment* list, char* path, int quan_structs)
@@ -107,7 +116,7 @@ int html_generator(struct comment* list, char* path, int quan_structs)
     fputs("<!DOCTYPE html><html><head><meta charset=\" UTF - 8\" >",
           documentary);
     fputs("<link rel=\"stylesheet\" type=\"text/css\" "
-          "href=\"./src/styles.css\">",
+          "href=\"./styles/styles.css\">",
           documentary);
     fputs("</head><body><div id=\"wrapper\">", documentary);
     fputs("<h2>This documentation is based on a file -", documentary);
