@@ -104,6 +104,12 @@ int html_generator(struct comment* list, char* path, int quan_structs)
         return 0;
     }
     // ======================= Header ===========================
+    fputs("<!DOCTYPE html><html><head><meta charset=\" UTF - 8\" >",
+          documentary);
+    fputs("<link rel=\"stylesheet\" type=\"text/css\" "
+          "href=\"./src/styles.css\">",
+          documentary);
+    fputs("</head><body><div id=\"wrapper\">", documentary);
     fputs("<h2>This documentation is based on a file -", documentary);
     // char* filename = filename_handle();
     // fputs(filename, documentary);
@@ -116,7 +122,7 @@ int html_generator(struct comment* list, char* path, int quan_structs)
     }
     char* expantion = expansion_handle(path);
     if (!strcmp(expantion, "h")) {
-        fputs("<i>Header file to program code on С/С++</i></br></br>",
+        fputs("<i>Header file to program code on C/C++</i></br></br>",
               documentary);
     }
     if (!strcmp(expantion, "c")) {
@@ -137,27 +143,26 @@ int html_generator(struct comment* list, char* path, int quan_structs)
               documentary);
     }
     fputs("the developer this program.</i></br></br>", documentary);
-    // ======================= Header ===========================
     // ====================== main content =====================
     for (int i = 0; i < quan_structs; i++) {
         int j = 0;
-        char** text_comment = list[i].comment_data;
         while (j < max_quan_str) {
-            int len = strlen(text_comment[j]);
+            int len = strlen(list[i].comment_data[j]);
             if (len == 0) {
                 break;
             }
+            fputs("<p class=\"comment\">", documentary);
             fputs(list[i].comment_data[j], documentary);
             fputs("</br>", documentary);
             j++;
         }
+        fputs("</p>", documentary);
         fputs("<code>", documentary);
         fputs(list[i].code_temp_string, documentary);
         fputs("</code></br></br>", documentary);
     }
-    // ====================== main content =====================
     // =======================   footer =========================
-    // =======================   footer =========================
+    fputs("</div></body></html>", documentary);
     fclose(documentary);
     return 0;
 }
