@@ -90,7 +90,8 @@ char* file_name_generator(char* path)
     for (int i = (last_index_dot - last_index); temp_filename[i] != '\0'; i++) {
         temp_filename[i] = '_';
     }
-    char* generated_filename = strcat(temp_filename, str_time);
+    char* generated_filename_temp = strcat(temp_filename, "__");
+    char* generated_filename = strcat(generated_filename_temp, str_time);
     char* folder_name = (char*)calloc(550, sizeof(char));
     char docs_path[] = "./docs/";
     for (int i = 0; docs_path[i] != '\0'; i++) {
