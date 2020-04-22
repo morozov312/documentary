@@ -86,14 +86,14 @@ int single_comment_code_check(char* str)
 }
 char* code_from_string_with_comment(char* str)
 {
-    int last_index_slash;
+    int last_index_slash = 0;
     for (unsigned int i = 0; i < strlen(str); i++) {
         if (str[i] == '/' && str[i - 1] == '/') {
             last_index_slash = i - 1;
         }
     }
     char* code_string = (char*)calloc(last_index_slash, sizeof(char));
-    for (int i = 0; i < last_index_slash - 1; i++) {
+    for (int i = 0; i < last_index_slash; i++) {
         code_string[i] = str[i];
     }
     return code_string;
@@ -164,9 +164,10 @@ char** path_reading(char path[], char** paths)
     int quan_str = 0;
     int num_valid_path = 0;
     while (quan_str < max_quan_str) {
-        quan_str++;
-        temp = (char*)malloc(max_len_inp_str * sizeof(char));
+        temp = (char*)calloc(max_len_inp_str, sizeof(char));
         ptrFile = fgets(temp, max_len_inp_str, myfile);
+        // need fixed puts of empty path's
+        quan_str++;
         if (ptrFile == NULL) {
             if (feof(myfile) != 0) {
                 break;

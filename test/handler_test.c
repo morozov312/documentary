@@ -154,8 +154,8 @@ CTEST(handle, code_from_string_comment)
     char* res_first = code_from_string_with_comment(str_first);
     char* res_second = code_from_string_with_comment(str_second);
     // Then
-    char* exception_first = "int i = 0";
-    char* exception_second = " int i = 0";
+    char* exception_first = "int i = 0 ";
+    char* exception_second = " int i = 0 ";
     ASSERT_STR(exception_first, res_first);
     ASSERT_STR(exception_second, res_second);
 }
