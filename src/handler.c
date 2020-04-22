@@ -123,7 +123,7 @@ char* comment_from_string_with_code(char* str)
     int first_double_slash_index = 0;
     for (unsigned int i = 0; i < strlen(str); i++) {
         if (str[i] == '/' && str[i - 1] == '/') {
-            first_double_slash_index = i;
+            first_double_slash_index = i - 1;
             break;
         }
     }

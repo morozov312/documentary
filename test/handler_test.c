@@ -159,3 +159,18 @@ CTEST(handle, code_from_string_comment)
     ASSERT_STR(exception_first, res_first);
     ASSERT_STR(exception_second, res_second);
 }
+
+CTEST(handle, comment_from_string_with_code)
+{
+    // Given
+    char str_first[] = "int i = 0 // comment 1";
+    char str_second[] = " int i = 0 // comment 2";
+    // When
+    char* res_first = comment_from_string_with_code(str_first);
+    char* res_second = comment_from_string_with_code(str_second);
+    // Then
+    char* exception_first = "// comment 1";
+    char* exception_second = "// comment 2";
+    ASSERT_STR(exception_first, res_first);
+    ASSERT_STR(exception_second, res_second);
+}
