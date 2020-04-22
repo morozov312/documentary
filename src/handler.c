@@ -216,7 +216,7 @@ int muitiline_comment_end_check(char* str)
 {
     unsigned int len = strlen(str);
     int flag = 0;
-    for (int i = 0; i < len; i++) {
+    for (unsigned int i = 0; i < len; i++) {
         if (str[i] == '*' && str[i + 1] == '/') {
             flag++;
         }

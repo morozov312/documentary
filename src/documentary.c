@@ -92,13 +92,10 @@ char* file_name_generator(char* path)
     }
     char* generated_filename = strcat(temp_filename, str_time);
     char* folder_name = (char*)calloc(550, sizeof(char));
-    folder_name[0] = '.';
-    folder_name[1] = '/';
-    folder_name[2] = 'd';
-    folder_name[3] = 'o';
-    folder_name[4] = 'c';
-    folder_name[5] = 's';
-    folder_name[6] = '/';
+    char docs_path[] = "./docs/";
+    for (int i = 0; docs_path[i] != '\0'; i++) {
+        folder_name[i] = docs_path[i];
+    }
     char* folder = strcat(folder_name, generated_filename);
     char* filename_html = strcat(folder, ".html");
     return filename_html;
@@ -207,5 +204,6 @@ int docs_gen(char** document_data, char* path)
         }
     }
     html_generator(comments_array, path, quan_struct);
+    printf("%s%s\n", "Succsesfully created documentation to file by ", path);
     return 0;
 }
