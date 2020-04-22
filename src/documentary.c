@@ -116,9 +116,9 @@ int html_generator(struct comment* list, char* path, int quan_structs)
           "href=\"./styles/styles.css\">",
           documentary);
     fputs("</head><body><div id=\"wrapper\">", documentary);
-    fputs("<h2>This documentation is based on a file -", documentary);
-    // char* filename = filename_handle();
-    // fputs(filename, documentary);
+    fputs("<h2>This documentation is shaped on file - ", documentary);
+    char* filename = filename_without_expan(path);
+    fputs(filename, documentary);
     fputs("</h2>", documentary);
     int flag = 0;
     for (int i = 0; i < quan_structs; i++) {

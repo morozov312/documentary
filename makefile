@@ -37,7 +37,7 @@ clean:
 	rm $(OBJ_TEST_DIR)/*.o	
 	rm $(BIN_DIR)/documentary
 	rm $(BIN_DIR)/testing
-	rm ./*.html
+	rm ./docs/*.html
 	
 run:
 	$(BIN_DIR)/documentary
