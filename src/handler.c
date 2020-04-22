@@ -52,6 +52,23 @@ char* filename_without_expan(char* path)
     }
 }
 
+int bracket_check(char* str)
+{
+    int symbol_counter = 0;
+    for (unsigned int i = 0; i < strlen(str); i++) {
+        if (str[i] == '{' || str[i] == '}' || str[i] == ' ') {
+            continue;
+        } else {
+            symbol_counter++;
+        }
+    }
+    if (symbol_counter != 0) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
 int expan_check(char* filepath)
 {
     const int quan_of_expan = 3;
