@@ -184,34 +184,51 @@ int docs_gen(char** document_data, char* path)
             count_of_lines++;
         }
     }
+    // this error appears if the document empty ot has 1 line
+    if (count_of_lines <= 1) {
+        printf("%s%s", "Error,file on path ", path);
+        printf("%s\n", " too small for documentation");
+        return 0;
+    }
     int quan_struct = 0;
     struct comment* comments_array
             = (struct comment*)calloc(count_of_lines, sizeof(struct comment));
-    for (int i = 0; i < count_of_lines - 2; i++) {
+    for (int i = 0; i < count_of_lines - 1; i++) {
         // single comment check
         int s_check = single_comment_check(document_data[i]);
         if (s_check == 1) {
-            // type of comment
+            int oneline_comment_check = 0;
+            oneline_comment_check = single_comment_code_check(document_data[i]);
+            /* fill type of comment and adding empty code string for the case
+             * when there are some comments in a row */
             comments_array[quan_struct].type = 0;
             comments_array[quan_struct].code_string = "";
             // nested comment chek
             if (s_check == -1) {
                 return 0;
             }
-            // created empty matrix of comments
             char** comment_text = (char**)calloc(max_quan_str, sizeof(char*));
             for (int j = 0; j < max_quan_str; j++) {
                 comment_text[j] = (char*)calloc(max_len_inp_str, sizeof(char));
             }
-            // fill
-            comment_text[0] = document_data[i];
-            int mb_chek = muitiline_comment_begin_check(document_data[i + 1]);
-            int me_chek = muitiline_comment_end_check(document_data[i + 1]);
-            int ns_check = single_comment_check(document_data[i + 1]);
-            // if next sting is code
-            if (mb_chek == 0 && me_chek == 0 && ns_check == 0) {
-                comments_array[quan_struct].code_string = document_data[i + 1];
-                i++;
+            if (!oneline_comment_check) {
+                comment_text[0] = del_single_comment(document_data[i]);
+                int mb_check = 0;
+                mb_check = muitiline_comment_begin_check(document_data[i + 1]);
+                int me_chek = muitiline_comment_end_check(document_data[i + 1]);
+                int ns_check = single_comment_check(document_data[i + 1]);
+                // if next sting is code
+                if (mb_check == 0 && me_chek == 0 && ns_check == 0) {
+                    comments_array[quan_struct].code_string
+                            = document_data[i + 1];
+                    i++;
+                }
+                // if on one line code and comment
+            } else {
+                char* code = code_from_string_with_comment(document_data[i]);
+                char* comment = comment_from_string_with_code(document_data[i]);
+                comments_array[quan_struct].code_string = code;
+                comment_text[0] = del_single_comment(comment);
             }
             comments_array[quan_struct].comment_data = comment_text;
             quan_struct++;
