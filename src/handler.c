@@ -96,7 +96,7 @@ char* code_from_string_with_comment(char* str)
             last_index_slash = i - 1;
         }
     }
-    char* code_string = (char*)calloc(last_index_slash * sizeof(char));
+    char* code_string = (char*)calloc(last_index_slash, sizeof(char));
     for (int i = 0; i < last_index_slash - 1; i++) {
         code_string[i] = str[i];
     }
