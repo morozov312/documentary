@@ -204,5 +204,6 @@ int docs_gen(char** document_data, char* path)
         }
     }
     html_generator(comments_array, path, quan_struct);
+    printf("%s%s\n", "Succsesfully created documentation to file by ", path);
     return 0;
 }
