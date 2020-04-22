@@ -5,8 +5,8 @@
 char* expansion_handle(char* str)
 {
     int max_len_expan = 4;
-    char* expantion = (char*)malloc(max_len_expan * sizeof(char));
-    int len_path = strlen(str);
+    char* expantion = (char*)calloc(max_len_expan, sizeof(char));
+    unsigned int len_path = strlen(str);
     int j = 0;
     for (int i = len_path - 1; i != 0; i--) {
         expantion[j] = str[i];
@@ -16,7 +16,7 @@ char* expansion_handle(char* str)
         }
     }
     int exp_temp_len = strlen(expantion);
-    char* reversed_str = (char*)malloc(exp_temp_len * sizeof(char));
+    char* reversed_str = (char*)calloc(exp_temp_len, sizeof(char));
     char buff;
     int k = 0;
     for (int i = exp_temp_len - 1; i >= 0; i--) {
@@ -24,7 +24,6 @@ char* expansion_handle(char* str)
         reversed_str[k] = buff;
         k++;
     }
-    free(expantion);
     return reversed_str;
 }
 int expan_check(char* filepath)
@@ -118,7 +117,7 @@ int muitiline_comment_begin_check(char* str)
 }
 int muitiline_comment_end_check(char* str)
 {
-    int len = strlen(str);
+    unsigned int len = strlen(str);
     int flag = 0;
     for (int i = 0; i < len; i++) {
         if (str[i] == '*' && str[i + 1] == '/') {
@@ -145,17 +144,12 @@ char** document_handle(char* paths)
     char *temp, *ptrFile;
     const int max_quan_str = 50 * 1000;
     int quan_str = 0;
-    char** data = (char**)malloc(max_quan_str * sizeof(char*));
+    char** data = (char**)calloc(max_quan_str, sizeof(char*));
     for (int i = 0; i < max_quan_str; i++) {
-        data[i] = (char*)malloc(max_len_inp_str * sizeof(char));
-    }
-    for (int i = 0; i < max_quan_str; i++) {
-        for (int j = 0; j < max_len_inp_str; j++) {
-            data[i][j] = 0;
-        }
+        data[i] = (char*)calloc(max_len_inp_str, sizeof(char));
     }
     while (quan_str < max_quan_str) {
-        temp = (char*)malloc(max_len_inp_str * sizeof(char));
+        temp = (char*)calloc(max_len_inp_str, sizeof(char));
         ptrFile = fgets(temp, max_len_inp_str, myfile);
         if (ptrFile == NULL) {
             if (feof(myfile) != 0) {

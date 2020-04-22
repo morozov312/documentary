@@ -74,13 +74,8 @@ char* file_name_generator(char* path)
     if (str_time[len] == '\n') {
         str_time[len] = '\0';
     }
-    char* temp_filename = (char*)malloc(
-            (filename_estimate_lenght + 5)
-            * sizeof(char)); // 12 is estimated count of chars for time
-    for (int i = 0; i < filename_estimate_lenght + 5; i++) {
-        temp_filename[i] = 0;
-    }
-
+    char* temp_filename
+            = (char*)calloc((filename_estimate_lenght + 20), sizeof(char));
     for (int i = 0; i < filename_estimate_lenght; i++) {
         if (path[i] == '/') {
             last_index = i;
@@ -96,8 +91,16 @@ char* file_name_generator(char* path)
         temp_filename[i] = '_';
     }
     char* generated_filename = strcat(temp_filename, str_time);
-    char* filename_html = strcat(generated_filename, ".html");
-    free(temp_filename);
+    char* folder_name = (char*)calloc(550, sizeof(char));
+    folder_name[0] = '.';
+    folder_name[1] = '/';
+    folder_name[2] = 'd';
+    folder_name[3] = 'o';
+    folder_name[4] = 'c';
+    folder_name[5] = 's';
+    folder_name[6] = '/';
+    char* folder = strcat(folder_name, generated_filename);
+    char* filename_html = strcat(folder, ".html");
     return filename_html;
 }
 int html_generator(struct comment* list, char* path, int quan_structs)
@@ -106,37 +109,69 @@ int html_generator(struct comment* list, char* path, int quan_structs)
     char* name = file_name_generator(path);
     documentary = fopen(name, "w");
     if (documentary == NULL) {
-        printf("%s\n", "Error! Not enough free memory to create html page!");
+        printf("%s\n", "Error create html page!");
         return 0;
     }
+    // ======================= Header ===========================
+    fputs("<!DOCTYPE html><html><head><meta charset=\" UTF - 8\" >",
+          documentary);
+    fputs("<link rel=\"stylesheet\" type=\"text/css\" "
+          "href=\"./styles/styles.css\">",
+          documentary);
+    fputs("</head><body><div id=\"wrapper\">", documentary);
+    fputs("<h2>This documentation is based on a file -", documentary);
+    // char* filename = filename_handle();
+    // fputs(filename, documentary);
+    fputs("</h2>", documentary);
     int flag = 0;
     for (int i = 0; i < quan_structs; i++) {
-        if (list[i].type) { // check presence of multiline comment in document
+        if (list[i].type) { // check presence of multiline comment indocument
             flag++;
         }
     }
-    fputs("<h2><b>HOME</b><h2></br>", documentary);
-    if (flag) {
-        fputs("Oficial</br>", documentary);
-    } else {
-        fputs("Not</br>", documentary);
+    char* expantion = expansion_handle(path);
+    if (!strcmp(expantion, "h")) {
+        fputs("<i>Header file to program code on C/C++</i></br></br>",
+              documentary);
     }
+    if (!strcmp(expantion, "c")) {
+        fputs("<i>Program code in language C</i></br></br>", documentary);
+    }
+    if (!strcmp(expantion, "cpp")) {
+        fputs("<i>Program code in language C++</i></br></br>", documentary);
+    }
+    fputs("<b>Warning</b></br></br><i>This documentation is based on the "
+          "program code containing </br> ",
+          documentary);
+    if (flag) {
+        fputs("documentary comments and is <u>officially</u> confirmed by",
+              documentary);
+    } else {
+        fputs("only one-line comments and <u>may not be officially</u> "
+              "confirmed by ",
+              documentary);
+    }
+    fputs("the developer this program.</i></br></br>", documentary);
+    // ====================== main content =====================
     for (int i = 0; i < quan_structs; i++) {
         int j = 0;
-        char** text_comment = list[i].comment_data;
         while (j < max_quan_str) {
-            int len = strlen(text_comment[j]);
+            int len = strlen(list[i].comment_data[j]);
             if (len == 0) {
                 break;
             }
+            fputs("<p class=\"comment\">", documentary);
             fputs(list[i].comment_data[j], documentary);
             fputs("</br>", documentary);
             j++;
         }
-        fputs("</br>", documentary);
+        fputs("</p>", documentary);
+        fputs("<code>", documentary);
         fputs(list[i].code_temp_string, documentary);
-        fputs("</br>", documentary);
+        fputs("</code></br></br>", documentary);
     }
+    // =======================   footer =========================
+    fputs("</div></body></html>", documentary);
     fclose(documentary);
     return 0;
 }
@@ -150,7 +185,7 @@ int docs_gen(char** document_data, char* path)
     }
     int quan_struct = 0;
     struct comment* comments_array
-            = (struct comment*)malloc(count_of_lines * sizeof(struct comment));
+            = (struct comment*)calloc(count_of_lines, sizeof(struct comment));
     for (int i = 0; i < count_of_lines - 2; i++) {
         if (single_comment_check(document_data[i])) {
             if (!muitiline_comment_begin_check(document_data[i + 1])
@@ -158,15 +193,10 @@ int docs_gen(char** document_data, char* path)
                 comments_array[quan_struct].code_temp_string
                         = document_data[i + 1];
                 char** comment_text
-                        = (char**)malloc(max_quan_str * sizeof(char*));
+                        = (char**)calloc(max_quan_str, sizeof(char*));
                 for (int j = 0; j < max_quan_str; j++) {
                     comment_text[j]
-                            = (char*)malloc(max_len_inp_str * sizeof(char));
-                }
-                for (int ii = 0; ii < max_quan_str; ii++) {
-                    for (int j = 0; j < max_len_inp_str; j++) {
-                        comment_text[ii][j] = 0;
-                    }
+                            = (char*)calloc(max_len_inp_str, sizeof(char));
                 }
                 int num_of_st_comment = 0;
                 comment_text[num_of_st_comment] = document_data[i];
@@ -177,6 +207,5 @@ int docs_gen(char** document_data, char* path)
         }
     }
     html_generator(comments_array, path, quan_struct);
-    free(comments_array);
     return 0;
 }

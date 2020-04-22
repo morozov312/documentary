@@ -8,14 +8,9 @@
 int main()
 {
     char path[] = "./path/path.txt";
-    char** paths = (char**)malloc(max_quan_str * sizeof(char*));
+    char** paths = (char**)calloc(max_quan_str, sizeof(char*));
     for (int i = 0; i < max_quan_str; i++) {
-        paths[i] = (char*)malloc(max_len_inp_str * sizeof(char));
-    }
-    for (int i = 0; i < max_quan_str; i++) {
-        for (int j = 0; j < max_len_inp_str; j++) {
-            paths[i][j] = 0;
-        }
+        paths[i] = (char*)calloc(max_len_inp_str, sizeof(char));
     }
     paths = path_reading(path, paths);
     int quan_of_paths = 0;
@@ -32,9 +27,5 @@ int main()
         }
         docs_gen(file_data, paths[i]);
     }
-    for (int i = 0; i < max_quan_str; i++) {
-        free(paths[i]);
-    }
-    free(paths);
     return 0;
 }
