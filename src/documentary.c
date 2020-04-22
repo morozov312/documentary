@@ -193,10 +193,72 @@ int docs_gen(char** document_data, char* path)
     int quan_struct = 0;
     struct comment* comments_array
             = (struct comment*)calloc(count_of_lines, sizeof(struct comment));
+    char** multiline_comment = (char**)malloc(max_quan_str * sizeof(char*));
+    for (int j = 0; j < max_quan_str; j++) {
+        multiline_comment[j] = (char*)malloc(max_len_inp_str * sizeof(char));
+    }
+    for (int j = 0; j < max_quan_str; j++) {
+        multiline_comment[j] = "";
+    }
+    // index of position in multiline comment
+    int index = 0;
+    // chek of begining multiline comment
+    int begin = 0;
     for (int i = 0; i < count_of_lines - 1; i++) {
+        int b_check = muitiline_comment_begin_check(document_data[i]);
+        int e_check = muitiline_comment_end_check(document_data[i]);
+        // multiline comment check
+        if (b_check == 1 && !begin) {
+            // nested comment chek
+            if (b_check == -1) {
+                return 0;
+            }
+            for (int j = 0; j < max_quan_str; j++) {
+                multiline_comment[j] = "";
+            }
+            multiline_comment[index] = document_data[i];
+            index++;
+            begin++;
+            comments_array[quan_struct].type = 1;
+        }
+        if (b_check == 1 && begin > 1) {
+            // error
+            return 0;
+        }
+        if (e_check == 1 && !begin) {
+            // error
+            return 0;
+        }
+        if (e_check == 0 && begin && b_check == 0) {
+            multiline_comment[index] = document_data[i];
+            index++;
+        }
+        if (e_check == 1 && begin) {
+            // nested comment chek
+            if (e_check == (-1)) {
+                return 0;
+            }
+            int mb_check = 0;
+            mb_check = muitiline_comment_begin_check(document_data[i + 1]);
+            int me_chek = muitiline_comment_end_check(document_data[i + 1]);
+            int ns_check = single_comment_check(document_data[i + 1]);
+            // if next string is code
+            multiline_comment[index] = document_data[i];
+            index++;
+            if (mb_check == 0 && me_chek == 0 && ns_check == 0) {
+                comments_array[quan_struct].code_string = document_data[i + 1];
+            } else {
+                comments_array[quan_struct].code_string = "";
+            }
+            comments_array[quan_struct].comment_data = multiline_comment;
+            quan_struct++;
+            i++;
+            index = 0;
+            begin = 0;
+        }
         // single comment check
         int s_check = single_comment_check(document_data[i]);
-        if (s_check == 1) {
+        if (s_check == 1 && !begin) {
             int oneline_comment_check = 0;
             oneline_comment_check = single_comment_code_check(document_data[i]);
             /* fill type of comment and adding empty code string for the case
@@ -207,9 +269,12 @@ int docs_gen(char** document_data, char* path)
             if (s_check == -1) {
                 return 0;
             }
-            char** comment_text = (char**)calloc(max_quan_str, sizeof(char*));
+            char** comment_text = (char**)malloc(max_quan_str * sizeof(char*));
             for (int j = 0; j < max_quan_str; j++) {
-                comment_text[j] = (char*)calloc(max_len_inp_str, sizeof(char));
+                comment_text[j] = (char*)malloc(max_len_inp_str * sizeof(char));
+            }
+            for (int j = 0; j < max_quan_str; j++) {
+                comment_text[j] = "";
             }
             if (!oneline_comment_check) {
                 comment_text[0] = del_single_comment(document_data[i]);
@@ -217,7 +282,7 @@ int docs_gen(char** document_data, char* path)
                 mb_check = muitiline_comment_begin_check(document_data[i + 1]);
                 int me_chek = muitiline_comment_end_check(document_data[i + 1]);
                 int ns_check = single_comment_check(document_data[i + 1]);
-                // if next sting is code
+                // if next string is code
                 if (mb_check == 0 && me_chek == 0 && ns_check == 0) {
                     comments_array[quan_struct].code_string
                             = document_data[i + 1];
