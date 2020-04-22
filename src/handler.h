@@ -9,4 +9,5 @@ int muitiline_comment_end_check(char* str);
 int expan_check(char* filepath);
 char* filename_without_expan(char* path);
 int bracket_check(char* str);
+int single_comment_code_check(char* str);
 #endif

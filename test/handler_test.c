@@ -126,3 +126,21 @@ CTEST(handle, bracket_check)
     ASSERT_EQUAL(res_second, exception_second);
     ASSERT_EQUAL(res_third, exception_third);
 }
+CTEST(handle, single_comment_code_check)
+{
+    // Given
+    char str_first[] = "// comment";
+    char str_second[] = "  // comment";
+    char str_third[] = "int i = 0 // comment";
+    // When
+    int res_first = single_comment_code_check(str_first);
+    int res_second = single_comment_code_check(str_second);
+    int res_third = single_comment_code_check(str_third);
+    // Then
+    int exception_first = 0;
+    int exception_second = 0;
+    int exception_third = 1;
+    ASSERT_EQUAL(res_first, exception_first);
+    ASSERT_EQUAL(res_second, exception_second);
+    ASSERT_EQUAL(res_third, exception_third);
+}

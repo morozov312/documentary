@@ -72,11 +72,13 @@ int bracket_check(char* str)
 int single_comment_code_check(char* str)
 {
     int symbol_counter = 0;
-    for (unsigned int = 0; i < strlen(str); i++) {
-        if (str[i] != '/' || str[i] != ' ') {
-            symbol_counter++;
-        } else {
+    for (unsigned int i = 0; i < strlen(str); i++) {
+        if (str[i] == '/' && str[i + 1] == '/') {
             break;
+        } else if (str[i] == ' ') {
+            continue;
+        } else {
+            symbol_counter++;
         }
     }
     if (symbol_counter != 0) {
