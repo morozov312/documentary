@@ -137,6 +137,25 @@ char* comment_from_string_with_code(char* str)
     return comment_string;
 }
 
+int comment_separator_check(char* str)
+{
+    int counter_of_same_symbols = 0;
+    for (unsigned int = 0; i < strlen(str); i++) {
+        if (str[i] == '/' && str[i - 1] == '/') {
+            for (unsigned int j = i + 1; j < strlen(str); j++) {
+                if (str[j] == str[j - 1]) {
+                    counter_of_same_symbols++;
+                }
+            }
+        }
+    }
+    if (counter_of_same_symbols > strlen(str) / 3) {
+        return 1; // string is separator comment
+    } else {
+        return 0; // string is not separator comment
+    }
+}
+
 char** path_reading(char path[], char** paths)
 {
     FILE* myfile;
