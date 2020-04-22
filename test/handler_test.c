@@ -97,9 +97,9 @@ CTEST(handle, filename_without_expan)
     char str_second[] = "./src/grab.h";
     char str_third[] = "nothing";
     // When
-    int res_first = filename_without_expan(str_first);
-    int res_second = filename_without_expan(str_second);
-    int res_third = filename_without_expan(str_third);
+    char* res_first = filename_without_expan(str_first);
+    char* res_second = filename_without_expan(str_second);
+    char* res_third = filename_without_expan(str_third);
     // Then
     char* exception_first = "main";
     char* exception_second = "grab";

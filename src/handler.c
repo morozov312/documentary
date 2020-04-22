@@ -41,11 +41,11 @@ char* filename_without_expan(char* path)
     int len_of_filename = last_dot_index - last_slash_index;
     char* filename = (char*)malloc(len_of_filename * sizeof(char));
     int counter = 0;
-    for (unsigned int i = last_slash_index; i < last_dot_index; i++) {
+    for (unsigned int i = last_slash_index + 1; i < last_dot_index; i++) {
         filename[counter] = path[i];
         counter++;
     }
-    if (strlen(filename) == 0) {
+    if (strlen(filename) <= 1) {
         return 0;
     } else {
         return filename;
