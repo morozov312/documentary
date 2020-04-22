@@ -8,4 +8,5 @@ int muitiline_comment_begin_check(char* str);
 int muitiline_comment_end_check(char* str);
 int expan_check(char* filepath);
 char* filename_without_expan(char* path);
+int bracket_check(char* str);
 #endif

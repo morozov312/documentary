@@ -108,3 +108,21 @@ CTEST(handle, filename_without_expan)
     ASSERT_STR(exception_second, res_second);
     ASSERT_STR(exception_third, res_third);
 }
+CTEST(handle, bracket_check)
+{
+    // Given
+    char str_first[] = " {  } ";
+    char str_second[] = " { int i  = 0 }";
+    char str_third[] = "  { int i = 0";
+    // When
+    int res_first = bracket_check(str_first);
+    int res_second = bracket_check(str_second);
+    int res_third = bracket_check(str_third);
+    // Then
+    int exception_first = 1;
+    int exception_second = 0;
+    int exception_third = 0;
+    ASSERT_EQUAL(res_first, exception_first);
+    ASSERT_EQUAL(res_second, exception_second);
+    ASSERT_EQUAL(res_third, exception_third);
+}
