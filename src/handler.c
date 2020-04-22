@@ -26,6 +26,83 @@ char* expansion_handle(char* str)
     }
     return reversed_str;
 }
+
+char* filename_without_expan(char* path)
+{
+    int last_slash_index;
+    int last_dot_index;
+    for (unsigned int i = 0; i < strlen(path); i++) {
+        if (path[i] == '/') {
+            last_slash_index = i;
+        } else if (path[i] == '.') {
+            last_dot_index = i;
+        }
+    }
+    int len_of_filename = last_dot_index - last_slash_index;
+    char* filename = (char*)malloc(len_of_filename * sizeof(char));
+    int counter = 0;
+    for (unsigned int i = last_slash_index + 1; i < last_dot_index; i++) {
+        filename[counter] = path[i];
+        counter++;
+    }
+    if (strlen(filename) <= 1) {
+        return 0;
+    } else {
+        return filename;
+    }
+}
+
+int bracket_check(char* str)
+{
+    int symbol_counter = 0;
+    for (unsigned int i = 0; i < strlen(str); i++) {
+        if (str[i] == '{' || str[i] == '}' || str[i] == ' ') {
+            continue;
+        } else {
+            symbol_counter++;
+        }
+    }
+    if (symbol_counter != 0) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+int single_comment_code_check(char* str)
+{
+    int symbol_counter = 0;
+    for (unsigned int i = 0; i < strlen(str); i++) {
+        if (str[i] == '/' && str[i + 1] == '/') {
+            break;
+        } else if (str[i] == ' ') {
+            continue;
+        } else {
+            symbol_counter++;
+        }
+    }
+    if (symbol_counter != 0) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+char* code_from_string_with_comment(char* str)
+{
+    int last_index_slash;
+    for (unsigned int i = 0; i < strlen(str); i++) {
+        if (str[i] == '/' && str[i - 1] == '/') {
+            last_index_slash = i - 1;
+        }
+    }
+    char* code_string = (char*)calloc(last_index_slash, sizeof(char));
+    for (int i = 0; i < last_index_slash - 1; i++) {
+        code_string[i] = str[i];
+    }
+    return code_string;
+}
+
 int expan_check(char* filepath)
 {
     const int quan_of_expan = 3;
@@ -40,6 +117,26 @@ int expan_check(char* filepath)
     }
     return 0;
 }
+
+char* comment_from_string_with_code(char* str)
+{
+    int first_double_slash_index = 0;
+    for (unsigned int i = 0; i < strlen(str); i++) {
+        if (str[i] == '/' && str[i - 1] == '/') {
+            first_double_slash_index = i - 1;
+            break;
+        }
+    }
+    int max_len_of_comment = strlen(str) - first_double_slash_index;
+    char* comment_string = (char*)calloc(max_len_of_comment, sizeof(char));
+    int counter = 0;
+    for (int i = first_double_slash_index; i < strlen(str); i++) {
+        comment_string[counter] = str[i];
+        counter++;
+    }
+    return comment_string;
+}
+
 char** path_reading(char path[], char** paths)
 {
     FILE* myfile;
