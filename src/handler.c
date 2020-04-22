@@ -117,6 +117,26 @@ int expan_check(char* filepath)
     }
     return 0;
 }
+
+char* comment_from_string_with_code(char* str)
+{
+    int first_double_slash_index = 0;
+    for (unsigned int i = 0; i < strlen(str); i++) {
+        if (str[i] == '/' && str[i - 1] == '/') {
+            first_double_slash_index = i;
+            break;
+        }
+    }
+    int max_len_of_comment = strlen(str) - first_double_slash_index;
+    char* comment_string = (char*)calloc(max_len_of_comment, sizeof(char));
+    int counter = 0;
+    for (int i = first_double_slash_index; i < strlen(str); i++) {
+        comment_string[counter] = str[i];
+        counter++;
+    }
+    return comment_string;
+}
+
 char** path_reading(char path[], char** paths)
 {
     FILE* myfile;
