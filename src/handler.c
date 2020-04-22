@@ -88,6 +88,21 @@ int single_comment_code_check(char* str)
     }
 }
 
+char* code_from_string_with_comment(char* str)
+{
+    int last_index_slash;
+    for (unsigned int i = 0; i < strlen(str); i++) {
+        if (str[i] == '/' && str[i - 1] == '/') {
+            last_index_slash = i - 1;
+        }
+    }
+    char* code_string = (char*)calloc(last_index_slash * sizeof(char));
+    for (int i = 0; i < last_index_slash - 1; i++) {
+        code_string[i] = str[i];
+    }
+    return code_string;
+}
+
 int expan_check(char* filepath)
 {
     const int quan_of_expan = 3;
