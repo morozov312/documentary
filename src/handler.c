@@ -69,6 +69,23 @@ int bracket_check(char* str)
     }
 }
 
+int single_comment_code_check(char* str)
+{
+    int symbol_counter = 0;
+    for (unsigned int = 0; i < strlen(str); i++) {
+        if (str[i] != '/' || str[i] != ' ') {
+            symbol_counter++;
+        } else {
+            break;
+        }
+    }
+    if (symbol_counter != 0) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
 int expan_check(char* filepath)
 {
     const int quan_of_expan = 3;
