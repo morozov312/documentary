@@ -12,4 +12,5 @@ int bracket_check(char* str);
 int single_comment_code_check(char* str);
 char* code_from_string_with_comment(char* str);
 char* comment_from_string_with_code(char* str);
+int comment_separator_check(char* str);
 #endif

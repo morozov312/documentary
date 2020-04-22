@@ -174,3 +174,18 @@ CTEST(handle, comment_from_string_with_code)
     ASSERT_STR(exception_first, res_first);
     ASSERT_STR(exception_second, res_second);
 }
+
+CTEST(handle, comment_separator_check)
+{
+    // Given
+    char* str_first = "//==================";
+    char* str_second = "//###########################";
+    // When
+    int res_first = comment_separator_check(str_first);
+    int res_second = comment_separator_check(str_second);
+    // Then
+    int exception_first = 1;
+    int exception_second = 1;
+    ASSERT_EQUAL(exception_first, res_first);
+    ASSERT_EQUAL(exception_second, res_second);
+}

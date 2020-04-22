@@ -121,7 +121,7 @@ int expan_check(char* filepath)
 char* comment_from_string_with_code(char* str)
 {
     int first_double_slash_index = 0;
-    for (unsigned int i = 0; i < strlen(str); i++) {
+    for (unsigned int i = 1; i < strlen(str); i++) {
         if (str[i] == '/' && str[i - 1] == '/') {
             first_double_slash_index = i - 1;
             break;
@@ -140,16 +140,17 @@ char* comment_from_string_with_code(char* str)
 int comment_separator_check(char* str)
 {
     int counter_of_same_symbols = 0;
-    for (unsigned int = 0; i < strlen(str); i++) {
+    for (unsigned int i = 1; i < strlen(str); i++) {
         if (str[i] == '/' && str[i - 1] == '/') {
             for (unsigned int j = i + 1; j < strlen(str); j++) {
                 if (str[j] == str[j - 1]) {
                     counter_of_same_symbols++;
                 }
             }
+            break;
         }
     }
-    if (counter_of_same_symbols > strlen(str) / 3) {
+    if (counter_of_same_symbols > (strlen(str) / 3)) {
         return 1; // string is separator comment
     } else {
         return 0; // string is not separator comment
