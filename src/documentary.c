@@ -8,7 +8,7 @@
 struct comment {
     int type; // 0 - single comment , 1 - multiline comment
     char** comment_data;
-    char* code_temp_string;
+    char* code_string;
 };
 char* del_single_comment(char* str)
 {
@@ -123,7 +123,8 @@ int html_generator(struct comment* list, char* path, int quan_structs)
     fputs("</h2>", documentary);
     int flag = 0;
     for (int i = 0; i < quan_structs; i++) {
-        if (list[i].type) { // check presence of multiline comment indocument
+        // check presence of multiline comment indocument
+        if (list[i].type) {
             flag++;
         }
     }
@@ -164,9 +165,11 @@ int html_generator(struct comment* list, char* path, int quan_structs)
             j++;
         }
         fputs("</p>", documentary);
-        fputs("<code>", documentary);
-        fputs(list[i].code_temp_string, documentary);
-        fputs("</code></br></br>", documentary);
+        if (strlen(list[i].code_string)) {
+            fputs("<code>", documentary);
+            fputs(list[i].code_string, documentary);
+            fputs("</code></br></br>", documentary);
+        }
     }
     // =======================   footer =========================
     fputs("</div></body></html>", documentary);
@@ -185,23 +188,33 @@ int docs_gen(char** document_data, char* path)
     struct comment* comments_array
             = (struct comment*)calloc(count_of_lines, sizeof(struct comment));
     for (int i = 0; i < count_of_lines - 2; i++) {
-        if (single_comment_check(document_data[i])) {
-            if (!muitiline_comment_begin_check(document_data[i + 1])
-                && !muitiline_comment_end_check(document_data[i + 1])) {
-                comments_array[quan_struct].code_temp_string
-                        = document_data[i + 1];
-                char** comment_text
-                        = (char**)calloc(max_quan_str, sizeof(char*));
-                for (int j = 0; j < max_quan_str; j++) {
-                    comment_text[j]
-                            = (char*)calloc(max_len_inp_str, sizeof(char));
-                }
-                int num_of_st_comment = 0;
-                comment_text[num_of_st_comment] = document_data[i];
-                comments_array[quan_struct].comment_data = comment_text;
-                comments_array[quan_struct].type = 0;
-                quan_struct++;
+        // single comment check
+        int s_check = single_comment_check(document_data[i]);
+        if (s_check == 1) {
+            // type of comment
+            comments_array[quan_struct].type = 0;
+            comments_array[quan_struct].code_string = "";
+            // nested comment chek
+            if (s_check == -1) {
+                return 0;
             }
+            // created empty matrix of comments
+            char** comment_text = (char**)calloc(max_quan_str, sizeof(char*));
+            for (int j = 0; j < max_quan_str; j++) {
+                comment_text[j] = (char*)calloc(max_len_inp_str, sizeof(char));
+            }
+            // fill
+            comment_text[0] = document_data[i];
+            int mb_chek = muitiline_comment_begin_check(document_data[i + 1]);
+            int me_chek = muitiline_comment_end_check(document_data[i + 1]);
+            int ns_check = single_comment_check(document_data[i + 1]);
+            // if next sting is code
+            if (mb_chek == 0 && me_chek == 0 && ns_check == 0) {
+                comments_array[quan_struct].code_string = document_data[i + 1];
+                i++;
+            }
+            comments_array[quan_struct].comment_data = comment_text;
+            quan_struct++;
         }
     }
     html_generator(comments_array, path, quan_struct);

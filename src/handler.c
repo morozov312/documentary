@@ -26,7 +26,6 @@ char* expansion_handle(char* str)
     }
     return reversed_str;
 }
-
 char* filename_without_expan(char* path)
 {
     int last_slash_index;
@@ -51,7 +50,6 @@ char* filename_without_expan(char* path)
         return filename;
     }
 }
-
 int bracket_check(char* str)
 {
     int symbol_counter = 0;
@@ -68,7 +66,6 @@ int bracket_check(char* str)
         return 1;
     }
 }
-
 int single_comment_code_check(char* str)
 {
     int symbol_counter = 0;
@@ -87,7 +84,6 @@ int single_comment_code_check(char* str)
         return 0;
     }
 }
-
 char* code_from_string_with_comment(char* str)
 {
     int last_index_slash;
@@ -102,7 +98,6 @@ char* code_from_string_with_comment(char* str)
     }
     return code_string;
 }
-
 int expan_check(char* filepath)
 {
     const int quan_of_expan = 3;
@@ -117,7 +112,6 @@ int expan_check(char* filepath)
     }
     return 0;
 }
-
 char* comment_from_string_with_code(char* str)
 {
     int first_double_slash_index = 0;
