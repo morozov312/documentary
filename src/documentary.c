@@ -7,7 +7,7 @@
 #define max_quan_str 50 * 1000
 struct comment {
     int type; // 0 - single comment , 1 - multiline comment
-    char** comment_data;
+    char* comment_data;
     char* code_string;
 };
 char* del_single_comment(char* str)
@@ -200,8 +200,8 @@ int docs_gen(char** document_data, char* path)
     for (int i = 0; i < count_of_lines - 1; i++) {
         // multiline comment check
         int begin_m_check, end_m_check = 0;
-        begin_m_check = muitiline_comment_begin_check(document_data[i]);
-        end_m_check = muitiline_comment_end_check(document_data[i]);
+        begin_m_check = multiline_comment_begin_check(document_data[i]);
+        end_m_check = multiline_comment_end_check(document_data[i]);
         if (begin_m_check == 1 && !start_mult_comment) {
             // nested comment check
             if (begin_m_check == -1) {
@@ -238,8 +238,8 @@ int docs_gen(char** document_data, char* path)
             // next line check
             char* next_string = document_data[i + 1];
             int n_mb_check = 0, n_me_check = 0, ns_check = 0;
-            n_mb_check = muitiline_comment_begin_check(next_string);
-            n_me_check = muitiline_comment_end_check(next_string);
+            n_mb_check = multiline_comment_begin_check(next_string);
+            n_me_check = multiline_comment_end_check(next_string);
             ns_check = single_comment_check(next_string);
             // if next string is code
             char* no_stars = del_multiline_comment_stars(document_data[i]);
@@ -275,8 +275,8 @@ int docs_gen(char** document_data, char* path)
                 // next line check
                 char* next_string = document_data[i + 1];
                 int n_mb_check = 0, n_me_check = 0, ns_check = 0;
-                n_mb_check = muitiline_comment_begin_check(next_string);
-                n_me_check = muitiline_comment_end_check(next_string);
+                n_mb_check = multiline_comment_begin_check(next_string);
+                n_me_check = multiline_comment_end_check(next_string);
                 ns_check = single_comment_check(next_string);
                 // if next string is code
                 if (n_mb_check == 0 && n_me_check == 0 && ns_check == 0) {

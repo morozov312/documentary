@@ -25,9 +25,9 @@ CTEST(handle, mult_comment_check_b)
     char str_second[] = " not comment";
     char str_thrid[] = " not comment /* comment /* nested comment";
     // When
-    int res_first = muitiline_comment_begin_check(str_first);
-    int res_second = muitiline_comment_begin_check(str_second);
-    int res_thrid = muitiline_comment_begin_check(str_thrid);
+    int res_first = multiline_comment_begin_check(str_first);
+    int res_second = multiline_comment_begin_check(str_second);
+    int res_thrid = multiline_comment_begin_check(str_thrid);
     // Then
     int exp_first = 1;
     int exp_second = 0;
@@ -43,9 +43,9 @@ CTEST(handle, mult_comment_check_e)
     char str_second[] = " not comment";
     char str_thrid[] = "  comment */ not comment */ nested comment";
     // When
-    int res_first = muitiline_comment_end_check(str_first);
-    int res_second = muitiline_comment_end_check(str_second);
-    int res_thrid = muitiline_comment_end_check(str_thrid);
+    int res_first = multiline_comment_end_check(str_first);
+    int res_second = multiline_comment_end_check(str_second);
+    int res_thrid = multiline_comment_end_check(str_thrid);
     // Then
     int exp_first = 1;
     int exp_second = 0;
@@ -103,7 +103,7 @@ CTEST(handle, filename_without_expan)
     // Then
     char* exception_first = "main";
     char* exception_second = "grab";
-    int exception_third = 0;
+    char* exception_third = 0;
     ASSERT_STR(exception_first, res_first);
     ASSERT_STR(exception_second, res_second);
     ASSERT_STR(exception_third, res_third);

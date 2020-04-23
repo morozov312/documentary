@@ -2,7 +2,7 @@
 #define DOCUMENTARY_H
 struct comment {
     int type; // 0 - single comment , 1 - multiline comment
-    char** comment_data;
+    char* comment_data;
     char* code_string;
 };
 char* del_single_comment(char* str);

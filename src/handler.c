@@ -5,22 +5,22 @@
 char* expansion_handle(char* str)
 {
     int max_len_expan = 4;
-    char* expantion = (char*)calloc(max_len_expan, sizeof(char));
+    char* expansion = (char*)calloc(max_len_expan, sizeof(char));
     unsigned int len_path = strlen(str);
     int j = 0;
-    for (int i = len_path - 1; i != 0; i--) {
-        expantion[j] = str[i];
+    for (unsigned int i = len_path - 1; i != 0; i--) {
+        expansion[j] = str[i];
         j++;
         if (str[i - 1] == '.' || j == 3) {
             break;
         }
     }
-    int exp_temp_len = strlen(expantion);
+    int exp_temp_len = (int)strlen(expansion);
     char* reversed_str = (char*)calloc(exp_temp_len, sizeof(char));
-    char buff;
+    char buff = 0;
     int k = 0;
     for (int i = exp_temp_len - 1; i >= 0; i--) {
-        buff = expantion[i];
+        buff = expansion[i];
         reversed_str[k] = buff;
         k++;
     }
@@ -28,8 +28,8 @@ char* expansion_handle(char* str)
 }
 char* filename_without_expan(char* path)
 {
-    int last_slash_index;
-    int last_dot_index;
+    unsigned int last_slash_index = 0;
+    unsigned int last_dot_index = 0;
     for (unsigned int i = 0; i < strlen(path); i++) {
         if (path[i] == '/') {
             last_slash_index = i;
@@ -37,8 +37,8 @@ char* filename_without_expan(char* path)
             last_dot_index = i;
         }
     }
-    int len_of_filename = last_dot_index - last_slash_index;
-    char* filename = (char*)calloc(len_of_filename, sizeof(char));
+    unsigned int len_of_filename = last_dot_index - last_slash_index;
+    char* filename = (char*)malloc(len_of_filename * sizeof(char));
     int counter = 0;
     for (unsigned int i = last_slash_index + 1; i < last_dot_index; i++) {
         filename[counter] = path[i];
@@ -86,14 +86,14 @@ int single_comment_code_check(char* str)
 }
 char* code_from_string_with_comment(char* str)
 {
-    int last_index_slash = 0;
+    unsigned int last_index_slash = 0;
     for (unsigned int i = 0; i < strlen(str); i++) {
         if (str[i] == '/' && str[i - 1] == '/') {
             last_index_slash = i - 1;
         }
     }
     char* code_string = (char*)calloc(last_index_slash, sizeof(char));
-    for (int i = 0; i < last_index_slash; i++) {
+    for (unsigned int i = 0; i < last_index_slash; i++) {
         code_string[i] = str[i];
     }
     return code_string;
@@ -114,17 +114,17 @@ int expan_check(char* filepath)
 }
 char* comment_from_string_with_code(char* str)
 {
-    int first_double_slash_index = 0;
-    for (unsigned int i = 1; i < strlen(str); i++) {
+    unsigned int first_double_slash_index = 0;
+    for (unsigned int i = 0; i < strlen(str); i++) {
         if (str[i] == '/' && str[i - 1] == '/') {
             first_double_slash_index = i - 1;
             break;
         }
     }
-    int max_len_of_comment = strlen(str) - first_double_slash_index;
+    unsigned int max_len_of_comment = strlen(str) - first_double_slash_index;
     char* comment_string = (char*)calloc(max_len_of_comment, sizeof(char));
     int counter = 0;
-    for (int i = first_double_slash_index; i < strlen(str); i++) {
+    for (unsigned int i = first_double_slash_index; i < strlen(str); i++) {
         comment_string[counter] = str[i];
         counter++;
     }
@@ -193,9 +193,9 @@ char** path_reading(char path[], char** paths)
 }
 int single_comment_check(char* str)
 {
-    int len = strlen(str);
+    unsigned int len = strlen(str);
     int flag = 0;
-    for (int i = 0; i < len; i++) {
+    for (unsigned int i = 0; i < len; i++) {
         if (str[i] == '/' && str[i + 1] == '/') {
             flag++;
         }
@@ -209,11 +209,11 @@ int single_comment_check(char* str)
     }
     return 0;
 }
-int muitiline_comment_begin_check(char* str)
+int multiline_comment_begin_check(char* str)
 {
-    int len = strlen(str);
+    unsigned int len = strlen(str);
     int flag = 0;
-    for (int i = 0; i < len; i++) {
+    for (unsigned int i = 0; i < len; i++) {
         if (str[i] == '/' && str[i + 1] == '*') {
             flag++;
         }
@@ -227,7 +227,7 @@ int muitiline_comment_begin_check(char* str)
     }
     return 0;
 }
-int muitiline_comment_end_check(char* str)
+int multiline_comment_end_check(char* str)
 {
     unsigned int len = strlen(str);
     int flag = 0;

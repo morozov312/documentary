@@ -1,6 +1,5 @@
 #include "documentary.h"
 #include "handler.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #define max_len_inp_str 500
