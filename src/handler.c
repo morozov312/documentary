@@ -7,9 +7,9 @@ char* expansion_handle(char* str)
 {
     int max_len_expan = 4;
     char* expansion = (char*)calloc(max_len_expan, sizeof(char));
-    unsigned int len_path = strlen(str);
+    int len_path = (int)strlen(str);
     int j = 0;
-    for (unsigned int i = len_path - 1; i != 0; i--) {
+    for (int i = len_path - 1; i != 0; i--) {
         expansion[j] = str[i];
         j++;
         if (str[i - 1] == '.' || j == 3) {
@@ -186,6 +186,13 @@ char** path_reading(char path[], char** paths)
         if (temp[len] == '\n') {
             temp[len] = '\0';
         }
+        if (len == 0) {
+            continue;
+        }
+        // the ability to add comments
+        if (temp[0] == '#') {
+            continue;
+        }
         int check = expan_check(temp);
         if (check) {
             paths[num_valid_path] = temp;
@@ -280,9 +287,6 @@ char** document_handle(char* paths)
             } else {
                 continue;
             }
-        }
-        if (strlen(temp) == 0) {
-            continue;
         }
         data[quan_str] = temp;
         quan_str++;
