@@ -10,6 +10,8 @@ struct comment {
     char* comment_data;
     char* code_string;
 };
+/* removes single-line comment characters
+ * for a more understandable entry in html page */
 char* del_single_comment(char* str)
 {
     for (int i = 0; str[i] != '\0'; i++) {
@@ -21,6 +23,8 @@ char* del_single_comment(char* str)
     }
     return str;
 }
+/*  removes multi-line comment characters
+ * for a more understandable entry in html page */
 char* del_multiline_comment_begin(char* str)
 {
     for (int i = 0; str[i] != '\0'; i++) {
@@ -54,6 +58,8 @@ char* del_multiline_comment_stars(char* str)
     }
     return str;
 }
+/* creates a unique file name which takes
+ * the name, day, number and time of creation of the documentation */
 char* file_name_generator(char* path)
 {
     int last_index = 0;
@@ -101,6 +107,10 @@ char* file_name_generator(char* path)
     char* filename_html = strcat(folder, ".html");
     return filename_html;
 }
+/**********************************************************
+ * this function creates an HTML page from the documentation
+ * in the directory - documentary/docs/
+ **********************************************************/
 int html_generator(struct comment* list, char* path, int quan_structs)
 {
     FILE* documentary;
@@ -198,6 +208,11 @@ int docs_gen(char** document_data, char* path)
     // start of the main processing cycle
     // ==========================================================================
     for (int i = 0; i < count_of_lines - 1; i++) {
+        if (i == count_of_lines - 2 && start_mult_comment) {
+            printf("%s%s", "Error,file on path ", path);
+            printf("%s\n", "incorrectly written");
+            return 0;
+        }
         // multiline comment check
         int begin_m_check, end_m_check = 0;
         begin_m_check = multiline_comment_begin_check(document_data[i]);
