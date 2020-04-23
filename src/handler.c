@@ -43,13 +43,17 @@ char* expansion_handle(char* str)
 // This function checks lines with code and multiline comments
 int code_and_multiline_comment_check(char* str)
 {
-    unsigned int lengh = strlen(str);
-    int begin_index, end_index = 0;
-
-    for (unsigned int i = 1; i < lengh; i++) {
+    // neeeeeed  fixeeeeeeed
+    unsigned int lenght = strlen(str);
+    int begin_index = 0, end_index = 0;
+    if (str[lenght - 1] == '\n') {
+        str[lenght - 1] = '\0';
+    }
+    for (unsigned int i = 1; i < lenght; i++) {
         if (str[i] == '*' && str[i - 1] == '/') {
             begin_index = i - 1;
-        } else if (str[i] == '/' && str[i - 1] == '*') {
+        }
+        if (str[i] == '/' && str[i - 1] == '*') {
             end_index = i;
         }
     }
@@ -60,7 +64,7 @@ int code_and_multiline_comment_check(char* str)
             return 1;
         }
     }
-    for (unsigned int i = end_index + 1; i < lengh; i++) {
+    for (unsigned int i = end_index + 1; i < lenght; i++) {
         if (str[i] != ' ') {
             return 1;
         }
@@ -73,6 +77,7 @@ int code_and_multiline_comment_check(char* str)
 // This function handles filename deleting expansion
 char* filename_without_expan(char* path)
 {
+    // neeeeeed  fixeeeeeeed
     unsigned int last_slash_index = 0;
     unsigned int last_dot_index = 0;
     for (unsigned int i = 0; i < strlen(path); i++) {
