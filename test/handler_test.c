@@ -144,7 +144,6 @@ CTEST(handle, single_comment_code_check)
     ASSERT_EQUAL(res_second, exception_second);
     ASSERT_EQUAL(res_third, exception_third);
 }
-
 CTEST(handle, code_from_string_comment)
 {
     // Given
@@ -159,7 +158,6 @@ CTEST(handle, code_from_string_comment)
     ASSERT_STR(exception_first, res_first);
     ASSERT_STR(exception_second, res_second);
 }
-
 CTEST(handle, comment_from_string_with_code)
 {
     // Given
@@ -174,7 +172,6 @@ CTEST(handle, comment_from_string_with_code)
     ASSERT_STR(exception_first, res_first);
     ASSERT_STR(exception_second, res_second);
 }
-
 CTEST(handle, comment_separator_check)
 {
     // Given

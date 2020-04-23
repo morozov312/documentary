@@ -173,7 +173,7 @@ int html_generator(struct comment* list, char* path, int quan_structs)
     // footer
     fputs("</div></body></html>", documentary);
     fclose(documentary);
-    return 0;
+    return 1;
 }
 int docs_gen(char** document_data, char* path)
 {
@@ -269,6 +269,10 @@ int docs_gen(char** document_data, char* path)
             if (s_check == -1) {
                 return 0;
             }
+            int separator = comment_separator_check(document_data[i]);
+            if (separator) {
+                continue;
+            }
             char* comment_text;
             if (!oneline_comment_check) {
                 comment_text = del_single_comment(document_data[i]);
@@ -294,7 +298,11 @@ int docs_gen(char** document_data, char* path)
             quan_struct++;
         }
     }
-    html_generator(comments_array, path, quan_struct);
-    printf("%s%s\n", "Succsesfully created documentation to file by ", path);
+    int res = html_generator(comments_array, path, quan_struct);
+    if (res) {
+        printf("%s%s\n",
+               "Succsesfully created documentation to file by ",
+               path);
+    }
     return 0;
 }
