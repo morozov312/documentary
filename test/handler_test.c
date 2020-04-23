@@ -168,3 +168,21 @@ CTEST(handle, comment_separator_check)
     ASSERT_EQUAL(exception_first, res_first);
     ASSERT_EQUAL(exception_second, res_second);
 }
+CTEST(handle, code_and_multiline_comment)
+{
+    // Given
+    char* str_first = "code /* comment */";
+    char* str_second = "code /* comment */ code";
+    char* str_third = " /* comment */ ";
+    // When
+    int res_first = code_and_multiline_comment_check(str_first);
+    int res_second = code_and_multiline_comment_check(str_second);
+    int res_third = code_and_multiline_comment_check(str_third);
+    // Then
+    int exception_first = 1;
+    int exception_second = 1;
+    int exception_third = 0;
+    ASSERT_EQUAL(exception_first, res_first);
+    ASSERT_EQUAL(exception_second, res_second);
+    ASSERT_EQUAL(exception_third, res_third);
+}
