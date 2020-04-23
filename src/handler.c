@@ -27,6 +27,31 @@ char* expansion_handle(char* str)
     }
     return reversed_str;
 }
+// This function checks lines with code and multiline comments
+int code_and_multiline_comment_check(char* str)
+{
+    unsigned int lengh = strlen(str);
+    int begin_index, end_index;
+
+    for (unsigned int i = 1; i < lengh; i++) {
+        if (str[i] == '*' && str[i - 1] == '/') {
+            begin_index = i - 1;
+        } else if (str[i] == '/' && str[i - 1] == '*') {
+            end_index = i;
+        }
+    }
+    for (int i = 0; i < begin_index - 1; i++) {
+        if (str[i] != ' ') {
+            return 1;
+        }
+    }
+    for (unsigned int i = end_index + 1; i < lengh; i++) {
+        if (str[i] != ' ') {
+            return 1;
+        }
+    }
+    return 0;
+}
 // This functiob handles filename deleting expansion
 char* filename_without_expan(char* path)
 {
