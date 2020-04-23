@@ -151,7 +151,7 @@ int comment_separator_check(char* str)
             break;
         }
     }
-    if (counter_of_same_symbols > (strlen(str) / 3)) {
+    if (counter_of_same_symbols > (int)(strlen(str) / 3)) {
         return 1; // string is separator comment
     } else {
         return 0; // string is not separator comment

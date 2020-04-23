@@ -76,7 +76,7 @@ char* file_name_generator(char* path)
     }
     char* temp_filename
             = (char*)calloc((filename_estimate_length + 20), sizeof(char));
-    for (int i = 0; i < filename_estimate_length; i++) {
+    for (unsigned int i = 0; i < filename_estimate_length; i++) {
         if (path[i] == '/') {
             last_index = i;
         } else if (path[i] == '.') {
