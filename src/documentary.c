@@ -1,3 +1,15 @@
+/***************************************
+ * THIS PROGRAM GENERATES DOCUMENTARY
+ * BY ANALIZING AND REWRITING COMMENTS FROM
+ * YOUR FILE TO NEW .html file
+ * PROGRAM DEVELOPED BY
+ * @MOSKALT AND @MOROZOV312
+ * 2020
+ * THE PROGRAMM IS OPENSOURCE PROJECT
+ * PROJECT SOURCE CODE
+ * https://github.com/morozov312/documentary
+ ****************************************/
+
 #include "handler.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -139,7 +151,7 @@ int html_generator(struct comment* list, char* path, int quan_structs)
             flag++;
         }
     }
-    // document language definition
+    // document programming language definition
     char* expansion = expansion_handle(path);
     if (!strcmp(expansion, "h")) {
         fputs("<i>Header file to program code on C/C++</i></br></br>",

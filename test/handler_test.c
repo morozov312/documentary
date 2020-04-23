@@ -112,7 +112,7 @@ CTEST(handle, single_comment_code_check)
 {
     // Given
     char str_first[] = "// comment";
-    char str_second[] = "  // comment";
+    char str_second[] = "  // comment too";
     char str_third[] = "int i = 0 // comment";
     // When
     int res_first = single_comment_code_check(str_first);
@@ -130,13 +130,13 @@ CTEST(handle, code_from_string_comment)
 {
     // Given
     char str_first[] = "int i = 0 // comment";
-    char str_second[] = " int i = 0 // comment";
+    char str_second[] = " char a = 0 // comment";
     // When
     char* res_first = code_from_string_with_comment(str_first);
     char* res_second = code_from_string_with_comment(str_second);
     // Then
     char* exception_first = "int i = 0 ";
-    char* exception_second = " int i = 0 ";
+    char* exception_second = " char a = 0 ";
     ASSERT_STR(exception_first, res_first);
     ASSERT_STR(exception_second, res_second);
 }
