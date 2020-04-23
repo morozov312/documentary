@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #define max_len_inp_str 500
+// This function handles expansion from path
 char* expansion_handle(char* str)
 {
     int max_len_expan = 4;
@@ -26,6 +27,7 @@ char* expansion_handle(char* str)
     }
     return reversed_str;
 }
+// This functiob handles filename deleting expansion
 char* filename_without_expan(char* path)
 {
     unsigned int last_slash_index = 0;
@@ -50,6 +52,7 @@ char* filename_without_expan(char* path)
         return filename;
     }
 }
+// This function checks brackets in code line
 int bracket_check(char* str)
 {
     int symbol_counter = 0;
@@ -66,6 +69,7 @@ int bracket_check(char* str)
         return 1;
     }
 }
+// This function checks comments on their type
 int single_comment_code_check(char* str)
 {
     int symbol_counter = 0;
@@ -84,6 +88,7 @@ int single_comment_code_check(char* str)
         return 0;
     }
 }
+// This function returns code if there are code in line with comment
 char* code_from_string_with_comment(char* str)
 {
     unsigned int last_index_slash = 0;
@@ -98,6 +103,7 @@ char* code_from_string_with_comment(char* str)
     }
     return code_string;
 }
+// This function checks file's expansion
 int expan_check(char* filepath)
 {
     const int quan_of_expan = 3;
@@ -112,6 +118,7 @@ int expan_check(char* filepath)
     }
     return 0;
 }
+// This function return comments from line with code
 char* comment_from_string_with_code(char* str)
 {
     unsigned int first_double_slash_index = 0;
@@ -130,7 +137,7 @@ char* comment_from_string_with_code(char* str)
     }
     return comment_string;
 }
-
+// This function checks comment on separator
 int comment_separator_check(char* str)
 {
     int counter_of_same_symbols = 0;
@@ -150,7 +157,7 @@ int comment_separator_check(char* str)
         return 0; // string is not separator comment
     }
 }
-
+// This function reads array of pathes
 char** path_reading(char path[], char** paths)
 {
     FILE* myfile;
@@ -191,6 +198,7 @@ char** path_reading(char path[], char** paths)
     fclose(myfile);
     return paths;
 }
+// This function checks single comments
 int single_comment_check(char* str)
 {
     unsigned int len = strlen(str);
@@ -209,6 +217,7 @@ int single_comment_check(char* str)
     }
     return 0;
 }
+// This function checks multiline comment's begin
 int multiline_comment_begin_check(char* str)
 {
     unsigned int len = strlen(str);
@@ -227,6 +236,7 @@ int multiline_comment_begin_check(char* str)
     }
     return 0;
 }
+// This function checks multiline comment's end
 int multiline_comment_end_check(char* str)
 {
     unsigned int len = strlen(str);
@@ -245,6 +255,7 @@ int multiline_comment_end_check(char* str)
     }
     return 0;
 }
+// This function return array of data from file
 char** document_handle(char* paths)
 {
     FILE* myfile;
