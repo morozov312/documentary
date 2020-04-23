@@ -46,7 +46,7 @@ char* filename_without_expan(char* path)
         filename[counter] = path[i];
         counter++;
     }
-    if (strlen(filename) <= 1) {
+    if (strlen(filename) < 1) {
         return 0;
     } else {
         return filename;
