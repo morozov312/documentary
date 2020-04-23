@@ -13,46 +13,46 @@ CTEST(handle, single_comment_check)
     // Then
     int exp_first = 1;
     int exp_second = 0;
-    int exp_thrid = -1;
+    int exp_third = -1;
     ASSERT_EQUAL(res_first, exp_first);
     ASSERT_EQUAL(res_second, exp_second);
-    ASSERT_EQUAL(res_third, exp_thrid);
+    ASSERT_EQUAL(res_third, exp_third);
 }
 CTEST(handle, mult_comment_check_b)
 {
     // Given
     char str_first[] = " not comment /* comment";
     char str_second[] = " not comment";
-    char str_thrid[] = " not comment /* comment /* nested comment";
+    char str_third[] = " not comment /* comment /* nested comment";
     // When
     int res_first = multiline_comment_begin_check(str_first);
     int res_second = multiline_comment_begin_check(str_second);
-    int res_thrid = multiline_comment_begin_check(str_thrid);
+    int res_thrid = multiline_comment_begin_check(str_third);
     // Then
     int exp_first = 1;
     int exp_second = 0;
-    int exp_thrid = -1;
+    int exp_third = -1;
     ASSERT_EQUAL(res_first, exp_first);
     ASSERT_EQUAL(res_second, exp_second);
-    ASSERT_EQUAL(res_thrid, exp_thrid);
+    ASSERT_EQUAL(res_thrid, exp_third);
 }
 CTEST(handle, mult_comment_check_e)
 {
     // Given
     char str_first[] = " comment */ not comment";
     char str_second[] = " not comment";
-    char str_thrid[] = "  comment */ not comment */ nested comment";
+    char str_third[] = "  comment */ not comment */ nested comment";
     // When
     int res_first = multiline_comment_end_check(str_first);
     int res_second = multiline_comment_end_check(str_second);
-    int res_thrid = multiline_comment_end_check(str_thrid);
+    int res_third = multiline_comment_end_check(str_third);
     // Then
     int exp_first = 1;
     int exp_second = 0;
-    int exp_thrid = -1;
+    int exp_third = -1;
     ASSERT_EQUAL(res_first, exp_first);
     ASSERT_EQUAL(res_second, exp_second);
-    ASSERT_EQUAL(res_thrid, exp_thrid);
+    ASSERT_EQUAL(res_third, exp_third);
 }
 CTEST(handle, expansion_handler)
 {

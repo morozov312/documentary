@@ -36,5 +36,9 @@ int main()
         // functions
         docs_gen(file_data, paths[i]);
     }
+    for (int i = 0; i < max_quan_str; i++) {
+        free(paths[i]);
+    }
+    free(paths);
     return 0;
 }

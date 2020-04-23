@@ -304,5 +304,6 @@ int docs_gen(char** document_data, char* path)
                "Succsesfully created documentation to file by ",
                path);
     }
+    free(comments_array);
     return 0;
 }
