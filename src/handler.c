@@ -52,23 +52,6 @@ char* filename_without_expan(char* path)
         return filename;
     }
 }
-// This function checks brackets in code line
-int bracket_check(char* str)
-{
-    int symbol_counter = 0;
-    for (unsigned int i = 0; i < strlen(str); i++) {
-        if (str[i] == '{' || str[i] == '}' || str[i] == ' ') {
-            continue;
-        } else {
-            symbol_counter++;
-        }
-    }
-    if (symbol_counter != 0) {
-        return 0;
-    } else {
-        return 1;
-    }
-}
 // This function checks comments on their type
 int single_comment_code_check(char* str)
 {
@@ -173,7 +156,6 @@ char** path_reading(char path[], char** paths)
     while (quan_str < max_quan_str) {
         temp = (char*)calloc(max_len_inp_str, sizeof(char));
         ptrFile = fgets(temp, max_len_inp_str, myfile);
-        // need fixed puts of empty path's
         quan_str++;
         if (ptrFile == NULL) {
             if (feof(myfile) != 0) {
