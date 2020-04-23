@@ -193,72 +193,73 @@ int docs_gen(char** document_data, char* path)
     int quan_struct = 0;
     struct comment* comments_array
             = (struct comment*)calloc(count_of_lines, sizeof(struct comment));
-    char** multiline_comment = (char**)malloc(max_quan_str * sizeof(char*));
-    for (int j = 0; j < max_quan_str; j++) {
-        multiline_comment[j] = (char*)malloc(max_len_inp_str * sizeof(char));
-    }
-    for (int j = 0; j < max_quan_str; j++) {
-        multiline_comment[j] = "";
-    }
-    // index of position in multiline comment
-    int index = 0;
-    // chek of begining multiline comment
-    int begin = 0;
+    // check of begin multiline comment
+    int start_mult_comment = 0;
+    // ==========================================================================
+    // start of the main processing cycle
+    // ==========================================================================
     for (int i = 0; i < count_of_lines - 1; i++) {
-        int b_check = muitiline_comment_begin_check(document_data[i]);
-        int e_check = muitiline_comment_end_check(document_data[i]);
         // multiline comment check
-        if (b_check == 1 && !begin) {
-            // nested comment chek
-            if (b_check == -1) {
+        int begin_m_check, end_m_check = 0;
+        begin_m_check = muitiline_comment_begin_check(document_data[i]);
+        end_m_check = muitiline_comment_end_check(document_data[i]);
+        if (begin_m_check == 1 && !start_mult_comment) {
+            // nested comment check
+            if (begin_m_check == -1) {
                 return 0;
             }
-            for (int j = 0; j < max_quan_str; j++) {
-                multiline_comment[j] = "";
-            }
-            multiline_comment[index] = document_data[i];
-            index++;
-            begin++;
+            comments_array[quan_struct].comment_data
+                    = del_multiline_comment_begin(document_data[i]);
+            start_mult_comment++;
             comments_array[quan_struct].type = 1;
+            comments_array[quan_struct].code_string = "";
+            quan_struct++;
         }
-        if (b_check == 1 && begin > 1) {
-            // error
+        if (begin_m_check == 1 && start_mult_comment > 1) {
+            printf("%s", "Error,don't use nested comments");
             return 0;
         }
-        if (e_check == 1 && !begin) {
-            // error
+        if (end_m_check == 1 && !start_mult_comment) {
+            printf("%s", "Error,don't use nested comments");
             return 0;
         }
-        if (e_check == 0 && begin && b_check == 0) {
-            multiline_comment[index] = document_data[i];
-            index++;
+        // write multi-line comment lines
+        if (end_m_check == 0 && start_mult_comment && begin_m_check == 0) {
+            comments_array[quan_struct].comment_data
+                    = del_multiline_comment_stars(document_data[i]);
+            comments_array[quan_struct].type = 1;
+            comments_array[quan_struct].code_string = "";
+            quan_struct++;
         }
-        if (e_check == 1 && begin) {
+        if (end_m_check == 1 && start_mult_comment) {
             // nested comment chek
-            if (e_check == (-1)) {
+            if (end_m_check == -1) {
                 return 0;
             }
-            int mb_check = 0;
-            mb_check = muitiline_comment_begin_check(document_data[i + 1]);
-            int me_chek = muitiline_comment_end_check(document_data[i + 1]);
-            int ns_check = single_comment_check(document_data[i + 1]);
+            // next line check
+            char* next_string = document_data[i + 1];
+            int n_mb_check = 0, n_me_check = 0, ns_check = 0;
+            n_mb_check = muitiline_comment_begin_check(next_string);
+            n_me_check = muitiline_comment_end_check(next_string);
+            ns_check = single_comment_check(next_string);
             // if next string is code
-            multiline_comment[index] = document_data[i];
-            index++;
-            if (mb_check == 0 && me_chek == 0 && ns_check == 0) {
-                comments_array[quan_struct].code_string = document_data[i + 1];
+            char* no_stars = del_multiline_comment_stars(document_data[i]);
+            comments_array[quan_struct].comment_data
+                    = del_multiline_comment_end(no_stars);
+            comments_array[quan_struct].type = 1;
+            if (n_mb_check == 0 && n_me_check == 0 && ns_check == 0) {
+                comments_array[quan_struct].code_string = next_string;
             } else {
                 comments_array[quan_struct].code_string = "";
             }
-            comments_array[quan_struct].comment_data = multiline_comment;
-            quan_struct++;
             i++;
-            index = 0;
-            begin = 0;
+            quan_struct++;
+            start_mult_comment = 0;
         }
+        // ========================================================================
         // single comment check
         int s_check = single_comment_check(document_data[i]);
-        if (s_check == 1 && !begin) {
+        if (s_check == 1 && !start_mult_comment) {
             int oneline_comment_check = 0;
             oneline_comment_check = single_comment_code_check(document_data[i]);
             /* fill type of comment and adding empty code string for the case
@@ -269,23 +270,18 @@ int docs_gen(char** document_data, char* path)
             if (s_check == -1) {
                 return 0;
             }
-            char** comment_text = (char**)malloc(max_quan_str * sizeof(char*));
-            for (int j = 0; j < max_quan_str; j++) {
-                comment_text[j] = (char*)malloc(max_len_inp_str * sizeof(char));
-            }
-            for (int j = 0; j < max_quan_str; j++) {
-                comment_text[j] = "";
-            }
+            char* comment_text;
             if (!oneline_comment_check) {
-                comment_text[0] = del_single_comment(document_data[i]);
-                int mb_check = 0;
-                mb_check = muitiline_comment_begin_check(document_data[i + 1]);
-                int me_chek = muitiline_comment_end_check(document_data[i + 1]);
-                int ns_check = single_comment_check(document_data[i + 1]);
+                comment_text = del_single_comment(document_data[i]);
+                // next line check
+                char* next_string = document_data[i + 1];
+                int n_mb_check = 0, n_me_check = 0, ns_check = 0;
+                n_mb_check = muitiline_comment_begin_check(next_string);
+                n_me_check = muitiline_comment_end_check(next_string);
+                ns_check = single_comment_check(next_string);
                 // if next string is code
-                if (mb_check == 0 && me_chek == 0 && ns_check == 0) {
-                    comments_array[quan_struct].code_string
-                            = document_data[i + 1];
+                if (n_mb_check == 0 && n_me_check == 0 && ns_check == 0) {
+                    comments_array[quan_struct].code_string = next_string;
                     i++;
                 }
                 // if on one line code and comment
@@ -293,7 +289,7 @@ int docs_gen(char** document_data, char* path)
                 char* code = code_from_string_with_comment(document_data[i]);
                 char* comment = comment_from_string_with_code(document_data[i]);
                 comments_array[quan_struct].code_string = code;
-                comment_text[0] = del_single_comment(comment);
+                comment_text = del_single_comment(comment);
             }
             comments_array[quan_struct].comment_data = comment_text;
             quan_struct++;
