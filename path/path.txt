@@ -1,3 +1,7 @@
+#### this line is a comment ####
+#### if you want to write a comment, start your line with '#' ####
+#### enter the paths to the files for which you want to draw up documentation #####
+#### use no more than 10 paths at a time ####
 ./example/ComponentDemo.h
-./example/target.js
-./example/target.cpp
+
+
