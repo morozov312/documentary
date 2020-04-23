@@ -110,7 +110,8 @@ int html_generator(struct comment* list, char* path, int quan_structs)
         printf("%s\n", "Error create html page!");
         return 0;
     }
-    // ======================= Header ===========================
+    // ==========================================================================
+    // Header
     fputs("<!DOCTYPE html><html><head><meta charset=\" UTF - 8\" >",
           documentary);
     fputs("<link rel=\"stylesheet\" type=\"text/css\" "
@@ -123,25 +124,27 @@ int html_generator(struct comment* list, char* path, int quan_structs)
     fputs("</h2>", documentary);
     int flag = 0;
     for (int i = 0; i < quan_structs; i++) {
-        // check presence of multiline comment indocument
+        // checking presence of multiline comment in document
         if (list[i].type) {
             flag++;
         }
     }
-    char* expantion = expansion_handle(path);
-    if (!strcmp(expantion, "h")) {
+    // document language definition
+    char* expansion = expansion_handle(path);
+    if (!strcmp(expansion, "h")) {
         fputs("<i>Header file to program code on C/C++</i></br></br>",
               documentary);
     }
-    if (!strcmp(expantion, "c")) {
+    if (!strcmp(expansion, "c")) {
         fputs("<i>Program code in language C</i></br></br>", documentary);
     }
-    if (!strcmp(expantion, "cpp")) {
+    if (!strcmp(expansion, "cpp")) {
         fputs("<i>Program code in language C++</i></br></br>", documentary);
     }
     fputs("<b>Warning</b></br></br><i>This documentation is based on the "
           "program code containing </br> ",
           documentary);
+    // checking for documentary comments
     if (flag) {
         fputs("documentary comments and is <u>officially</u> confirmed by",
               documentary);
@@ -151,27 +154,23 @@ int html_generator(struct comment* list, char* path, int quan_structs)
               documentary);
     }
     fputs("the developer this program.</i></br></br>", documentary);
-    // ====================== main content =====================
+    // ==========================================================================
+    // main content
     for (int i = 0; i < quan_structs; i++) {
-        int j = 0;
-        while (j < max_quan_str) {
-            int len = strlen(list[i].comment_data[j]);
-            if (len == 0) {
-                break;
-            }
+        if (strlen(list[i].comment_data)) {
             fputs("<p class=\"comment\">", documentary);
-            fputs(list[i].comment_data[j], documentary);
+            fputs(list[i].comment_data, documentary);
             fputs("</br>", documentary);
-            j++;
+            fputs("</p>", documentary);
         }
-        fputs("</p>", documentary);
         if (strlen(list[i].code_string)) {
             fputs("<code>", documentary);
             fputs(list[i].code_string, documentary);
             fputs("</code></br></br>", documentary);
         }
     }
-    // =======================   footer =========================
+    // ==========================================================================
+    // footer
     fputs("</div></body></html>", documentary);
     fclose(documentary);
     return 0;
