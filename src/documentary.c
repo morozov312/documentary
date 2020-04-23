@@ -58,7 +58,7 @@ char* file_name_generator(char* path)
 {
     int last_index = 0;
     int temp = 0;
-    int filename_estimate_lenght = strlen(path);
+    unsigned int filename_estimate_length = strlen(path);
     long int s_time = 0;
     struct tm* m_time;
     int last_index_dot = 0;
@@ -70,13 +70,13 @@ char* file_name_generator(char* path)
             str_time[i] = '_';
         }
     }
-    int len = strlen(str_time) - 1;
+    unsigned int len = strlen(str_time) - 1;
     if (str_time[len] == '\n') {
         str_time[len] = '\0';
     }
     char* temp_filename
-            = (char*)calloc((filename_estimate_lenght + 20), sizeof(char));
-    for (int i = 0; i < filename_estimate_lenght; i++) {
+            = (char*)calloc((filename_estimate_length + 20), sizeof(char));
+    for (int i = 0; i < filename_estimate_length; i++) {
         if (path[i] == '/') {
             last_index = i;
         } else if (path[i] == '.') {
