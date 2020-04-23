@@ -1,3 +1,15 @@
+/***************************************
+ * THIS PROGRAM GENERATES DOCUMENTARY
+ * BY ANALIZING AND REWRITING COMMENTS FROM
+ * YOUR FILE TO NEW .html file
+ * PROGRAM DEVELOPED BY
+ * @MOSKALT AND @MOROZOV312
+ * 2020
+ * THE PROGRAMM IS OPENSOURCE PROJECT
+ * PROJECT SOURCE CODE
+ * https://github.com/morozov312/documentary
+ ****************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,36 +37,47 @@ char* expansion_handle(char* str)
         reversed_str[k] = buff;
         k++;
     }
+    // returns file extension for next checks
     return reversed_str;
 }
 // This function checks lines with code and multiline comments
 int code_and_multiline_comment_check(char* str)
 {
-    unsigned int lengh = strlen(str);
-    int begin_index, end_index;
-
-    for (unsigned int i = 1; i < lengh; i++) {
+    // neeeeeed  fixeeeeeeed
+    unsigned int lenght = strlen(str);
+    int begin_index = 0, end_index = 0;
+    if (str[lenght - 1] == '\n') {
+        str[lenght - 1] = '\0';
+    }
+    for (unsigned int i = 1; i < lenght; i++) {
         if (str[i] == '*' && str[i - 1] == '/') {
             begin_index = i - 1;
-        } else if (str[i] == '/' && str[i - 1] == '*') {
+        }
+        if (str[i] == '/' && str[i - 1] == '*') {
             end_index = i;
         }
     }
+    // return 1 if if the line with the multi-line comment contains code
+    // =================================================================
     for (int i = 0; i < begin_index - 1; i++) {
         if (str[i] != ' ') {
             return 1;
         }
     }
-    for (unsigned int i = end_index + 1; i < lengh; i++) {
+    for (unsigned int i = end_index + 1; i < lenght; i++) {
         if (str[i] != ' ') {
             return 1;
         }
     }
+    // =================================================================
+    // if there is no code in the line with multi-line comment or the line is
+    // not multi-line comment
     return 0;
 }
-// This functiob handles filename deleting expansion
+// This function handles filename deleting expansion
 char* filename_without_expan(char* path)
 {
+    // neeeeeed  fixeeeeeeed
     unsigned int last_slash_index = 0;
     unsigned int last_dot_index = 0;
     for (unsigned int i = 0; i < strlen(path); i++) {
@@ -71,6 +94,8 @@ char* filename_without_expan(char* path)
         filename[counter] = path[i];
         counter++;
     }
+    // returns file name without extension
+    // if it is impossible returns 0
     if (strlen(filename) < 1) {
         return 0;
     } else {
