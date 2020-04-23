@@ -7,8 +7,8 @@
 #define max_quan_str 50 * 1000
 struct comment {
     int type; // 0 - single comment , 1 - multiline comment
-    char** comment_data;
-    char* code_temp_string;
+    char* comment_data;
+    char* code_string;
 };
 char* del_single_comment(char* str)
 {
@@ -58,7 +58,7 @@ char* file_name_generator(char* path)
 {
     int last_index = 0;
     int temp = 0;
-    int filename_estimate_lenght = strlen(path);
+    unsigned int filename_estimate_length = strlen(path);
     long int s_time = 0;
     struct tm* m_time;
     int last_index_dot = 0;
@@ -70,13 +70,13 @@ char* file_name_generator(char* path)
             str_time[i] = '_';
         }
     }
-    int len = strlen(str_time) - 1;
+    unsigned int len = strlen(str_time) - 1;
     if (str_time[len] == '\n') {
         str_time[len] = '\0';
     }
     char* temp_filename
-            = (char*)calloc((filename_estimate_lenght + 20), sizeof(char));
-    for (int i = 0; i < filename_estimate_lenght; i++) {
+            = (char*)calloc((filename_estimate_length + 20), sizeof(char));
+    for (int i = 0; i < filename_estimate_length; i++) {
         if (path[i] == '/') {
             last_index = i;
         } else if (path[i] == '.') {
@@ -110,7 +110,8 @@ int html_generator(struct comment* list, char* path, int quan_structs)
         printf("%s\n", "Error create html page!");
         return 0;
     }
-    // ======================= Header ===========================
+    // ==========================================================================
+    // Header
     fputs("<!DOCTYPE html><html><head><meta charset=\" UTF - 8\" >",
           documentary);
     fputs("<link rel=\"stylesheet\" type=\"text/css\" "
@@ -123,24 +124,27 @@ int html_generator(struct comment* list, char* path, int quan_structs)
     fputs("</h2>", documentary);
     int flag = 0;
     for (int i = 0; i < quan_structs; i++) {
-        if (list[i].type) { // check presence of multiline comment indocument
+        // checking presence of multiline comment in document
+        if (list[i].type) {
             flag++;
         }
     }
-    char* expantion = expansion_handle(path);
-    if (!strcmp(expantion, "h")) {
+    // document language definition
+    char* expansion = expansion_handle(path);
+    if (!strcmp(expansion, "h")) {
         fputs("<i>Header file to program code on C/C++</i></br></br>",
               documentary);
     }
-    if (!strcmp(expantion, "c")) {
+    if (!strcmp(expansion, "c")) {
         fputs("<i>Program code in language C</i></br></br>", documentary);
     }
-    if (!strcmp(expantion, "cpp")) {
+    if (!strcmp(expansion, "cpp")) {
         fputs("<i>Program code in language C++</i></br></br>", documentary);
     }
     fputs("<b>Warning</b></br></br><i>This documentation is based on the "
           "program code containing </br> ",
           documentary);
+    // checking for documentary comments
     if (flag) {
         fputs("documentary comments and is <u>officially</u> confirmed by",
               documentary);
@@ -150,25 +154,23 @@ int html_generator(struct comment* list, char* path, int quan_structs)
               documentary);
     }
     fputs("the developer this program.</i></br></br>", documentary);
-    // ====================== main content =====================
+    // ==========================================================================
+    // main content
     for (int i = 0; i < quan_structs; i++) {
-        int j = 0;
-        while (j < max_quan_str) {
-            int len = strlen(list[i].comment_data[j]);
-            if (len == 0) {
-                break;
-            }
+        if (strlen(list[i].comment_data)) {
             fputs("<p class=\"comment\">", documentary);
-            fputs(list[i].comment_data[j], documentary);
+            fputs(list[i].comment_data, documentary);
             fputs("</br>", documentary);
-            j++;
+            fputs("</p>", documentary);
         }
-        fputs("</p>", documentary);
-        fputs("<code>", documentary);
-        fputs(list[i].code_temp_string, documentary);
-        fputs("</code></br></br>", documentary);
+        if (strlen(list[i].code_string)) {
+            fputs("<code>", documentary);
+            fputs(list[i].code_string, documentary);
+            fputs("</code></br></br>", documentary);
+        }
     }
-    // =======================   footer =========================
+    // ==========================================================================
+    // footer
     fputs("</div></body></html>", documentary);
     fclose(documentary);
     return 0;
@@ -181,27 +183,115 @@ int docs_gen(char** document_data, char* path)
             count_of_lines++;
         }
     }
+    // this error appears if the document empty ot has 1 line
+    if (count_of_lines <= 1) {
+        printf("%s%s", "Error,file on path ", path);
+        printf("%s\n", " too small for documentation");
+        return 0;
+    }
     int quan_struct = 0;
     struct comment* comments_array
             = (struct comment*)calloc(count_of_lines, sizeof(struct comment));
-    for (int i = 0; i < count_of_lines - 2; i++) {
-        if (single_comment_check(document_data[i])) {
-            if (!muitiline_comment_begin_check(document_data[i + 1])
-                && !muitiline_comment_end_check(document_data[i + 1])) {
-                comments_array[quan_struct].code_temp_string
-                        = document_data[i + 1];
-                char** comment_text
-                        = (char**)calloc(max_quan_str, sizeof(char*));
-                for (int j = 0; j < max_quan_str; j++) {
-                    comment_text[j]
-                            = (char*)calloc(max_len_inp_str, sizeof(char));
-                }
-                int num_of_st_comment = 0;
-                comment_text[num_of_st_comment] = document_data[i];
-                comments_array[quan_struct].comment_data = comment_text;
-                comments_array[quan_struct].type = 0;
-                quan_struct++;
+    // check of begin multiline comment
+    int start_mult_comment = 0;
+    // ==========================================================================
+    // start of the main processing cycle
+    // ==========================================================================
+    for (int i = 0; i < count_of_lines - 1; i++) {
+        // multiline comment check
+        int begin_m_check, end_m_check = 0;
+        begin_m_check = multiline_comment_begin_check(document_data[i]);
+        end_m_check = multiline_comment_end_check(document_data[i]);
+        if (begin_m_check == 1 && !start_mult_comment) {
+            // nested comment check
+            if (begin_m_check == -1) {
+                return 0;
             }
+            comments_array[quan_struct].comment_data
+                    = del_multiline_comment_begin(document_data[i]);
+            start_mult_comment++;
+            comments_array[quan_struct].type = 1;
+            comments_array[quan_struct].code_string = "";
+            quan_struct++;
+        }
+        if (begin_m_check == 1 && start_mult_comment > 1) {
+            printf("%s", "Error,don't use nested comments");
+            return 0;
+        }
+        if (end_m_check == 1 && !start_mult_comment) {
+            printf("%s", "Error,don't use nested comments");
+            return 0;
+        }
+        // write multi-line comment lines
+        if (end_m_check == 0 && start_mult_comment && begin_m_check == 0) {
+            comments_array[quan_struct].comment_data
+                    = del_multiline_comment_stars(document_data[i]);
+            comments_array[quan_struct].type = 1;
+            comments_array[quan_struct].code_string = "";
+            quan_struct++;
+        }
+        if (end_m_check == 1 && start_mult_comment) {
+            // nested comment chek
+            if (end_m_check == -1) {
+                return 0;
+            }
+            // next line check
+            char* next_string = document_data[i + 1];
+            int n_mb_check = 0, n_me_check = 0, ns_check = 0;
+            n_mb_check = multiline_comment_begin_check(next_string);
+            n_me_check = multiline_comment_end_check(next_string);
+            ns_check = single_comment_check(next_string);
+            // if next string is code
+            char* no_stars = del_multiline_comment_stars(document_data[i]);
+            comments_array[quan_struct].comment_data
+                    = del_multiline_comment_end(no_stars);
+            comments_array[quan_struct].type = 1;
+            if (n_mb_check == 0 && n_me_check == 0 && ns_check == 0) {
+                comments_array[quan_struct].code_string = next_string;
+            } else {
+                comments_array[quan_struct].code_string = "";
+            }
+            i++;
+            quan_struct++;
+            start_mult_comment = 0;
+        }
+        // ========================================================================
+        // single comment check
+        int s_check = single_comment_check(document_data[i]);
+        if (s_check == 1 && !start_mult_comment) {
+            int oneline_comment_check = 0;
+            oneline_comment_check = single_comment_code_check(document_data[i]);
+            /* fill type of comment and adding empty code string for the case
+             * when there are some comments in a row */
+            comments_array[quan_struct].type = 0;
+            comments_array[quan_struct].code_string = "";
+            // nested comment chek
+            if (s_check == -1) {
+                return 0;
+            }
+            char* comment_text;
+            if (!oneline_comment_check) {
+                comment_text = del_single_comment(document_data[i]);
+                // next line check
+                char* next_string = document_data[i + 1];
+                int n_mb_check = 0, n_me_check = 0, ns_check = 0;
+                n_mb_check = multiline_comment_begin_check(next_string);
+                n_me_check = multiline_comment_end_check(next_string);
+                ns_check = single_comment_check(next_string);
+                // if next string is code
+                if (n_mb_check == 0 && n_me_check == 0 && ns_check == 0) {
+                    comments_array[quan_struct].code_string = next_string;
+                    i++;
+                }
+                // if on one line code and comment
+            } else {
+                char* code = code_from_string_with_comment(document_data[i]);
+                char* comment = comment_from_string_with_code(document_data[i]);
+                comments_array[quan_struct].code_string = code;
+                comment_text = del_single_comment(comment);
+            }
+            comments_array[quan_struct].comment_data = comment_text;
+            quan_struct++;
         }
     }
     html_generator(comments_array, path, quan_struct);
