@@ -318,6 +318,13 @@ int docs_gen(char** document_data, char* path)
             quan_struct++;
         }
     }
+    // handling the case when there are no comments in the code
+    if (quan_struct == 0) {
+        printf("%s%s", "Error,file on path ", path);
+        printf("%s\n",
+               " no comments found, the document cannot be processed! ");
+        return 0;
+    }
     int res = html_generator(comments_array, path, quan_struct);
     if (res) {
         printf("%s%s\n",
