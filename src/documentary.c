@@ -49,7 +49,6 @@ char* del_multiline_comment_begin(char* str)
 }
 char* del_multiline_comment_end(char* str)
 {
-    // neeeeeed  fixeeeeeeed
     for (int i = 0; str[i] != '\0'; i++) {
         if (str[i] == '*' && str[i + 1] == '/') {
             str[i] = ' ';
@@ -60,14 +59,13 @@ char* del_multiline_comment_end(char* str)
 }
 char* del_multiline_comment_stars(char* str)
 {
-    //  or this neeeeeed  fixeeeeeeed
-    int flag = 0;
+    int index = 0;
     for (int i = 0; str[i] != '\0'; i++) {
-        if (str[i] != ' ' && str[i] != '*') {
-            flag++;
-        }
-        if (str[i] == '*' && !flag) {
+        if (str[i] != '*') {
+            index++;
+        } else if (index != 0 && str[i] == '*') {
             str[i] = ' ';
+            break;
         }
     }
     return str;
