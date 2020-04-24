@@ -242,7 +242,7 @@ int docs_gen(char** document_data, char* path)
             }
             char* inp_str = document_data[i];
             char* str_no_characters;
-            str_no_characters = del_multiline_comment_begin(document_data[i]);
+            str_no_characters = del_multiline_comment_begin(inp_str);
             char* without_tags = no_html(str_no_characters);
             comments_array[quan_struct].comment_data = without_tags;
             start_mult_comment++;
@@ -262,7 +262,7 @@ int docs_gen(char** document_data, char* path)
         if (end_m_check == 0 && start_mult_comment && begin_m_check == 0) {
             char* inp_str = document_data[i];
             char* str_no_characters;
-            str_no_characters = del_multiline_comment_stars(document_data[i]);
+            str_no_characters = del_multiline_comment_stars(inp_str);
             char* without_tags = no_html(str_no_characters);
             comments_array[quan_struct].comment_data = without_tags;
             comments_array[quan_struct].type = 1;

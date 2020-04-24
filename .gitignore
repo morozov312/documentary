@@ -1,4 +1,4 @@
 *.o
-*.html
+docs/*.html
 bin/testing
 bin/documentary
