@@ -186,3 +186,17 @@ CTEST(handle, code_and_multiline_comment)
     ASSERT_EQUAL(exception_second, res_second);
     ASSERT_EQUAL(exception_third, res_third);
 }
+CTEST(handle, no_html)
+{
+    // Given
+    char str_first[] = "<<<>>>";
+    char str_second[] = "int n = 10";
+    // When
+    char* res_first = no_html(str_first);
+    char* res_second = no_html(str_second);
+    // Then
+    char* exception_first = "&lt&lt&lt&gt&gt&gt";
+    char* exception_second = "int n = 10";
+    ASSERT_STR(exception_first, res_first);
+    ASSERT_STR(exception_second, res_second);
+}

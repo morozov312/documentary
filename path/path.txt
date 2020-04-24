@@ -3,7 +3,7 @@
 #### enter the paths to the files for which you want to draw up documentation #####
 #### use no more than 10 paths at a time ####
 ./src/main.c
-#./src/handler.c
-#./src/documentary.c
+./src/handler.c
+./src/documentary.c
 
 

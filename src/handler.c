@@ -137,6 +137,31 @@ char* code_from_string_with_comment(char* str)
     return code_string;
 }
 // This function checks file's expansion
+char* no_html(char* str)
+{
+    int len = (int)strlen(str);
+    /* in the worst case, the string is increased 3 times + end of line
+     * character*/
+    char* no_html_str = (char*)calloc((len * 3) + 1, sizeof(char));
+    int j = 0;
+    for (int i = 0; i < len; i++, j++) {
+        if (str[i] == '<') {
+            no_html_str[j] = '&';
+            no_html_str[j + 1] = 'l';
+            no_html_str[j + 2] = 't';
+            j += 2;
+        } else if (str[i] == '>') {
+            no_html_str[j] = '&';
+            no_html_str[j + 1] = 'g';
+            no_html_str[j + 2] = 't';
+            j += 2;
+        } else {
+            no_html_str[j] = str[i];
+        }
+    }
+    no_html_str[j] = '\0';
+    return no_html_str;
+}
 int expan_check(char* filepath)
 {
     const int quan_of_expan = 3;

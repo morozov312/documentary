@@ -13,4 +13,5 @@ char* code_from_string_with_comment(char* str);
 char* comment_from_string_with_code(char* str);
 int comment_separator_check(char* str);
 int code_and_multiline_comment_check(char* str);
+char* no_html(char* str);
 #endif

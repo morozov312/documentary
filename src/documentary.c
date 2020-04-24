@@ -135,6 +135,7 @@ int html_generator(struct comment* list, char* path, int quan_structs)
         return 0;
     }
     // ==========================================================================
+    // Header
     fputs("<!DOCTYPE html><html><head><meta charset=\" UTF - 8\" >",
           documentary);
     fputs("<link rel=\"stylesheet\" type=\"text/css\" "
@@ -193,6 +194,7 @@ int html_generator(struct comment* list, char* path, int quan_structs)
         }
     }
     // ==========================================================================
+    // Footer
     fputs("</div></body></html>", documentary);
     fclose(documentary);
     return 1;
@@ -242,8 +244,11 @@ int docs_gen(char** document_data, char* path)
             if (begin_m_check == -1) {
                 return 0;
             }
-            comments_array[quan_struct].comment_data
-                    = del_multiline_comment_begin(document_data[i]);
+            char* inp_str = document_data[i];
+            char* str_no_characters;
+            str_no_characters = del_multiline_comment_begin(document_data[i]);
+            char* without_tags = no_html(str_no_characters);
+            comments_array[quan_struct].comment_data = without_tags;
             start_mult_comment++;
             comments_array[quan_struct].type = 1;
             comments_array[quan_struct].code_string = "";
@@ -259,8 +264,11 @@ int docs_gen(char** document_data, char* path)
         }
         // write multi-line comment lines
         if (end_m_check == 0 && start_mult_comment && begin_m_check == 0) {
-            comments_array[quan_struct].comment_data
-                    = del_multiline_comment_stars(document_data[i]);
+            char* inp_str = document_data[i];
+            char* str_no_characters;
+            str_no_characters = del_multiline_comment_stars(document_data[i]);
+            char* without_tags = no_html(str_no_characters);
+            comments_array[quan_struct].comment_data = without_tags;
             comments_array[quan_struct].type = 1;
             comments_array[quan_struct].code_string = "";
             quan_struct++;
@@ -278,11 +286,12 @@ int docs_gen(char** document_data, char* path)
             ns_check = single_comment_check(next_string);
             // if next string is code
             char* no_stars = del_multiline_comment_stars(document_data[i]);
-            comments_array[quan_struct].comment_data
-                    = del_multiline_comment_end(no_stars);
+            char* str_no_characters = del_multiline_comment_end(no_stars);
+            char* without_tags = no_html(str_no_characters);
+            comments_array[quan_struct].comment_data = without_tags;
             comments_array[quan_struct].type = 1;
             if (n_mb_check == 0 && n_me_check == 0 && ns_check == 0) {
-                comments_array[quan_struct].code_string = next_string;
+                comments_array[quan_struct].code_string = no_html(next_string);
             } else {
                 comments_array[quan_struct].code_string = "";
             }
@@ -310,9 +319,10 @@ int docs_gen(char** document_data, char* path)
             }
             char* comment_text;
             if (!oneline_comment_check) {
-                comment_text = del_single_comment(document_data[i]);
+                char* str_no_characters = del_single_comment(document_data[i]);
+                comment_text = no_html(str_no_characters);
                 // next line check
-                char* next_string = document_data[i + 1];
+                char* next_string = no_html(document_data[i + 1]);
                 int n_mb_check = 0, n_me_check = 0, ns_check = 0;
                 n_mb_check = multiline_comment_begin_check(next_string);
                 n_me_check = multiline_comment_end_check(next_string);
@@ -325,9 +335,11 @@ int docs_gen(char** document_data, char* path)
                 // if on one line code and comment
             } else {
                 char* code = code_from_string_with_comment(document_data[i]);
+                char* code_no_html = no_html(code);
                 char* comment = comment_from_string_with_code(document_data[i]);
-                comments_array[quan_struct].code_string = code;
-                comment_text = del_single_comment(comment);
+                comments_array[quan_struct].code_string = code_no_html;
+                char* str_no_characters = del_single_comment(comment);
+                comment_text = no_html(str_no_characters);
             }
             comments_array[quan_struct].comment_data = comment_text;
             quan_struct++;
