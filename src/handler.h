@@ -12,10 +12,6 @@ int single_comment_code_check(char* str);
 char* code_from_string_with_comment(char* str);
 char* comment_from_string_with_code(char* str);
 int comment_separator_check(char* str);
-<<<<<<< HEAD
-int code_and_multiline_comment_check(char* str);
 char* no_html(char* str);
-=======
 int code_and_multiline_comment_check(char* str, int begin_check, int end_check);
->>>>>>> Fixed code_and_multiline_comment_check function
 #endif

@@ -25,20 +25,24 @@ CTEST(documentary, del_multiline_comment_stars)
     char str_second[] = " comment without stars";
     char str_third[] = " * comment withs star and pointer *";
     char str_fourth[] = "int * ptr = NULL";
+    char str_fifth[] = "/****************";
     // When
     char* res_first = del_multiline_comment_stars(str_first);
     char* res_second = del_multiline_comment_stars(str_second);
     char* res_third = del_multiline_comment_stars(str_third);
     char* res_fourth = del_multiline_comment_stars(str_fourth);
+    char* res_fifth = del_multiline_comment_stars(str_fifth);
     // Then
     char exp_first[] = "   comment ";
     char exp_second[] = " comment without stars";
     char exp_thrid[] = "   comment withs star and pointer *";
     char exp_fourth[] = "int * ptr = NULL";
+    char exp_fifth[] = "/****************";
     ASSERT_STR(res_first, exp_first);
     ASSERT_STR(res_second, exp_second);
     ASSERT_STR(res_third, exp_thrid);
     ASSERT_STR(res_fourth, exp_fourth);
+    ASSERT_STR(res_fifth, exp_fifth); // this case added after bug fixed
 }
 CTEST(documentary, del_multiline_comment_begin)
 {
