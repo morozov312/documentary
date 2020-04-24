@@ -41,32 +41,36 @@ char* expansion_handle(char* str)
     return reversed_str;
 }
 // This function checks lines with code and multiline comments
-int code_and_multiline_comment_check(char* str)
+int code_and_multiline_comment_check(char* str, int begin_check, int end_check)
 {
-    // neeeeeed  fixeeeeeeed
     unsigned int lenght = strlen(str);
     int begin_index = 0, end_index = 0;
-    if (str[lenght - 1] == '\n') {
-        str[lenght - 1] = '\0';
-    }
     for (unsigned int i = 1; i < lenght; i++) {
-        if (str[i] == '*' && str[i - 1] == '/') {
-            begin_index = i - 1;
+        if (begin_check == 1) {
+            if (str[i] == '*' && str[i - 1] == '/') {
+                begin_index = i - 1;
+            }
         }
-        if (str[i] == '/' && str[i - 1] == '*') {
-            end_index = i;
+        if (end_check == 1) {
+            if (str[i] == '/' && str[i - 1] == '*') {
+                end_index = i;
+            }
         }
     }
     // return 1 if if the line with the multi-line comment contains code
     // =================================================================
-    for (int i = 0; i < begin_index - 1; i++) {
-        if (str[i] != ' ') {
-            return 1;
+    if (begin_check == 1) {
+        for (int i = 0; i < begin_index - 1; i++) {
+            if (str[i] != ' ') {
+                return 1;
+            }
         }
     }
-    for (unsigned int i = end_index + 1; i < lenght; i++) {
-        if (str[i] != ' ') {
-            return 1;
+    if (end_check == 1) {
+        for (unsigned int i = end_index + 1; i < lenght; i++) {
+            if (str[i] != ' ') {
+                return 1;
+            }
         }
     }
     // =================================================================
@@ -77,7 +81,6 @@ int code_and_multiline_comment_check(char* str)
 // This function handles filename deleting expansion
 char* filename_without_expan(char* path)
 {
-    // neeeeeed  fixeeeeeeed
     unsigned int last_slash_index = 0;
     unsigned int last_dot_index = 0;
     for (unsigned int i = 0; i < strlen(path); i++) {
@@ -88,7 +91,7 @@ char* filename_without_expan(char* path)
         }
     }
     unsigned int len_of_filename = last_dot_index - last_slash_index;
-    char* filename = (char*)malloc(len_of_filename * sizeof(char));
+    char* filename = (char*)calloc(len_of_filename, sizeof(char));
     int counter = 0;
     for (unsigned int i = last_slash_index + 1; i < last_dot_index; i++) {
         filename[counter] = path[i];

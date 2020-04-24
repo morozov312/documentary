@@ -49,7 +49,6 @@ char* del_multiline_comment_begin(char* str)
 }
 char* del_multiline_comment_end(char* str)
 {
-    // neeeeeed  fixeeeeeeed
     for (int i = 0; str[i] != '\0'; i++) {
         if (str[i] == '*' && str[i + 1] == '/') {
             str[i] = ' ';
@@ -60,14 +59,12 @@ char* del_multiline_comment_end(char* str)
 }
 char* del_multiline_comment_stars(char* str)
 {
-    //  or this neeeeeed  fixeeeeeeed
-    int flag = 0;
-    for (int i = 0; str[i] != '\0'; i++) {
+    for (unsigned int i = 0; i < strlen(str); i++) {
         if (str[i] != ' ' && str[i] != '*') {
-            flag++;
-        }
-        if (str[i] == '*' && !flag) {
+            break;
+        } else if (str[i] != ' ' && str[i] == '*') {
             str[i] = ' ';
+            break;
         }
     }
     return str;
@@ -232,14 +229,13 @@ int docs_gen(char** document_data, char* path)
         begin_m_check = multiline_comment_begin_check(document_data[i]);
         end_m_check = multiline_comment_end_check(document_data[i]);
         if (begin_m_check == 1 && !start_mult_comment) {
-            // if (code_and_multiline_comment_check(document_data[i]) == 1) {
-            //     printf("%s%s", "Error,file on path ", path);
-            //     printf("%s\n", " incorrectly written");
-            //     return 0;
-            // }
-
-            // ++++++++++++++ need fixed +++++++++++++++++++++
-
+            if (code_and_multiline_comment_check(
+                        document_data[i], begin_m_check, end_m_check)
+                == 1) {
+                printf("%s%s", "Error,file on path ", path);
+                printf("%s\n", " incorrectly written");
+                return 0;
+            }
             // nested comment check
             if (begin_m_check == -1) {
                 return 0;

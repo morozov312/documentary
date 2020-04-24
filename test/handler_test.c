@@ -175,9 +175,9 @@ CTEST(handle, code_and_multiline_comment)
     char* str_second = "code /* comment */ code";
     char* str_third = " /* comment */ ";
     // When
-    int res_first = code_and_multiline_comment_check(str_first);
-    int res_second = code_and_multiline_comment_check(str_second);
-    int res_third = code_and_multiline_comment_check(str_third);
+    int res_first = code_and_multiline_comment_check(str_first, 1, 1);
+    int res_second = code_and_multiline_comment_check(str_second, 1, 1);
+    int res_third = code_and_multiline_comment_check(str_third, 1, 1);
     // Then
     int exception_first = 1;
     int exception_second = 1;
