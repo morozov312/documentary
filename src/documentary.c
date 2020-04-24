@@ -59,11 +59,10 @@ char* del_multiline_comment_end(char* str)
 }
 char* del_multiline_comment_stars(char* str)
 {
-    int index = 0;
-    for (int i = 0; str[i] != '\0'; i++) {
-        if (str[i] != '*') {
-            index++;
-        } else if (index != 0 && str[i] == '*') {
+    for (unsigned int i = 0; i < strlen(str); i++) {
+        if (str[i] != ' ' && str[i] != '*') {
+            break;
+        } else if (str[i] != ' ' && str[i] == '*') {
             str[i] = ' ';
             break;
         }
