@@ -230,14 +230,13 @@ int docs_gen(char** document_data, char* path)
         begin_m_check = multiline_comment_begin_check(document_data[i]);
         end_m_check = multiline_comment_end_check(document_data[i]);
         if (begin_m_check == 1 && !start_mult_comment) {
-            // if (code_and_multiline_comment_check(document_data[i]) == 1) {
-            //     printf("%s%s", "Error,file on path ", path);
-            //     printf("%s\n", " incorrectly written");
-            //     return 0;
-            // }
-
-            // ++++++++++++++ need fixed +++++++++++++++++++++
-
+            if (code_and_multiline_comment_check(
+                        document_data[i], begin_m_check, end_m_check)
+                == 1) {
+                printf("%s%s", "Error,file on path ", path);
+                printf("%s\n", " incorrectly written");
+                return 0;
+            }
             // nested comment check
             if (begin_m_check == -1) {
                 return 0;
