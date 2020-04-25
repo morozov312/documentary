@@ -6,7 +6,7 @@ This repository is a course project in the discipline "Software Development Tech
 This program compiles documentation on comments in source code one of the [supported programming languages](https://github.com/morozov312/documentary/wiki) in format html page.
 # How it works?
 <p>
-1) Download or clone this repositoy on your PC </br>
+1) Download or clone this repository on your PC </br>
 2) Put the path to the file where you want to compile the documentation in the file ./path/path.txt </br>
 3) From the project directory run in terminal command make && make run </br>
 4) Enjoy your documentation which is located in folder ./docs </br>
@@ -27,10 +27,10 @@ $ make check </br>
 will test existing functions using the library ctest.h </br>
 $ make clean </br>
 remove assembly artifacts in folders ./bin and ./build and all html pages wich you created in the folder ./docs </br>
-compiler: gcc   OS wich you can use by default Linux or MacOS </br>
+compiler: gcc </br> OS wich you can use by default Linux or MacOS </br>
 </p>
 <h1>Example</h1>
-Example of work and finished documentation developed by this program you can find in folder ./example </br>
+Example of work and finished documentation developed by this program you can find in folder ./example </br></br> 
 <p align="center">
   <img alt="example" src="./img/example.png">
 </p>
