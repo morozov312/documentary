@@ -1,9 +1,0 @@
-#### this line is a comment ####
-#### if you want to write a comment, start your line with '#' ####
-#### enter the paths to the files for which you want to draw up documentation #####
-#### use no more than 10 paths at a time ####
-./src/main.c
-./src/handler.c
-./src/documentary.c
-
-
