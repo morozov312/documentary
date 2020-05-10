@@ -18,23 +18,9 @@
 #define max_len_inp_str 500
 #define max_quan_str 50 * 1000
 struct comment {
-    int type; // 0 - single comment , 1 - multiline comment
     char* comment_data;
     char* code_string;
 };
-/* removes single-line comment characters
- * for a more understandable entry in html page */
-char* del_single_comment(char* str)
-{
-    for (int i = 0; str[i] != '\0'; i++) {
-        if (str[i] == '/' && str[i + 1] == '/') {
-            str[i] = ' ';
-            str[i + 1] = ' ';
-            break;
-        }
-    }
-    return str;
-}
 /*  removes multi-line comment characters
  * for a more understandable entry in html page */
 char* del_multiline_comment_begin(char* str)
@@ -143,13 +129,6 @@ int html_generator(struct comment* list, char* path, int quan_structs)
     char* filename = filename_without_expan(path);
     fputs(filename, documentary);
     fputs("</h2>", documentary);
-    int flag = 0;
-    for (int i = 0; i < quan_structs; i++) {
-        // checking presence of multiline comment in document
-        if (list[i].type) {
-            flag++;
-        }
-    }
     // document programming language definition
     char* expansion = expansion_handle(path);
     if (!strcmp(expansion, "h")) {
@@ -165,16 +144,6 @@ int html_generator(struct comment* list, char* path, int quan_structs)
     fputs("<b>Warning</b></br></br><i>This documentation is based on the "
           "program code containing </br> ",
           documentary);
-    // checking for documentary comments
-    if (flag) {
-        fputs("documentary comments and is <u>officially</u> confirmed by",
-              documentary);
-    } else {
-        fputs("only one-line comments and <u>may not be officially</u> "
-              "confirmed by ",
-              documentary);
-    }
-    fputs("the developer this program.</i></br></br>", documentary);
     // ==========================================================================
     // main content
     for (int i = 0; i < quan_structs; i++) {
@@ -195,165 +164,4 @@ int html_generator(struct comment* list, char* path, int quan_structs)
     fputs("</div></body></html>", documentary);
     fclose(documentary);
     return 1;
-}
-int docs_gen(char** document_data, char* path)
-{
-    int count_of_lines = 0;
-    for (int i = 0; i < max_quan_str; i++) {
-        if (strlen(document_data[i]) != 0) {
-            count_of_lines++;
-        }
-    }
-    // this error appears if the document empty ot has 1 line
-    if (count_of_lines <= 1) {
-        printf("%s%s", "Error,file on path ", path);
-        printf("%s\n", " too small for documentation");
-        return 0;
-    }
-    int quan_struct = 0;
-    struct comment* comments_array
-            = (struct comment*)calloc(count_of_lines, sizeof(struct comment));
-    // check of begin multiline comment
-    int start_mult_comment = 0;
-    // ==========================================================================
-    // start of the main processing cycle
-    // ==========================================================================
-    for (int i = 0; i < count_of_lines - 1; i++) {
-        if (i == count_of_lines - 2 && start_mult_comment) {
-            printf("%s%s", "Error,file on path ", path);
-            printf("%s\n", "incorrectly written");
-            return 0;
-        }
-        // multiline comment check
-        int begin_m_check, end_m_check = 0;
-        begin_m_check = multiline_comment_begin_check(document_data[i]);
-        end_m_check = multiline_comment_end_check(document_data[i]);
-        if (begin_m_check == 1 && !start_mult_comment) {
-            if (code_and_multiline_comment_check(
-                        document_data[i], begin_m_check, end_m_check)
-                == 1) {
-                printf("%s%s", "Error,file on path ", path);
-                printf("%s\n", " incorrectly written");
-                return 0;
-            }
-            // nested comment check
-            if (begin_m_check == -1) {
-                return 0;
-            }
-            char* inp_str = document_data[i];
-            char* str_no_characters;
-            str_no_characters = del_multiline_comment_begin(inp_str);
-            char* without_tags = no_html(str_no_characters);
-            comments_array[quan_struct].comment_data = without_tags;
-            start_mult_comment++;
-            comments_array[quan_struct].type = 1;
-            comments_array[quan_struct].code_string = "";
-            quan_struct++;
-        }
-        if (begin_m_check == 1 && start_mult_comment > 1) {
-            printf("%s", "Error,don't use nested comments");
-            return 0;
-        }
-        if (end_m_check == 1 && !start_mult_comment) {
-            printf("%s", "Error,don't use nested comments");
-            return 0;
-        }
-        // write multi-line comment lines
-        if (end_m_check == 0 && start_mult_comment && begin_m_check == 0) {
-            char* inp_str = document_data[i];
-            char* str_no_characters;
-            str_no_characters = del_multiline_comment_stars(inp_str);
-            char* without_tags = no_html(str_no_characters);
-            comments_array[quan_struct].comment_data = without_tags;
-            comments_array[quan_struct].type = 1;
-            comments_array[quan_struct].code_string = "";
-            quan_struct++;
-        }
-        if (end_m_check == 1 && start_mult_comment) {
-            // nested comment chek
-            if (end_m_check == -1) {
-                return 0;
-            }
-            // next line check
-            char* next_string = document_data[i + 1];
-            int n_mb_check = 0, n_me_check = 0, ns_check = 0;
-            n_mb_check = multiline_comment_begin_check(next_string);
-            n_me_check = multiline_comment_end_check(next_string);
-            ns_check = single_comment_check(next_string);
-            // if next string is code
-            char* no_stars = del_multiline_comment_stars(document_data[i]);
-            char* str_no_characters = del_multiline_comment_end(no_stars);
-            char* without_tags = no_html(str_no_characters);
-            comments_array[quan_struct].comment_data = without_tags;
-            comments_array[quan_struct].type = 1;
-            if (n_mb_check == 0 && n_me_check == 0 && ns_check == 0) {
-                comments_array[quan_struct].code_string = no_html(next_string);
-            } else {
-                comments_array[quan_struct].code_string = "";
-            }
-            i++;
-            quan_struct++;
-            start_mult_comment = 0;
-        }
-        // ========================================================================
-        // single comment check
-        int s_check = single_comment_check(document_data[i]);
-        if (s_check == 1 && !start_mult_comment) {
-            int oneline_comment_check = 0;
-            oneline_comment_check = single_comment_code_check(document_data[i]);
-            /* fill type of comment and adding empty code string for the case
-             * when there are some comments in a row */
-            comments_array[quan_struct].type = 0;
-            comments_array[quan_struct].code_string = "";
-            // nested comment chek
-            if (s_check == -1) {
-                return 0;
-            }
-            int separator = comment_separator_check(document_data[i]);
-            if (separator) {
-                continue;
-            }
-            char* comment_text;
-            if (!oneline_comment_check) {
-                char* str_no_characters = del_single_comment(document_data[i]);
-                comment_text = no_html(str_no_characters);
-                // next line check
-                char* next_string = no_html(document_data[i + 1]);
-                int n_mb_check = 0, n_me_check = 0, ns_check = 0;
-                n_mb_check = multiline_comment_begin_check(next_string);
-                n_me_check = multiline_comment_end_check(next_string);
-                ns_check = single_comment_check(next_string);
-                // if next string is code
-                if (n_mb_check == 0 && n_me_check == 0 && ns_check == 0) {
-                    comments_array[quan_struct].code_string = next_string;
-                    i++;
-                }
-                // if on one line code and comment
-            } else {
-                char* code = code_from_string_with_comment(document_data[i]);
-                char* code_no_html = no_html(code);
-                char* comment = comment_from_string_with_code(document_data[i]);
-                comments_array[quan_struct].code_string = code_no_html;
-                char* str_no_characters = del_single_comment(comment);
-                comment_text = no_html(str_no_characters);
-            }
-            comments_array[quan_struct].comment_data = comment_text;
-            quan_struct++;
-        }
-    }
-    // handling the case when there are no comments in the code
-    if (quan_struct == 0) {
-        printf("%s%s", "Error,file on path ", path);
-        printf("%s\n",
-               " no comments found, the document cannot be processed! ");
-        return 0;
-    }
-    int res = html_generator(comments_array, path, quan_struct);
-    if (res) {
-        printf("%s%s\n",
-               "Succsesfully created documentation to file by ",
-               path);
-    }
-    free(comments_array);
-    return 0;
 }
