@@ -50,7 +50,7 @@ char* filename_without_expan(char* path)
     }
 }
 // This function checks file's expansion
-char* no_html(char* str)
+char* exclude_html(char* str) // need memory clear
 {
     int len = (int)strlen(str);
     /* in the worst case, the string is increased 3 times + end of line
@@ -126,7 +126,7 @@ int multiline_comment_end_check(char* str)
     return flag > 0 ? 1 : 0;
 }
 // This function return array of data from file
-char** document_handle(char* paths)
+char** document_handle(char* paths) // need memory clear
 {
     FILE* myfile;
     myfile = fopen(paths, "r");
@@ -134,14 +134,14 @@ char** document_handle(char* paths)
         printf("%s%s%s\n", "On path ", paths, " file not found!");
         return 0;
     }
-    char *temp, *ptrFile;
+    char* ptrFile;
     int quan_str = 0;
     char** data = (char**)calloc(max_quan_str, sizeof(char*));
     for (int i = 0; i < max_quan_str; i++) {
         data[i] = (char*)calloc(max_len_inp_str, sizeof(char));
     }
     while (quan_str < max_quan_str) {
-        temp = (char*)calloc(max_len_inp_str, sizeof(char));
+        char* temp = (char*)calloc(max_len_inp_str, sizeof(char));
         ptrFile = fgets(temp, max_len_inp_str, myfile);
         if (ptrFile == NULL) {
             if (feof(myfile) != 0) {
@@ -152,6 +152,7 @@ char** document_handle(char* paths)
         }
         data[quan_str] = temp;
         quan_str++;
+        free(temp);
     }
     fclose(myfile);
     return data;

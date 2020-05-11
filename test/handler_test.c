@@ -90,14 +90,14 @@ CTEST(handle, filename_without_expan)
     ASSERT_STR(exception_second, res_second);
     ASSERT_STR(exception_third, res_third);
 }
-CTEST(handle, no_html)
+CTEST(handle, exclude_html)
 {
     // Given
     char str_first[] = "<<<>>>";
     char str_second[] = "int n = 10";
     // When
-    char* res_first = no_html(str_first);
-    char* res_second = no_html(str_second);
+    char* res_first = exclude_html(str_first);
+    char* res_second = exclude_html(str_second);
     // Then
     char* exception_first = "&lt&lt&lt&gt&gt&gt";
     char* exception_second = "int n = 10";
