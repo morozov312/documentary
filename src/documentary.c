@@ -192,10 +192,62 @@ int html_generator(struct comment* list, char* path, int quan_structs)
     fclose(documentary);
     return 1;
 }
+int code_check(char* str)
+{
+    int single = single_comment_check(str);
+    int m_b = multiline_comment_begin_check(str);
+    int m_e = multiline_comment_end_check(str);
+    if (!single && !m_b && !m_e) {
+        return 1;
+    }
+    return 0;
+}
 int document_creation(char* path)
 {
     char** document_data = get_data_from_document(path);
-    int qty_structs = 0;
+    int count_of_lines = 0, qty_structs = 0, begin = 0;
     for (int i = 0; i < max_quan_str; i++) {
+        if (strlen(document_data[i]) != 0) {
+            count_of_lines++;
+        }
+    }
+    // this error appears if the document empty ot has 1 line
+    if (count_of_lines <= 1) {
+        printf("%s%s", "Error,file on path ", path);
+        printf("%s\n", " too small for documentation");
+        return 0;
+    }
+    struct comment* comments_array
+            = (struct comment*)calloc(count_of_lines, sizeof(struct comment));
+    for (int i = 0; i < count_of_lines; i++) {
+        char* str = document_data[i];
+        char* next_str = document_data[i + 1];
+        int check_single_doc = check_single_documentary_comment(str);
+        int doc_mult_b = check_document_multiline_commentary(str);
+        int mult_e = multiline_comment_end_check(str);
+        if (doc_mult_b && !begin) {
+            begin = 1;
+            comments_array[qty_structs].comment_data
+                    = del_documentary_comment_symbols(str);
+        }
+        if (begin && !doc_mult_b && !mult_e) {
+            comments_array[qty_structs].comment_data
+                    = del_multiline_comment_stars(str);
+            comments_array[qty_structs].code_string = "";
+            qty_structs++;
+        }
+        if (mult_e) {
+        }
+        if (check_single_doc && !begin) {
+            comments_array[qty_structs].comment_data
+                    = del_documentary_comment_symbols(str);
+            if (code_check(next_str)) {
+                comments_array[qty_structs].code_string = next_str;
+                i++;
+            } else {
+                comments_array[qty_structs].code_string = "";
+            }
+            qty_structs++;
+        }
     }
 }
