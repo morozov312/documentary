@@ -9,4 +9,5 @@ int extension_check(char* filepath);
 char* filename_without_extension(char* path);
 char* exclude_html(char* str);
 int check_document_multiline_commentary(char* string);
+int check_single_documentary_comment(char* string);
 #endif

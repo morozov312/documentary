@@ -91,6 +91,17 @@ int single_comment_check(char* str)
     }
     return flag > 0 ? 1 : 0;
 }
+
+int check_single_documentary_comment(char* string)
+{
+    char* ptr_slash = strchr(string, '/');
+    if (single_comment_check(string) == 1) {
+        if (ptr_slash[2] == '/' || ptr_slash[2] == '!')
+            return 1;
+        else
+            return 0;
+    }
+}
 // This function checks multiline comment's begin
 int multiline_comment_begin_check(char* str)
 {

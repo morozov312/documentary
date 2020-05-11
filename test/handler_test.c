@@ -135,3 +135,21 @@ CTEST(handle, check_document_multiline_commentary)
     ASSERT_EQUAL(res_second, exception_second);
     ASSERT_EQUAL(res_third, exception_third);
 }
+CTEST(handle, check_single_documentary_comment)
+{
+    // Given
+    char* str_first = "///   begin";
+    char* str_second = "//!  begin";
+    char* str_third = "// nothing";
+    // When
+    int res_first = check_single_documentary_comment(str_first);
+    int res_second = check_single_documentary_comment(str_second);
+    int res_third = check_single_documentary_comment(str_third);
+    // Then
+    int exception_first = 1;
+    int exception_second = 1;
+    int exception_third = 0;
+    ASSERT_EQUAL(res_first, exception_first);
+    ASSERT_EQUAL(res_second, exception_second);
+    ASSERT_EQUAL(res_third, exception_third);
+}
