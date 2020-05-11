@@ -11,6 +11,7 @@
  ****************************************/
 
 #include "handler.h"
+#include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -23,6 +24,14 @@ struct comment {
 };
 /*  removes multi-line comment characters
  * for a more understandable entry in html page */
+
+int counter = 0;
+
+char* del_documentary_comment_symbols(char* string)
+{
+    char* ptr_slash = strchr(string, '/');
+    return ptr_slash == NULL ? "" : ptr_slash + 3;
+}
 char* del_multiline_comment_begin(char* str)
 {
     for (int i = 0; str[i] != '\0'; i++) {
@@ -106,6 +115,31 @@ char* get_document_type(char* path)
     }
     return "";
 }
+void recursive_files_search(char* path, char** paths)
+{
+    DIR* d = opendir(path);
+    if (d == NULL)
+        return;
+    struct dirent* dir;
+    while ((dir = readdir(d)) != NULL) {
+        if (dir->d_type != DT_DIR) {
+            char* f_path = (char*)calloc(100, sizeof(char));
+            sprintf(f_path, "%s/%s", path, dir->d_name);
+            strcpy(paths[counter], f_path);
+            free(f_path);
+            counter++;
+
+        } else if (
+                dir->d_type == DT_DIR && strcmp(dir->d_name, ".") != 0
+                && strcmp(dir->d_name, "..") != 0) {
+            char d_path[255];
+            sprintf(d_path, "%s/%s", path, dir->d_name);
+            recursive_files_search(d_path, paths);
+        }
+    }
+    closedir(d);
+}
+
 int html_generator(struct comment* list, char* path, int quan_structs)
 {
     FILE *documentary, *styles;
