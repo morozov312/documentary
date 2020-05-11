@@ -14,7 +14,12 @@
 #include "handler.h"
 #include <stdlib.h>
 #include <string.h>
-int main()
+int main(int argc, char* argv[])
 {
+    if (argc != 5 && argc != 3) {
+        printf("%s\n", "error");
+        return 0;
+    }
+    char* inp = get_inpdir(argc, argv);
     return 0;
 }

@@ -10,4 +10,6 @@ char* filename_without_extension(char* path);
 char* exclude_html(char* str);
 int check_document_multiline_commentary(char* string);
 int check_single_documentary_comment(char* string);
+char* get_inpdir(int qty, char* array_argv[]);
+char* get_outdir(int qty, char* array_argv[]);
 #endif
