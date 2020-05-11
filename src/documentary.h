@@ -8,4 +8,5 @@ char* del_multiline_comment_begin(char* str);
 char* del_multiline_comment_end(char* str);
 char* del_multiline_comment_stars(char* str);
 int html_generator(struct comment* list, char* path, int quan_structs);
+char* file_name_generator(char* path);
 #endif

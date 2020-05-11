@@ -59,12 +59,9 @@ char* del_multiline_comment_stars(char* str)
  * the name, day, number and time of creation of the documentation */
 char* file_name_generator(char* path)
 {
-    int last_index = 0;
-    int temp = 0;
-    unsigned int filename_estimate_length = strlen(path);
+    int last_index = 0, temp = 0;
     long int s_time = 0;
     struct tm* m_time;
-    int last_index_dot = 0;
     s_time = time(NULL);
     m_time = localtime(&s_time);
     char* str_time = asctime(m_time);
@@ -77,29 +74,18 @@ char* file_name_generator(char* path)
     if (str_time[len] == '\n') {
         str_time[len] = '\0';
     }
-    char* temp_filename
-            = (char*)calloc((filename_estimate_length + 20), sizeof(char));
-    for (unsigned int i = 0; i < filename_estimate_length; i++) {
-        if (path[i] == '/') {
-            last_index = i;
-        } else if (path[i] == '.') {
-            last_index_dot = i;
-        }
-    }
-    for (int i = last_index + 1; i < last_index_dot; i++) {
-        temp_filename[temp] = path[i];
-        temp++;
-    }
-    for (int i = (last_index_dot - last_index); temp_filename[i] != '\0'; i++) {
-        temp_filename[i] = '_';
-    }
+    char* temp_filename = filename_without_extension(path); // need free
     char* generated_filename_temp = strcat(temp_filename, "__");
-    char* generated_filename = strcat(generated_filename_temp, str_time);
-    char* folder_name = (char*)calloc(550, sizeof(char));
+    char* generated_filename;
+    strcpy(generated_filename, generated_filename_temp);
+    free(temp_filename);
+    generated_filename = strcat(generated_filename, str_time);
+    char* folder_name = (char*)calloc(550, sizeof(char)); // need free
     char docs_path[] = "./docs/";
     for (int i = 0; docs_path[i] != '\0'; i++) {
         folder_name[i] = docs_path[i];
     }
+
     char* folder = strcat(folder_name, generated_filename);
     char* filename_html = strcat(folder, ".html");
     return filename_html;

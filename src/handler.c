@@ -35,7 +35,7 @@ char* filename_without_extension(char* path)
     int last_slash_index = p_last_slash - path;
     int count_of_symbols = last_dot_index - last_slash_index - 1;
     char* filename
-            = (char*)malloc(count_of_symbols * sizeof(char)); // need mem free
+            = (char*)calloc(count_of_symbols, sizeof(char)); // need mem free
     strncpy(filename, p_last_slash + 1, count_of_symbols);
     filename[count_of_symbols + 1] = '\0';
     return filename;
