@@ -6,6 +6,6 @@ int single_comment_check(char* str);
 int multiline_comment_begin_check(char* str);
 int multiline_comment_end_check(char* str);
 int extention_check(char* filepath);
-char* filename_without_expan(char* path);
-char* exclude_html(char* str);
+char* filename_without_extension(char* path);
+char* no_html(char* str);
 #endif

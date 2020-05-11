@@ -23,31 +23,22 @@ char* get_file_extension(const char* file_path)
     return dot_ptr == NULL ? "" : dot_ptr + 1;
 }
 // This function handles filename deleting expansion
-char* filename_without_expan(char* path)
+
+char* filename_without_extension(char* path)
 {
-    unsigned int last_slash_index = 0;
-    unsigned int last_dot_index = 0;
-    for (unsigned int i = 0; i < strlen(path); i++) {
-        if (path[i] == '/') {
-            last_slash_index = i;
-        } else if (path[i] == '.') {
-            last_dot_index = i;
-        }
+    char* p_last_dot = strrchr(path, '.');
+    char* p_last_slash = strrchr(path, '/');
+    if (p_last_dot == NULL || p_last_slash == NULL) {
+        return "";
     }
-    unsigned int len_of_filename = last_dot_index - last_slash_index;
-    char* filename = (char*)calloc(len_of_filename, sizeof(char));
-    int counter = 0;
-    for (unsigned int i = last_slash_index + 1; i < last_dot_index; i++) {
-        filename[counter] = path[i];
-        counter++;
-    }
-    // returns file name without extension
-    // if it is impossible returns 0
-    if (strlen(filename) < 1) {
-        return 0;
-    } else {
-        return filename;
-    }
+    int last_dot_index = p_last_dot - path;
+    int last_slash_index = p_last_slash - path;
+    int count_of_symbols = last_dot_index - last_slash_index - 1;
+    char* filename
+            = (char*)malloc(count_of_symbols * sizeof(char)); // need mem free
+    strncpy(filename, p_last_slash + 1, count_of_symbols);
+    filename[count_of_symbols + 1] = '\0';
+    return filename;
 }
 // This function checks file's expansion
 char* exclude_html(char* str) // need memory clear

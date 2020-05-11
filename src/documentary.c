@@ -126,7 +126,7 @@ int html_generator(struct comment* list, char* path, int quan_structs)
           documentary);
     fputs("</head><body><div id=\"wrapper\">", documentary);
     fputs("<h2>This documentation is shaped on file - ", documentary);
-    char* filename = filename_without_expan(path);
+    char* filename = filename_without_extension(path);
     fputs(filename, documentary);
     fputs("</h2>", documentary);
     // document programming language definition

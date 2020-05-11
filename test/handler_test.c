@@ -72,20 +72,20 @@ CTEST(handle, extention_check)
     ASSERT_EQUAL(res_second, exception_second);
     ASSERT_EQUAL(res_third, exception_third);
 }
-CTEST(handle, filename_without_expan)
+CTEST(handle, filename_without_extension)
 {
     // Given
     char str_first[] = "./myprogram/main.cpp";
     char str_second[] = "./src/grab.h";
     char str_third[] = "nothing";
     // When
-    char* res_first = filename_without_expan(str_first);
-    char* res_second = filename_without_expan(str_second);
-    char* res_third = filename_without_expan(str_third);
+    char* res_first = filename_without_extension(str_first);
+    char* res_second = filename_without_extension(str_second);
+    char* res_third = filename_without_extension(str_third);
     // Then
     char* exception_first = "main";
     char* exception_second = "grab";
-    char* exception_third = 0;
+    char* exception_third = "";
     ASSERT_STR(exception_first, res_first);
     ASSERT_STR(exception_second, res_second);
     ASSERT_STR(exception_third, res_third);
