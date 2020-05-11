@@ -75,7 +75,7 @@ char* file_name_generator(char* path)
     }
     char* temp_filename = filename_without_extension(path); // need free
     char* generated_filename_temp = strcat(temp_filename, "__");
-    char* generated_filename;
+    char* generated_filename = (char*)calloc(550, sizeof(char)); // need free;
     strcpy(generated_filename, generated_filename_temp);
     free(temp_filename);
     generated_filename = strcat(generated_filename, str_time);
@@ -84,7 +84,6 @@ char* file_name_generator(char* path)
     for (int i = 0; docs_path[i] != '\0'; i++) {
         folder_name[i] = docs_path[i];
     }
-
     char* folder = strcat(folder_name, generated_filename);
     char* filename_html = strcat(folder, ".html");
     return filename_html;
@@ -105,6 +104,7 @@ char* get_document_type(char* path)
     if (!strcmp(extension, "cpp")) {
         return "<i>Program code in language C++</i></br></br>";
     }
+    return "";
 }
 int html_generator(struct comment* list, char* path, int quan_structs)
 {
@@ -140,7 +140,7 @@ int html_generator(struct comment* list, char* path, int quan_structs)
     fputs(filename, documentary);
     fputs("</h2>", documentary);
     // document programming language definition
-    fputs(get_document_type, documentary);
+    fputs(get_document_type(path), documentary);
     // main content
     for (int i = 0; i < quan_structs; i++) {
         if (strlen(list[i].comment_data)) {
