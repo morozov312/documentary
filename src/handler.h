@@ -1,7 +1,7 @@
 #ifndef HANDLER_H
 #define HANDLER_H
 char* get_file_extension(char* file_path);
-char** document_handle(char* paths);
+char** get_data_from_document(char* paths);
 int single_comment_check(char* str);
 int multiline_comment_begin_check(char* str);
 int multiline_comment_end_check(char* str);

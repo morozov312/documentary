@@ -116,8 +116,7 @@ int html_generator(struct comment* list, char* path, int quan_structs)
     fputs(filename, documentary);
     fputs("</h2>", documentary);
     // document programming language definition
-    char* expansion;
-    // = expansion_handle(path);
+    char* expansion = get_file_extension(path);
     if (!strcmp(expansion, "h")) {
         fputs("<i>Header file to program code on C/C++</i></br></br>",
               documentary);

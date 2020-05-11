@@ -117,7 +117,7 @@ int multiline_comment_end_check(char* str)
     return flag > 0 ? 1 : 0;
 }
 // This function return array of data from file
-char** document_handle(char* paths) // need memory clear
+char** get_data_from_document(char* paths) // need memory clear
 {
     FILE* myfile;
     myfile = fopen(paths, "r");
@@ -141,7 +141,7 @@ char** document_handle(char* paths) // need memory clear
                 continue;
             }
         }
-        data[quan_str] = temp;
+        strcpy(data[quan_str], temp);
         quan_str++;
         free(temp);
     }

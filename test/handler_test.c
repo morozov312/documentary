@@ -1,5 +1,7 @@
 #include <ctest.h>
 #include <handler.h>
+#define max_len_inp_str 500
+#define max_quan_str 50000
 CTEST(handle, single_comment_check)
 {
     // Given
@@ -103,4 +105,14 @@ CTEST(handle, exclude_html)
     char* exception_second = "int n = 10";
     ASSERT_STR(exception_first, res_first);
     ASSERT_STR(exception_second, res_second);
+}
+CTEST(handle, document_handle)
+{
+    // Given
+    char str[] = "./test/main.c";
+    // When
+    char** res = get_data_from_document(str);
+    // Then
+    char* exception = "#define CTEST_MAIN\n";
+    ASSERT_STR(res[0], exception);
 }
