@@ -27,7 +27,7 @@ struct comment {
 
 int counter = 0;
 
-char* del_documentary_multiline_comment_symbols(char* string)
+char* del_documentary_comment_symbols(char* string)
 {
     char* ptr_slash = strchr(string, '/');
     return ptr_slash == NULL ? "" : ptr_slash + 3;
