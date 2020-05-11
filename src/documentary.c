@@ -59,7 +59,6 @@ char* del_multiline_comment_stars(char* str)
  * the name, day, number and time of creation of the documentation */
 char* file_name_generator(char* path)
 {
-    int last_index = 0, temp = 0;
     long int s_time = 0;
     struct tm* m_time;
     s_time = time(NULL);
@@ -76,7 +75,7 @@ char* file_name_generator(char* path)
     }
     char* temp_filename = filename_without_extension(path); // need free
     char* generated_filename_temp = strcat(temp_filename, "__");
-    char* generated_filename;
+    char* generated_filename = (char*)calloc(550, sizeof(char)); // need free;
     strcpy(generated_filename, generated_filename_temp);
     free(temp_filename);
     generated_filename = strcat(generated_filename, str_time);
@@ -85,7 +84,6 @@ char* file_name_generator(char* path)
     for (int i = 0; docs_path[i] != '\0'; i++) {
         folder_name[i] = docs_path[i];
     }
-
     char* folder = strcat(folder_name, generated_filename);
     char* filename_html = strcat(folder, ".html");
     return filename_html;
@@ -94,51 +92,61 @@ char* file_name_generator(char* path)
  * this function creates an HTML page from the documentation
  * in the directory - documentary/docs/
  **********************************************************/
+char* get_document_type(char* path)
+{
+    char* extension = get_file_extension(path);
+    if (!strcmp(extension, "h")) {
+        return "<i>Header file to program code on C/C++</i></br></br>";
+    }
+    if (!strcmp(extension, "c")) {
+        return "<i>Program code in language C</i></br></br>";
+    }
+    if (!strcmp(extension, "cpp")) {
+        return "<i>Program code in language C++</i></br></br>";
+    }
+    return "";
+}
 int html_generator(struct comment* list, char* path, int quan_structs)
 {
-    FILE* documentary;
+    FILE *documentary, *styles;
+    char* ptrFile;
     char* name = file_name_generator(path);
     documentary = fopen(name, "w");
     if (documentary == NULL) {
         printf("%s\n", "Error create html page!");
         return 0;
     }
-    // ==========================================================================
     // Header
-    fputs("<!DOCTYPE html><html><head><meta charset=\" UTF - 8\" >",
-          documentary);
-    fputs("<link rel=\"stylesheet\" type=\"text/css\" "
-          "href=\"./styles/styles.css\">",
-          documentary);
-    fputs("</head><body><div id=\"wrapper\">", documentary);
-    fputs("<h2>This documentation is shaped on file - ", documentary);
+    styles = fopen("./styles/styles.html", "r");
+    if (styles == NULL) {
+        printf("%s\n", "Stylesheet not found!");
+        return 0;
+    }
+    while (1) {
+        char* temp = (char*)calloc(max_len_inp_str, sizeof(char));
+        ptrFile = fgets(temp, max_len_inp_str, styles);
+        if (ptrFile == NULL) {
+            if (feof(styles) != 0) {
+                break;
+            } else {
+                continue;
+            }
+        }
+        fputs(temp, documentary);
+        free(temp);
+    }
+    fclose(styles);
     char* filename = filename_without_extension(path);
     fputs(filename, documentary);
     fputs("</h2>", documentary);
     // document programming language definition
-    char* expansion;
-    // = expansion_handle(path);
-    if (!strcmp(expansion, "h")) {
-        fputs("<i>Header file to program code on C/C++</i></br></br>",
-              documentary);
-    }
-    if (!strcmp(expansion, "c")) {
-        fputs("<i>Program code in language C</i></br></br>", documentary);
-    }
-    if (!strcmp(expansion, "cpp")) {
-        fputs("<i>Program code in language C++</i></br></br>", documentary);
-    }
-    fputs("<b>Warning</b></br></br><i>This documentation is based on the "
-          "program code containing </br> ",
-          documentary);
-    // ==========================================================================
+    fputs(get_document_type(path), documentary);
     // main content
     for (int i = 0; i < quan_structs; i++) {
         if (strlen(list[i].comment_data)) {
             fputs("<p class=\"comment\">", documentary);
             fputs(list[i].comment_data, documentary);
-            fputs("</br>", documentary);
-            fputs("</p>", documentary);
+            fputs("</br></p>", documentary);
         }
         if (strlen(list[i].code_string)) {
             fputs("<code>", documentary);
@@ -146,7 +154,6 @@ int html_generator(struct comment* list, char* path, int quan_structs)
             fputs("</code></br></br>", documentary);
         }
     }
-    // ==========================================================================
     // Footer
     fputs("</div></body></html>", documentary);
     fclose(documentary);

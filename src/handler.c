@@ -23,7 +23,6 @@ char* get_file_extension(const char* file_path)
     return dot_ptr == NULL ? "" : dot_ptr + 1;
 }
 // This function handles filename deleting expansion
-
 char* filename_without_extension(char* path)
 {
     char* p_last_dot = strrchr(path, '.');
@@ -66,7 +65,7 @@ char* exclude_html(char* str) // need memory clear
     no_html_str[j] = '\0';
     return no_html_str;
 }
-int extention_check(char* filepath)
+int extension_check(char* filepath)
 {
     char* valid_extentions[qty_of_extentions] = {"cpp", "h", "c"};
     int flag = 0;
@@ -117,7 +116,7 @@ int multiline_comment_end_check(char* str)
     return flag > 0 ? 1 : 0;
 }
 // This function return array of data from file
-char** document_handle(char* paths) // need memory clear
+char** get_data_from_document(char* paths) // need memory clear
 {
     FILE* myfile;
     myfile = fopen(paths, "r");
@@ -141,7 +140,7 @@ char** document_handle(char* paths) // need memory clear
                 continue;
             }
         }
-        data[quan_str] = temp;
+        strcpy(data[quan_str], temp);
         quan_str++;
         free(temp);
     }

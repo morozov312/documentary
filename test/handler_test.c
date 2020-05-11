@@ -1,5 +1,7 @@
 #include <ctest.h>
 #include <handler.h>
+#define max_len_inp_str 500
+#define max_quan_str 50000
 CTEST(handle, single_comment_check)
 {
     // Given
@@ -54,16 +56,16 @@ CTEST(handle, mult_comment_end_check)
     ASSERT_EQUAL(res_second, exp_second);
     ASSERT_EQUAL(res_third, exp_third);
 }
-CTEST(handle, extention_check)
+CTEST(handle, extension_check)
 {
     // Given
     char str_first[] = "./myprogram/main.cpp";
     char str_second[] = "./src/grab.h";
     char str_third[] = "nothing";
     // When
-    int res_first = extention_check(str_first);
-    int res_second = extention_check(str_second);
-    int res_third = extention_check(str_third);
+    int res_first = extension_check(str_first);
+    int res_second = extension_check(str_second);
+    int res_third = extension_check(str_third);
     // Then
     int exception_first = 1;
     int exception_second = 1;
@@ -103,4 +105,14 @@ CTEST(handle, exclude_html)
     char* exception_second = "int n = 10";
     ASSERT_STR(exception_first, res_first);
     ASSERT_STR(exception_second, res_second);
+}
+CTEST(handle, document_handle)
+{
+    // Given
+    char str[] = "./test/main.c";
+    // When
+    char** res = get_data_from_document(str);
+    // Then
+    char* exception = "#define CTEST_MAIN\n";
+    ASSERT_STR(res[0], exception);
 }
