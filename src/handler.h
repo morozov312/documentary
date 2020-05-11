@@ -1,11 +1,11 @@
 #ifndef HANDLER_H
 #define HANDLER_H
-char* expansion_handle(char* str);
+char* get_file_extension(char* file_path);
 char** document_handle(char* paths);
 int single_comment_check(char* str);
 int multiline_comment_begin_check(char* str);
 int multiline_comment_end_check(char* str);
-int expan_check(char* filepath);
+int extention_check(char* filepath);
 char* filename_without_expan(char* path);
 char* no_html(char* str);
 #endif

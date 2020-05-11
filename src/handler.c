@@ -15,31 +15,12 @@
 #include <string.h>
 #define max_len_inp_str 500
 #define max_quan_str 50000
+#define qty_of_extentions 3
 // This function handles expansion from path
-char* expansion_handle(char* str)
+char* get_file_extension(const char* file_path)
 {
-    int max_len_expan = 4;
-    char* expansion = (char*)calloc(max_len_expan, sizeof(char));
-    int len_path = (int)strlen(str);
-    int j = 0;
-    for (int i = len_path - 1; i != 0; i--) {
-        expansion[j] = str[i];
-        j++;
-        if (str[i - 1] == '.' || j == 3) {
-            break;
-        }
-    }
-    int exp_temp_len = (int)strlen(expansion);
-    char* reversed_str = (char*)calloc(exp_temp_len, sizeof(char));
-    char buff = 0;
-    int k = 0;
-    for (int i = exp_temp_len - 1; i >= 0; i--) {
-        buff = expansion[i];
-        reversed_str[k] = buff;
-        k++;
-    }
-    // returns file extension for next checks
-    return reversed_str;
+    char* dot_ptr = strrchr(file_path, '.');
+    return dot_ptr == NULL ? "" : dot_ptr + 1;
 }
 // This function handles filename deleting expansion
 char* filename_without_expan(char* path)
@@ -94,14 +75,13 @@ char* no_html(char* str)
     no_html_str[j] = '\0';
     return no_html_str;
 }
-int expan_check(char* filepath)
+int extention_check(char* filepath)
 {
-    const int quan_of_expan = 3;
-    const char exps[3][4] = {"cpp", "c", "h"};
+    char* valid_extentions[qty_of_extentions] = {"cpp", "h", "c"};
     int flag = 0;
-    char* temp = expansion_handle(filepath);
-    for (int i = 0; i < quan_of_expan; i++) {
-        flag = strcmp(temp, exps[i]);
+    char* temp = get_file_extension(filepath);
+    for (int i = 0; i < qty_of_extentions; i++) {
+        flag = strcmp(temp, valid_extentions[i]);
         if (flag == 0) {
             return 1;
         }
@@ -116,16 +96,10 @@ int single_comment_check(char* str)
     for (unsigned int i = 0; i < len; i++) {
         if (str[i] == '/' && str[i + 1] == '/') {
             flag++;
+            i++;
         }
     }
-    if (flag == 1) {
-        return 1;
-    }
-    if (flag > 1) {
-        printf("%s", "Error,don't use nested comments");
-        return -1;
-    }
-    return 0;
+    return flag > 0 ? 1 : 0;
 }
 // This function checks multiline comment's begin
 int multiline_comment_begin_check(char* str)
@@ -137,14 +111,7 @@ int multiline_comment_begin_check(char* str)
             flag++;
         }
     }
-    if (flag == 1) {
-        return 1;
-    }
-    if (flag > 1) {
-        printf("%s", "Error,don't use nested comments");
-        return -1;
-    }
-    return 0;
+    return flag > 0 ? 1 : 0;
 }
 // This function checks multiline comment's end
 int multiline_comment_end_check(char* str)
@@ -156,14 +123,7 @@ int multiline_comment_end_check(char* str)
             flag++;
         }
     }
-    if (flag == 1) {
-        return 1;
-    }
-    if (flag > 1) {
-        printf("%s", "Error,don't use nested comments");
-        return -1;
-    }
-    return 0;
+    return flag > 0 ? 1 : 0;
 }
 // This function return array of data from file
 char** document_handle(char* paths)
