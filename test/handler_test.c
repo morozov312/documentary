@@ -153,3 +153,25 @@ CTEST(handle, check_single_documentary_comment)
     ASSERT_EQUAL(res_second, exception_second);
     ASSERT_EQUAL(res_third, exception_third);
 }
+CTEST(handle, get_inpdir)
+{
+    // Given
+    char* argv[] = {"./documentary ", "-inpdir", "./src"};
+    int qty = 3;
+    // When
+    char* exception = get_inpdir(qty, argv);
+    // Then
+    char* res = "./src";
+    ASSERT_STR(res, exception);
+}
+CTEST(handle, get_outdir)
+{
+    // Given
+    char* argv[] = {"./documentary ", "-outdir", "./docs"};
+    int qty = 3;
+    // When
+    char* exception = get_outdir(qty, argv);
+    // Then
+    char* res = "./docs";
+    ASSERT_STR(res, exception);
+}
