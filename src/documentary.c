@@ -219,16 +219,29 @@ int document_creation(char* path)
     }
     struct comment* comments_array
             = (struct comment*)calloc(count_of_lines, sizeof(struct comment));
-    for (int i = 0; i < count_of_lines; i++) {
+    for (int i = 0; i < count_of_lines - 1; i++) {
         char* str = document_data[i];
         char* next_str = document_data[i + 1];
         int check_single_doc = check_single_documentary_comment(str);
         int doc_mult_b = check_document_multiline_commentary(str);
         int mult_e = multiline_comment_end_check(str);
-        if (doc_mult_b && !begin) {
+        if (doc_mult_b && mult_e) {
+            comments_array[qty_structs].comment_data
+                    = del_documentary_comment_symbols(str);
+            if (code_check(next_str)) {
+                comments_array[qty_structs].code_string = next_str;
+                i++;
+            } else {
+                comments_array[qty_structs].code_string = "";
+            }
+            qty_structs++;
+        }
+        if (doc_mult_b && !begin && !mult_e) {
             begin = 1;
             comments_array[qty_structs].comment_data
                     = del_documentary_comment_symbols(str);
+            comments_array[qty_structs].code_string = "";
+            qty_structs++;
         }
         if (begin && !doc_mult_b && !mult_e) {
             comments_array[qty_structs].comment_data
@@ -236,7 +249,17 @@ int document_creation(char* path)
             comments_array[qty_structs].code_string = "";
             qty_structs++;
         }
-        if (mult_e) {
+        if (mult_e && begin && !doc_mult_b) {
+            comments_array[qty_structs].comment_data
+                    = multiline_comment_end_check(str);
+            if (code_check(next_str)) {
+                comments_array[qty_structs].code_string = next_str;
+                i++;
+            } else {
+                comments_array[qty_structs].code_string = "";
+            }
+            qty_structs++;
+            begin = 0;
         }
         if (check_single_doc && !begin) {
             comments_array[qty_structs].comment_data
@@ -250,4 +273,19 @@ int document_creation(char* path)
             qty_structs++;
         }
     }
+    // handling the case when there are no comments in the code
+    if (qty_structs == 0) {
+        printf("%s%s", "Error,file on path ", path);
+        printf("%s\n",
+               " no comments found, the document cannot be processed! ");
+        return 0;
+    }
+    int res = html_generator(comments_array, path, qty_structs);
+    if (res) {
+        printf("%s%s\n",
+               "Succsesfully created documentation to file by ",
+               path);
+    }
+    free(comments_array);
+    return 0;
 }
