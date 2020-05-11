@@ -101,6 +101,7 @@ int check_single_documentary_comment(char* string)
         else
             return 0;
     }
+    return 0;
 }
 // This function checks multiline comment's begin
 int multiline_comment_begin_check(char* str)
@@ -170,4 +171,44 @@ char** get_data_from_document(char* paths) // need memory clear
     }
     fclose(myfile);
     return data;
+}
+char* get_inpdir(int qty, char* array_argv[])
+{
+    const char input_directory[] = "-inpdir";
+    const char output_directory[] = "-outdir";
+    for (int i = 1; i < qty; i++) {
+        if (strcmp(array_argv[i], input_directory) != 0
+            && strcmp(array_argv[i], output_directory) != 0) {
+            printf("%s%s\n", "Unknown option: ", array_argv[i]);
+            continue;
+        }
+        if (strcmp(array_argv[i], output_directory) == 0) {
+            i++;
+            continue;
+        }
+        if (strcmp(array_argv[i], input_directory) == 0) {
+            return array_argv[i + 1];
+        }
+    }
+    return "";
+}
+char* get_outdir(int qty, char* array_argv[])
+{
+    const char input_directory[] = "-inpdir";
+    const char output_directory[] = "-outdir";
+    for (int i = 1; i < qty; i++) {
+        if (strcmp(array_argv[i], input_directory) != 0
+            && strcmp(array_argv[i], output_directory) != 0) {
+            printf("%s%s\n", "Unknown option: ", array_argv[i]);
+            continue;
+        }
+        if (strcmp(array_argv[i], input_directory) == 0) {
+            i++;
+            continue;
+        }
+        if (strcmp(array_argv[i], output_directory) == 0) {
+            return array_argv[i + 1];
+        }
+    }
+    return "";
 }
