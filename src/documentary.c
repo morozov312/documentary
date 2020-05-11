@@ -6,7 +6,7 @@
  * @MOSKALT AND @MOROZOV312
  * 2020
  * THE PROGRAMM IS OPENSOURCE PROJECT
- * PROJECT SOURCE CODE
+ * PROJECT'S SOURCE CODE
  * https://github.com/morozov312/documentary
  ****************************************/
 
@@ -22,7 +22,7 @@ struct comment {
     char* comment_data;
     char* code_string;
 };
-/*  removes multi-line comment characters
+/*!  removes multi-line comment characters
  * for a more understandable entry in html page */
 
 int counter = 0;
@@ -64,7 +64,7 @@ char* del_multiline_comment_stars(char* str)
     }
     return str;
 }
-/* creates a unique file name which takes
+/*! creates a unique file name which takes
  * the name, day, number and time of creation of the documentation */
 char* file_name_generator(char* path)
 {
