@@ -106,14 +106,13 @@ char* get_document_type(char* path)
     char* extension = get_file_extension(path);
     if (!strcmp(extension, "h")) {
         return "<i>Header file to program code on C/C++</i></br></br>";
-    }
-    if (!strcmp(extension, "c")) {
+    } else if (!strcmp(extension, "c")) {
         return "<i>Program code in language C</i></br></br>";
-    }
-    if (!strcmp(extension, "cpp")) {
+    } else if (!strcmp(extension, "cpp")) {
         return "<i>Program code in language C++</i></br></br>";
+    } else {
+        return "";
     }
-    return "";
 }
 void recursive_files_search(char* path, char** paths)
 {
