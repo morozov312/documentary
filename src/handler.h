@@ -8,4 +8,5 @@ int multiline_comment_end_check(char* str);
 int extension_check(char* filepath);
 char* filename_without_extension(char* path);
 char* exclude_html(char* str);
+int check_document_multiline_commentary(char* string);
 #endif

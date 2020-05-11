@@ -116,3 +116,22 @@ CTEST(handle, document_handle)
     char* exception = "#define CTEST_MAIN\n";
     ASSERT_STR(res[0], exception);
 }
+
+CTEST(handle, check_document_multiline_commentary)
+{
+    // Given
+    char* str_first = "/**   begin";
+    char* str_second = "/*!  begin";
+    char* str_third = "/* nothing";
+    // When
+    int res_first = check_document_multiline_commentary(str_first);
+    int res_second = check_document_multiline_commentary(str_second);
+    int res_third = check_document_multiline_commentary(str_third);
+    // Then
+    int exception_first = 1;
+    int exception_second = 1;
+    int exception_third = 0;
+    ASSERT_EQUAL(res_first, exception_first);
+    ASSERT_EQUAL(res_second, exception_second);
+    ASSERT_EQUAL(res_third, exception_third);
+}

@@ -95,7 +95,7 @@ int single_comment_check(char* str)
 int multiline_comment_begin_check(char* str)
 {
     unsigned int len = strlen(str);
-    int flag = 0;
+    int flag = 0; // can be rewritten
     for (unsigned int i = 0; i < len; i++) {
         if (str[i] == '/' && str[i + 1] == '*') {
             flag++;
@@ -114,6 +114,19 @@ int multiline_comment_end_check(char* str)
         }
     }
     return flag > 0 ? 1 : 0;
+}
+
+int check_document_multiline_commentary(char* string)
+{
+    char* ptr_first_star = strchr(string, '*');
+    if (multiline_comment_begin_check(string) == 1) {
+        if ((ptr_first_star)[1] == '*' || (ptr_first_star)[1] == '!') {
+            return 1; // valid comment
+        } else {
+            return 0; // invalid comment
+        }
+    } else
+        return 0;
 }
 // This function return array of data from file
 char** get_data_from_document(char* paths) // need memory clear
