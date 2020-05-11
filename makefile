@@ -1,5 +1,5 @@
 .PHONY: clean all run check rebuild
-FLAGS := -std=c99
+FLAGS := -std=c99 -D_BSD_SOURCE
 FLAG := -std=c11
 SRC_DIR := ./src
 BIN_DIR := ./bin

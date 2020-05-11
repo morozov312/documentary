@@ -71,3 +71,22 @@ CTEST(documentary, del_multiline_comment_end)
     ASSERT_STR(res_third, exp_thrid);
     ASSERT_STR(res_fourth, exp_fourth);
 }
+
+CTEST(documentary, del_documentary_multiline_comment_symbols)
+{
+    // Given
+    char str_first[] = "/** *comment end ";
+    char str_second[] = "/*! not comment";
+    char str_third[] = "/**comment";
+    // When
+    char* res_first = del_documentary_multiline_comment_symbols(str_first);
+    char* res_second = del_documentary_multiline_comment_symbols(str_second);
+    char* res_third = del_documentary_multiline_comment_symbols(str_third);
+    // Then
+    char exp_first[] = " *comment end ";
+    char exp_second[] = " not comment";
+    char exp_third[] = "comment";
+    ASSERT_STR(exp_first, res_first);
+    ASSERT_STR(exp_second, res_second);
+    ASSERT_STR(exp_third, res_third);
+}
