@@ -56,16 +56,16 @@ CTEST(handle, mult_comment_end_check)
     ASSERT_EQUAL(res_second, exp_second);
     ASSERT_EQUAL(res_third, exp_third);
 }
-CTEST(handle, extention_check)
+CTEST(handle, extension_check)
 {
     // Given
     char str_first[] = "./myprogram/main.cpp";
     char str_second[] = "./src/grab.h";
     char str_third[] = "nothing";
     // When
-    int res_first = extention_check(str_first);
-    int res_second = extention_check(str_second);
-    int res_third = extention_check(str_third);
+    int res_first = extension_check(str_first);
+    int res_second = extension_check(str_second);
+    int res_third = extension_check(str_third);
     // Then
     int exception_first = 1;
     int exception_second = 1;

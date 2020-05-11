@@ -23,7 +23,6 @@ char* get_file_extension(const char* file_path)
     return dot_ptr == NULL ? "" : dot_ptr + 1;
 }
 // This function handles filename deleting expansion
-
 char* filename_without_extension(char* path)
 {
     char* p_last_dot = strrchr(path, '.');
@@ -66,7 +65,7 @@ char* exclude_html(char* str) // need memory clear
     no_html_str[j] = '\0';
     return no_html_str;
 }
-int extention_check(char* filepath)
+int extension_check(char* filepath)
 {
     char* valid_extentions[qty_of_extentions] = {"cpp", "h", "c"};
     int flag = 0;

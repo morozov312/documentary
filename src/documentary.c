@@ -59,7 +59,6 @@ char* del_multiline_comment_stars(char* str)
  * the name, day, number and time of creation of the documentation */
 char* file_name_generator(char* path)
 {
-    int last_index = 0, temp = 0;
     long int s_time = 0;
     struct tm* m_time;
     s_time = time(NULL);
@@ -96,14 +95,14 @@ char* file_name_generator(char* path)
  **********************************************************/
 char* get_document_type(char* path)
 {
-    char* extention = get_file_extension(path);
-    if (!strcmp(extention, "h")) {
+    char* extension = get_file_extension(path);
+    if (!strcmp(extension, "h")) {
         return "<i>Header file to program code on C/C++</i></br></br>";
     }
-    if (!strcmp(extention, "c")) {
+    if (!strcmp(extension, "c")) {
         return "<i>Program code in language C</i></br></br>";
     }
-    if (!strcmp(extention, "cpp")) {
+    if (!strcmp(extension, "cpp")) {
         return "<i>Program code in language C++</i></br></br>";
     }
 }
@@ -142,7 +141,6 @@ int html_generator(struct comment* list, char* path, int quan_structs)
     fputs("</h2>", documentary);
     // document programming language definition
     fputs(get_document_type, documentary);
-
     // main content
     for (int i = 0; i < quan_structs; i++) {
         if (strlen(list[i].comment_data)) {
