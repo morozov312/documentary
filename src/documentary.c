@@ -192,3 +192,10 @@ int html_generator(struct comment* list, char* path, int quan_structs)
     fclose(documentary);
     return 1;
 }
+int document_creation(char* path)
+{
+    char** document_data = get_data_from_document(path);
+    int qty_structs = 0;
+    for (int i = 0; i < max_quan_str; i++) {
+    }
+}

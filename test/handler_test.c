@@ -111,10 +111,10 @@ CTEST(handle, document_handle)
     // Given
     char str[] = "./test/main.c";
     // When
-    char** res = get_data_from_document(str);
+    char** res_first = get_data_from_document(str);
     // Then
-    char* exception = "#define CTEST_MAIN\n";
-    ASSERT_STR(res[0], exception);
+    char* res_fisrt = "#define CTEST_MAIN\n";
+    ASSERT_STR(res_first[0], res_fisrt);
 }
 
 CTEST(handle, check_document_multiline_commentary)
@@ -156,22 +156,38 @@ CTEST(handle, check_single_documentary_comment)
 CTEST(handle, get_inpdir)
 {
     // Given
-    char* argv[] = {"./documentary ", "-inpdir", "./src"};
-    int qty = 3;
+    char* argv_first[] = {"./documentary ", "-inpdir", "./src"};
+    char* argv_second[] = {"./documentary ", "-inpdir", "-inpdir"};
+    char* argv_third[] = {"./documentary ", "-l", "./src"};
+    int qty_for_three = 3;
     // When
-    char* exception = get_inpdir(qty, argv);
+    char* res_fisrt = get_inpdir(qty_for_three, argv_first);
+    char* res_second = get_inpdir(qty_for_three, argv_second);
+    char* res_thrid = get_inpdir(qty_for_three, argv_third);
     // Then
-    char* res = "./src";
-    ASSERT_STR(res, exception);
+    char* exception_first = "./src";
+    char* exception_second = "-inpdir";
+    char* exception_third = "";
+    ASSERT_STR(exception_first, res_fisrt);
+    ASSERT_STR(exception_second, res_second);
+    ASSERT_STR(exception_third, res_thrid);
 }
 CTEST(handle, get_outdir)
 {
     // Given
-    char* argv[] = {"./documentary ", "-outdir", "./docs"};
-    int qty = 3;
+    char* argv_first[] = {"./documentary ", "-outdir", "./docs"};
+    char* argv_second[] = {"./documentary ", "-outdir", "-outdir"};
+    char* argv_third[] = {"./documentary ", "-l", "./src"};
+    int qty_for_three = 3;
     // When
-    char* exception = get_outdir(qty, argv);
+    char* res_fisrt = get_outdir(qty_for_three, argv_first);
+    char* res_second = get_outdir(qty_for_three, argv_second);
+    char* res_thrid = get_outdir(qty_for_three, argv_third);
     // Then
-    char* res = "./docs";
-    ASSERT_STR(res, exception);
+    char* exception_first = "./docs";
+    char* exception_second = "-outdir";
+    char* exception_third = "";
+    ASSERT_STR(exception_first, res_fisrt);
+    ASSERT_STR(exception_second, res_second);
+    ASSERT_STR(exception_third, res_thrid);
 }
