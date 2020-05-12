@@ -175,11 +175,11 @@ int html_generator(struct comment* list, char* path, int qty_structs)
             fputs("<p class=\"comment\">", documentary);
             fputs(list[i].comment_data, documentary);
             fputs("</br></p>", documentary);
-        }
-        if (list[i].code_string) {
-            fputs("<code>", documentary);
-            fputs(list[i].code_string, documentary);
-            fputs("</code></br></br>", documentary);
+            if (strlen(list[i].code_string)) {
+                fputs("<code>", documentary);
+                fputs(list[i].code_string, documentary);
+                fputs("</code></br></br>", documentary);
+            }
         }
     }
     // Footer
@@ -201,19 +201,47 @@ struct comment* create(int count, char** doc)
 {
     struct comment* comments_array
             = (struct comment*)calloc(count, sizeof(struct comment));
-    int qty = 0;
-    for (int i = 0; i < count; i++) {
+    int qty = 0, begin = 0;
+    for (int i = 0; i < count - 1; i++) {
         char* current_str = doc[i];
-        char* next_str = doc[i];
-        if (check_single_documentary_comment(current_str)) {
+        char* next_str = doc[i + 1];
+        int m_b = multiline_comment_begin_check(current_str);
+        int m_e = multiline_comment_end_check(current_str);
+        if (check_document_multiline_commentary(current_str) && !begin) {
+            begin = 1;
+            comments_array[qty].comment_data
+                    = del_documentary_comment_symbols(current_str);
+            comments_array[qty].code_string = "";
+            if (!m_e) {
+                qty++;
+            }
+        }
+        if (begin && !m_e && !m_b) {
+            comments_array[qty].comment_data
+                    = del_multiline_comment_stars(current_str);
+            comments_array[qty].code_string = "";
+            qty++;
+        }
+        if (check_single_documentary_comment(current_str) && !begin) {
             comments_array[qty].comment_data
                     = del_documentary_comment_symbols(current_str);
             if (code_check(next_str)) {
-                comments_array[qty].code_string = doc[i + 1];
+                comments_array[qty].code_string = next_str;
             } else {
                 comments_array[qty].code_string = "";
             }
             qty++;
+        }
+        if (m_e) {
+            comments_array[qty].comment_data
+                    = del_multiline_comment_end(current_str);
+            if (code_check(next_str)) {
+                comments_array[qty].code_string = next_str;
+            } else {
+                comments_array[qty].code_string = "";
+            }
+            qty++;
+            begin = 0;
         }
     }
     return comments_array;

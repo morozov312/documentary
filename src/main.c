@@ -9,7 +9,6 @@
  * PROJECT SOURCE CODE
  * https://github.com/morozov312/documentary
  ****************************************/
-
 #include "documentary.h"
 #include "handler.h"
 #include <stdio.h>
@@ -20,6 +19,7 @@
 
 int main(int argc, char* argv[])
 {
+    /// check args
     if (argc != 5 && argc != 3) {
         printf("%s\n", "error");
         return 0;
