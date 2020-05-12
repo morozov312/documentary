@@ -203,9 +203,16 @@ struct comment* create(int count, char** doc)
             = (struct comment*)calloc(count, sizeof(struct comment));
     int qty = 0;
     for (int i = 0; i < count; i++) {
-        if (check_single_documentary_comment(doc[i])) {
-            comments_array[qty].comment_data = doc[i];
-            comments_array[qty].code_string = doc[i + 1];
+        char* current_str = doc[i];
+        char* next_str = doc[i];
+        if (check_single_documentary_comment(current_str)) {
+            comments_array[qty].comment_data
+                    = del_documentary_comment_symbols(current_str);
+            if (code_check(next_str)) {
+                comments_array[qty].code_string = doc[i + 1];
+            } else {
+                comments_array[qty].code_string = "";
+            }
             qty++;
         }
     }
