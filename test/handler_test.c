@@ -75,38 +75,38 @@ CTEST(handle, extension_check)
     ASSERT_EQUAL(res_second, exception_second);
     ASSERT_EQUAL(res_third, exception_third);
 }
-CTEST(handle, filename_without_extension)
-{
-    // Given
-    char str_first[] = "./myprogram/main.cpp";
-    char str_second[] = "./src/grab.h";
-    char str_third[] = "nothing";
-    // When
-    char* res_first = filename_without_extension(str_first);
-    char* res_second = filename_without_extension(str_second);
-    char* res_third = filename_without_extension(str_third);
-    // Then
-    char* exception_first = "main";
-    char* exception_second = "grab";
-    char* exception_third = "";
-    ASSERT_STR(exception_first, res_first);
-    ASSERT_STR(exception_second, res_second);
-    ASSERT_STR(exception_third, res_third);
-}
-CTEST(handle, exclude_html)
-{
-    // Given
-    char str_first[] = "<<<>>>";
-    char str_second[] = "int n = 10";
-    // When
-    char* res_first = exclude_html(str_first);
-    char* res_second = exclude_html(str_second);
-    // Then
-    char* exception_first = "&lt&lt&lt&gt&gt&gt";
-    char* exception_second = "int n = 10";
-    ASSERT_STR(exception_first, res_first);
-    ASSERT_STR(exception_second, res_second);
-}
+// CTEST(handle, filename_without_extension)
+// {
+//     // Given
+//     char str_first[] = "./myprogram/main.cpp";
+//     char str_second[] = "./src/grab.h";
+//     char str_third[] = "nothing";
+//     // When
+//     char* res_first = filename_without_extension(str_first);
+//     char* res_second = filename_without_extension(str_second);
+//     char* res_third = filename_without_extension(str_third);
+//     // Then
+//     char* exception_first = "main";
+//     char* exception_second = "grab";
+//     char* exception_third = "";
+//     ASSERT_STR(exception_first, res_first);
+//     ASSERT_STR(exception_second, res_second);
+//     ASSERT_STR(exception_third, res_third);
+// }
+// CTEST(handle, exclude_html)
+// {
+//     // Given
+//     char str_first[] = "<<<>>>";
+//     char str_second[] = "int n = 10";
+//     // When
+//     char* res_first = exclude_html(str_first);
+//     char* res_second = exclude_html(str_second);
+//     // Then
+//     char* exception_first = "&lt&lt&lt&gt&gt&gt";
+//     char* exception_second = "int n = 10";
+//     ASSERT_STR(exception_first, res_first);
+//     ASSERT_STR(exception_second, res_second);
+// }
 CTEST(handle, document_handle)
 {
     // Given
