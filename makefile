@@ -40,7 +40,7 @@ clean:
 	rm ./docs/*.html
 	
 run:
-	$(BIN_DIR)/documentary -inpdir ./src
+	$(BIN_DIR)/documentary -inpdir ./test
 
 check: 
 	$(BIN_DIR)/testing

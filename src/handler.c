@@ -23,21 +23,16 @@ char* get_file_extension(const char* file_path)
     return dot_ptr == NULL ? "" : dot_ptr + 1;
 }
 // This function handles filename deleting expansion
-char* filename_without_extension(char* path)
+const char* filename_without_extension(char* path)
 {
+    char* temp_path = (char*)calloc(strlen(path), sizeof(char*));
+    strcpy(temp_path, path);
     char* p_last_dot = strrchr(path, '.');
-    char* p_last_slash = strrchr(path, '/');
-    if (p_last_dot == NULL || p_last_slash == NULL) {
-        return "";
-    }
     int last_dot_index = p_last_dot - path;
-    int last_slash_index = p_last_slash - path;
-    int count_of_symbols = last_dot_index - last_slash_index - 1;
-    char* filename
-            = (char*)calloc(count_of_symbols, sizeof(char)); // need mem free
-    strncpy(filename, p_last_slash + 1, count_of_symbols);
-    filename[count_of_symbols + 1] = '\0';
-    return filename;
+    temp_path[last_dot_index] = '\0';
+    char* p_last_slash = strrchr(temp_path, '/');
+    free(temp_path);
+    return p_last_slash == NULL ? "" : p_last_slash + 1;
 }
 // This function checks file's expansion
 char* exclude_html(char* str) // need memory clear
@@ -45,25 +40,25 @@ char* exclude_html(char* str) // need memory clear
     int len = (int)strlen(str);
     /* in the worst case, the string is increased 3 times + end of line
      * character*/
-    char* no_html_str = (char*)calloc((len * 3) + 1, sizeof(char));
+    str = (char*)realloc(str, (len * 3) + 1);
     int j = 0;
     for (int i = 0; i < len; i++, j++) {
         if (str[i] == '<') {
-            no_html_str[j] = '&';
-            no_html_str[j + 1] = 'l';
-            no_html_str[j + 2] = 't';
+            str[j] = '&';
+            str[j + 1] = 'l';
+            str[j + 2] = 't';
             j += 2;
         } else if (str[i] == '>') {
-            no_html_str[j] = '&';
-            no_html_str[j + 1] = 'g';
-            no_html_str[j + 2] = 't';
+            str[j] = '&';
+            str[j + 1] = 'g';
+            str[j + 2] = 't';
             j += 2;
         } else {
-            no_html_str[j] = str[i];
+            str[j] = str[i];
         }
     }
-    no_html_str[j] = '\0';
-    return no_html_str;
+    str[j] = '\0';
+    return str;
 }
 int extension_check(char* filepath)
 {

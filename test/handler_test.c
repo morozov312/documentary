@@ -6,6 +6,7 @@ CTEST(handle, single_comment_check)
 {
     // Given
     char str_first[] = " not comment // comment";
+    /// comment
     char str_second[] = " not comment";
     char str_third[] = " not comment // comment // nested comment";
     // When
