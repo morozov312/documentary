@@ -24,7 +24,6 @@ struct comment {
 };
 /*!  removes multi-line comment characters
  * for a more understandable entry in html page */
-
 int counter = 0;
 
 char* del_documentary_comment_symbols(char* string)
@@ -82,7 +81,7 @@ char* file_name_generator(char* path)
     if (str_time[len] == '\n') {
         str_time[len] = '\0';
     }
-    char filename[1000];
+    char* filename = (char*)calloc((strlen(path) + 30), sizeof(char));
     sprintf(filename,
             "%s%s%s%s%s",
             "./docs/",
@@ -185,6 +184,7 @@ int html_generator(struct comment* list, char* path, int qty_structs)
     // Footer
     fputs("</div></body></html>", documentary);
     fclose(documentary);
+    free(name);
     return 1;
 }
 int code_check(char* str)
