@@ -9,4 +9,5 @@ char* file_name_generator(char* path);
 void recursive_files_search(char* path, char** paths);
 char* del_documentary_comment_symbols(char* string);
 char* get_document_type(char* path);
+int document_creation(char* path);
 #endif

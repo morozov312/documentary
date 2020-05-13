@@ -24,7 +24,6 @@ struct comment {
 };
 /*!  removes multi-line comment characters
  * for a more understandable entry in html page */
-
 int counter = 0;
 
 char* del_documentary_comment_symbols(char* string)
@@ -82,20 +81,15 @@ char* file_name_generator(char* path)
     if (str_time[len] == '\n') {
         str_time[len] = '\0';
     }
-    char* temp_filename = filename_without_extension(path); // need free
-    char* generated_filename_temp = strcat(temp_filename, "__");
-    char* generated_filename = (char*)calloc(550, sizeof(char)); // need free;
-    strcpy(generated_filename, generated_filename_temp);
-    free(temp_filename);
-    generated_filename = strcat(generated_filename, str_time);
-    char* folder_name = (char*)calloc(550, sizeof(char)); // need free
-    char docs_path[] = "./docs/";
-    for (int i = 0; docs_path[i] != '\0'; i++) {
-        folder_name[i] = docs_path[i];
-    }
-    char* folder = strcat(folder_name, generated_filename);
-    char* filename_html = strcat(folder, ".html");
-    return filename_html;
+    char* filename = (char*)calloc((strlen(path) + 30), sizeof(char));
+    sprintf(filename,
+            "%s%s%s%s%s",
+            "./docs/",
+            str_time,
+            "_",
+            filename_without_extension(path),
+            ".html");
+    return filename;
 }
 /**********************************************************
  * this function creates an HTML page from the documentation
@@ -139,7 +133,7 @@ void recursive_files_search(char* path, char** paths)
     closedir(d);
 }
 
-int html_generator(struct comment* list, char* path, int quan_structs)
+int html_generator(struct comment* list, char* path, int qty_structs)
 {
     FILE *documentary, *styles;
     char* ptrFile;
@@ -175,21 +169,22 @@ int html_generator(struct comment* list, char* path, int quan_structs)
     // document programming language definition
     fputs(get_document_type(path), documentary);
     // main content
-    for (int i = 0; i < quan_structs; i++) {
-        if (strlen(list[i].comment_data)) {
+    for (int i = 0; i < qty_structs; i++) {
+        if (list[i].comment_data) {
             fputs("<p class=\"comment\">", documentary);
             fputs(list[i].comment_data, documentary);
             fputs("</br></p>", documentary);
-        }
-        if (strlen(list[i].code_string)) {
-            fputs("<code>", documentary);
-            fputs(list[i].code_string, documentary);
-            fputs("</code></br></br>", documentary);
+            if (strlen(list[i].code_string)) {
+                fputs("<code>", documentary);
+                fputs(list[i].code_string, documentary);
+                fputs("</code></br></br>", documentary);
+            }
         }
     }
     // Footer
     fputs("</div></body></html>", documentary);
     fclose(documentary);
+    free(name);
     return 1;
 }
 int code_check(char* str)
@@ -202,90 +197,93 @@ int code_check(char* str)
     }
     return 0;
 }
+struct comment* create(int count, char** doc)
+{
+    struct comment* comments_array
+            = (struct comment*)calloc(count, sizeof(struct comment));
+    int qty = 0, begin = 0;
+    for (int i = 0; i < count - 1; i++) {
+        char* current_str = doc[i];
+        char* next_str = doc[i + 1];
+        int m_b = multiline_comment_begin_check(current_str);
+        int m_e = multiline_comment_end_check(current_str);
+        if (check_document_multiline_commentary(current_str) && !begin) {
+            begin = 1;
+            comments_array[qty].comment_data
+                    = del_documentary_comment_symbols(current_str);
+            comments_array[qty].code_string = "";
+            if (!m_e) {
+                qty++;
+            }
+        }
+        if (begin && !m_e && !m_b) {
+            comments_array[qty].comment_data
+                    = del_multiline_comment_stars(current_str);
+            comments_array[qty].code_string = "";
+            qty++;
+        }
+        if (check_single_documentary_comment(current_str) && !begin) {
+            comments_array[qty].comment_data
+                    = del_documentary_comment_symbols(current_str);
+            if (code_check(next_str)) {
+                comments_array[qty].code_string = next_str;
+            } else {
+                comments_array[qty].code_string = "";
+            }
+            qty++;
+        }
+        if (m_e) {
+            comments_array[qty].comment_data
+                    = del_multiline_comment_end(current_str);
+            if (code_check(next_str)) {
+                comments_array[qty].code_string = next_str;
+            } else {
+                comments_array[qty].code_string = "";
+            }
+            qty++;
+            begin = 0;
+        }
+    }
+    return comments_array;
+};
 int document_creation(char* path)
 {
     char** document_data = get_data_from_document(path);
-    int count_of_lines = 0, qty_structs = 0, begin = 0;
+    int count_of_lines = 0, qty_structs = 0;
+    if (document_data == NULL) {
+        return 0;
+    }
     for (int i = 0; i < max_quan_str; i++) {
         if (strlen(document_data[i]) != 0) {
+            document_data[i] = exclude_html(document_data[i]);
+            // printf("%s\n", document_data[i]);
             count_of_lines++;
         }
     }
-    // this error appears if the document empty ot has 1 line
+    /// this error appears if the document empty ot has 1 line
     if (count_of_lines <= 1) {
         printf("%s%s", "Error,file on path ", path);
         printf("%s\n", " too small for documentation");
         return 0;
     }
-    struct comment* comments_array
-            = (struct comment*)calloc(count_of_lines, sizeof(struct comment));
-    for (int i = 0; i < count_of_lines - 1; i++) {
-        char* str = document_data[i];
-        char* next_str = document_data[i + 1];
-        int check_single_doc = check_single_documentary_comment(str);
-        int doc_mult_b = check_document_multiline_commentary(str);
-        int mult_e = multiline_comment_end_check(str);
-        if (doc_mult_b && mult_e) {
-            comments_array[qty_structs].comment_data
-                    = del_documentary_comment_symbols(str);
-            if (code_check(next_str)) {
-                comments_array[qty_structs].code_string = next_str;
-                i++;
-            } else {
-                comments_array[qty_structs].code_string = "";
-            }
-            qty_structs++;
-        }
-        if (doc_mult_b && !begin && !mult_e) {
-            begin = 1;
-            comments_array[qty_structs].comment_data
-                    = del_documentary_comment_symbols(str);
-            comments_array[qty_structs].code_string = "";
-            qty_structs++;
-        }
-        if (begin && !doc_mult_b && !mult_e) {
-            comments_array[qty_structs].comment_data
-                    = del_multiline_comment_stars(str);
-            comments_array[qty_structs].code_string = "";
-            qty_structs++;
-        }
-        if (mult_e && begin && !doc_mult_b) {
-            comments_array[qty_structs].comment_data
-                    = multiline_comment_end_check(str);
-            if (code_check(next_str)) {
-                comments_array[qty_structs].code_string = next_str;
-                i++;
-            } else {
-                comments_array[qty_structs].code_string = "";
-            }
-            qty_structs++;
-            begin = 0;
-        }
-        if (check_single_doc && !begin) {
-            comments_array[qty_structs].comment_data
-                    = del_documentary_comment_symbols(str);
-            if (code_check(next_str)) {
-                comments_array[qty_structs].code_string = next_str;
-                i++;
-            } else {
-                comments_array[qty_structs].code_string = "";
-            }
+    struct comment* comments_array = create(count_of_lines, document_data);
+    for (int i = 0; i < count_of_lines; i++) {
+        if (comments_array[i].comment_data != NULL) {
             qty_structs++;
         }
     }
-    // handling the case when there are no comments in the code
     if (qty_structs == 0) {
-        printf("%s%s", "Error,file on path ", path);
-        printf("%s\n",
-               " no comments found, the document cannot be processed! ");
+        printf("%s\n", "error 1111");
         return 0;
     }
     int res = html_generator(comments_array, path, qty_structs);
     if (res) {
-        printf("%s%s\n",
-               "Succsesfully created documentation to file by ",
-               path);
+        printf("%s\n", "success");
     }
+    for (int i = 0; i < max_quan_str; i++) {
+        free(document_data[i]);
+    }
+    free(document_data);
     free(comments_array);
     return 0;
 }

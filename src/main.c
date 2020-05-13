@@ -9,7 +9,6 @@
  * PROJECT SOURCE CODE
  * https://github.com/morozov312/documentary
  ****************************************/
-
 #include "documentary.h"
 #include "handler.h"
 #include <stdio.h>
@@ -20,6 +19,7 @@
 
 int main(int argc, char* argv[])
 {
+    /// check args
     if (argc != 5 && argc != 3) {
         printf("%s\n", "error");
         return 0;
@@ -30,5 +30,18 @@ int main(int argc, char* argv[])
         paths_array[i] = (char*)calloc(255, sizeof(char));
     }
     recursive_files_search(start_folder, paths_array);
+    for (int i = 0; i < MAX_COUNT_OF_FILES; i++) {
+        // printf("%s\n", paths_array[i]); // here was starting documente
+        // creation
+        unsigned int len = strlen(paths_array[i]);
+        // need develop func witch del invis files
+        if (len > 0) {
+            document_creation(paths_array[i]);
+        }
+    }
+    for (int i = 0; i < MAX_COUNT_OF_FILES; i++) {
+        free(paths_array[i]);
+    }
+    free(paths_array);
     return 0;
 }
