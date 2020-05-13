@@ -1,6 +1,7 @@
+#include "comments_delete.h"
 #include <ctest.h>
-#include <documentary.h>
-CTEST(documentary, del_multiline_comment_stars)
+
+CTEST(comments_delete, del_multiline_comment_stars)
 {
     // Given
     char str_first[] = " * comment ";
@@ -26,7 +27,7 @@ CTEST(documentary, del_multiline_comment_stars)
     ASSERT_STR(res_fourth, exp_fourth);
     ASSERT_STR(res_fifth, exp_fifth); // this case added after bug fixed
 }
-CTEST(documentary, del_multiline_comment_begin)
+CTEST(comments_delete, del_multiline_comment_begin)
 {
     // Given
     char str_first[] = " /* comment begin ";
@@ -49,7 +50,7 @@ CTEST(documentary, del_multiline_comment_begin)
     ASSERT_STR(res_third, exp_thrid);
     ASSERT_STR(res_fourth, exp_fourth);
 }
-CTEST(documentary, del_multiline_comment_end)
+CTEST(comments_delete, del_multiline_comment_end)
 {
     // Given
     char str_first[] = "comment end */";
@@ -72,7 +73,7 @@ CTEST(documentary, del_multiline_comment_end)
     ASSERT_STR(res_fourth, exp_fourth);
 }
 
-CTEST(documentary, del_documentary_comment_symbols)
+CTEST(comments_delete, del_documentary_comment_symbols)
 {
     // Given
     char str_first[] = "/** *comment end ";
@@ -86,28 +87,6 @@ CTEST(documentary, del_documentary_comment_symbols)
     char exp_first[] = " *comment end ";
     char exp_second[] = " not comment";
     char exp_third[] = "comment";
-    ASSERT_STR(exp_first, res_first);
-    ASSERT_STR(exp_second, res_second);
-    ASSERT_STR(exp_third, res_third);
-}
-
-CTEST(documentary, get_document_type)
-{
-    // Given
-    char str_first[] = "./folder/src/main.cpp";
-    char str_second[] = "./src/header.h";
-    char str_third[] = "./fake/depth.c";
-    char str_fourth[] = "./fake/main.py";
-    // When
-    char* res_first = get_document_type(str_first);
-    char* res_second = get_document_type(str_second);
-    char* res_third = get_document_type(str_third);
-    char* res_fourth = get_document_type(str_fourth);
-    // Then
-    char exp_first[] = "<i>Program code in language C++</i></br></br>";
-    char exp_second[] = "<i>Header file to program code on C/C++</i></br></br>";
-    char exp_third[] = "<i>Program code in language C</i></br></br>";
-    char exp_fourth[] = "";
     ASSERT_STR(exp_first, res_first);
     ASSERT_STR(exp_second, res_second);
     ASSERT_STR(exp_third, res_third);
