@@ -250,6 +250,9 @@ int document_creation(char* path)
 {
     char** document_data = get_data_from_document(path);
     int count_of_lines = 0, qty_structs = 0;
+    if (document_data == NULL) {
+        return 0;
+    }
     for (int i = 0; i < max_quan_str; i++) {
         if (strlen(document_data[i]) != 0) {
             document_data[i] = exclude_html(document_data[i]);
