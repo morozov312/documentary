@@ -40,25 +40,26 @@ char* exclude_html(char* str) // need memory clear
     int len = (int)strlen(str);
     /* in the worst case, the string is increased 3 times + end of line
      * character*/
-    str = (char*)realloc(str, (len * 3) + 1);
+    char* without_html_str = (char*)calloc((len * 3) + 1, sizeof(char));
     int j = 0;
     for (int i = 0; i < len; i++, j++) {
         if (str[i] == '<') {
-            str[j] = '&';
-            str[j + 1] = 'l';
-            str[j + 2] = 't';
+            without_html_str[j] = '&';
+            without_html_str[j + 1] = 'l';
+            without_html_str[j + 2] = 't';
             j += 2;
         } else if (str[i] == '>') {
-            str[j] = '&';
-            str[j + 1] = 'g';
-            str[j + 2] = 't';
+            without_html_str[j] = '&';
+            without_html_str[j + 1] = 'g';
+            without_html_str[j + 2] = 't';
             j += 2;
         } else {
-            str[j] = str[i];
+            without_html_str[j] = str[i];
         }
     }
-    str[j] = '\0';
-    return str;
+    without_html_str[j] = '\0';
+    free(str);
+    return without_html_str;
 }
 int extension_check(char* filepath)
 {
