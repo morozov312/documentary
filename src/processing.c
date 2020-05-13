@@ -1,5 +1,6 @@
 #include "advanced_check.h"
 #include "advanced_handle.h"
+#include "comments_check.h"
 #include "comments_delete.h"
 #include "utilities.h"
 #include <stdio.h>
@@ -135,11 +136,10 @@ int document_creation(char* path)
     for (int i = 0; i < max_quan_str; i++) {
         if (strlen(document_data[i]) != 0) {
             document_data[i] = exclude_html(document_data[i]);
-            // printf("%s\n", document_data[i]);
             count_of_lines++;
         }
     }
-    /// this error appears if the document empty ot has 1 line
+    // this error appears if the document empty ot has 1 line
     if (count_of_lines <= 1) {
         printf("%s%s", "Error,file on path ", path);
         printf("%s\n", " too small for documentation");
@@ -152,12 +152,12 @@ int document_creation(char* path)
         }
     }
     if (qty_structs == 0) {
-        printf("%s\n", "error 1111");
+        printf("%s%s%s\n", "In file - ", path, "no documentary comments found");
         return 0;
     }
     int res = html_generator(comments_array, path, qty_structs);
     if (res) {
-        printf("%s\n", "success");
+        printf("%s%s\n", "Successfully created documentation on file - ", path);
     }
     for (int i = 0; i < max_quan_str; i++) {
         free(document_data[i]);

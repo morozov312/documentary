@@ -41,8 +41,7 @@ const char* filename_without_extension(char* path)
 {
     char* temp_path = (char*)calloc(strlen(path), sizeof(char*));
     strcpy(temp_path, path);
-    char* p_last_dot = strrchr(path, '.');
-    int last_dot_index = p_last_dot - path;
+    int last_dot_index = strcspn(path, ".");
     temp_path[last_dot_index] = '\0';
     char* p_last_slash = strrchr(temp_path, '/');
     free(temp_path);

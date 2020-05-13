@@ -1,16 +1,6 @@
 #include "advanced_check.h"
 #include <ctest.h>
 
-CTEST(advanced_check, document_handle)
-{
-    // Given
-    char str[] = "./test/main.c";
-    // When
-    char** res_first = get_data_from_document(str);
-    // Then
-    char* res_fisrt = "#define CTEST_MAIN\n";
-    ASSERT_STR(res_first[0], res_fisrt);
-}
 CTEST(advanced_check, extension_check)
 {
     // Given

@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_COUNT_OF_FILES 10
+#define MAX_COUNT_OF_FILES 30
 
 int main(int argc, char* argv[])
 {
