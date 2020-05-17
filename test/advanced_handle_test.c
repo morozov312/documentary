@@ -22,14 +22,3 @@ CTEST(advanced_handle, get_document_type)
     ASSERT_STR(exp_second, res_second);
     ASSERT_STR(exp_third, res_third);
 }
-
-CTEST(advanced_handle, document_handle)
-{
-    // Given
-    char str[] = "./test/main.c";
-    // When
-    char** res_first = get_data_from_document(str);
-    // Then
-    char* res_fisrt = "#define CTEST_MAIN\n";
-    ASSERT_STR(res_first[0], res_fisrt);
-}

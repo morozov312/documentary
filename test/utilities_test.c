@@ -110,3 +110,14 @@ CTEST(utilities, check_single_documentary_comment)
     ASSERT_EQUAL(res_second, exception_second);
     ASSERT_EQUAL(res_third, exception_third);
 }
+
+CTEST(utilities, get_data_from_document)
+{
+    // Given
+    char str[] = "./test/main.c";
+    // When
+    char** res_first = get_data_from_document(str);
+    // Then
+    char* res_fisrt = "#define CTEST_MAIN\n";
+    ASSERT_STR(res_first[0], res_fisrt);
+}
