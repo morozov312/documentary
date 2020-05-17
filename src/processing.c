@@ -7,8 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define max_len_inp_str 500
-#define max_quan_str 50 * 1000
+#define MAX_LEN_INP_STR 500
+#define MAX_QTY_STR 50 * 1000
 
 typedef struct {
     char* comment_data;
@@ -25,15 +25,15 @@ int html_generator(comment* list, char* path, int qty_structs)
         printf("%s\n", "Error create html page!");
         return 0;
     }
-    // Header
+    /// Header
     styles = fopen("./styles/styles.html", "r");
     if (styles == NULL) {
         printf("%s\n", "Error, stylesheet not found!");
         return 0;
     }
     while (1) {
-        char* temp = (char*)calloc(max_len_inp_str, sizeof(char));
-        ptrFile = fgets(temp, max_len_inp_str, styles);
+        char* temp = (char*)calloc(MAX_LEN_INP_STR, sizeof(char));
+        ptrFile = fgets(temp, MAX_LEN_INP_STR, styles);
         if (ptrFile == NULL) {
             if (feof(styles) != 0) {
                 break;
@@ -48,7 +48,7 @@ int html_generator(comment* list, char* path, int qty_structs)
     char* filename = filename_without_extension(path);
     fputs(filename, documentary);
     fputs("</h2>", documentary);
-    // document programming language definition
+    /// document programming language definition
     fputs(get_document_type(path), documentary);
     // main content
     for (int i = 0; i < qty_structs; i++) {
@@ -63,7 +63,7 @@ int html_generator(comment* list, char* path, int qty_structs)
             }
         }
     }
-    // Footer
+    /// Footer
     fputs("</div></body></html>", documentary);
     fclose(documentary);
     free(name);
@@ -129,18 +129,23 @@ comment* create(int count, char** doc)
 };
 int document_creation(char* path)
 {
+    int valid_check = check_extension(path);
+    if (!valid_check) {
+        printf("%s%s\n", "Unsupported file format on - ", path);
+        return 0;
+    }
     char** document_data = get_data_from_document(path);
     int count_of_lines = 0, qty_structs = 0;
     if (document_data == NULL) {
         return 0;
     }
-    for (int i = 0; i < max_quan_str; i++) {
+    for (int i = 0; i < MAX_QTY_STR; i++) {
         if (strlen(document_data[i]) != 0) {
             document_data[i] = exclude_html(document_data[i]);
             count_of_lines++;
         }
     }
-    // this error appears if the document empty ot has 1 line
+    /// this error appears if the document empty ot has 1 line
     if (count_of_lines <= 1) {
         printf("%s%s", "Error,file on path ", path);
         printf("%s\n", " too small for documentation");
@@ -163,7 +168,7 @@ int document_creation(char* path)
     if (res) {
         printf("%s%s\n", "Successfully created documentation on file - ", path);
     }
-    for (int i = 0; i < max_quan_str; i++) {
+    for (int i = 0; i < MAX_QTY_STR; i++) {
         free(document_data[i]);
     }
     free(document_data);
