@@ -6,6 +6,8 @@
 #define max_len_inp_str 500
 #define max_quan_str 50000
 #define qty_of_extentions 3
+#define MAX_PATH_LEN 255
+#define MAX_COUNT_OF_FILES 30
 
 int counter = 0;
 
@@ -41,11 +43,14 @@ const char* filename_without_extension(char* path)
 {
     char* temp_path = (char*)calloc(strlen(path), sizeof(char*));
     strcpy(temp_path, path);
-    int last_dot_index = strcspn(path, ".");
+    char* last_dot = strrchr(path, '.');
+    int last_dot_index = last_dot - path;
     temp_path[last_dot_index] = '\0';
-    char* p_last_slash = strrchr(temp_path, '/');
-    free(temp_path);
-    return p_last_slash == NULL ? "" : p_last_slash + 1;
+    temp_path = strrchr(temp_path, '/');
+    return temp_path == NULL ? "" : temp_path + 1;
+    // free(temp_path);
+    // printf("????? %s ????", p_last_slash + 1);
+    // return p_last_slash == NULL ? "" : p_last_slash + 1;
 }
 
 void recursive_files_search(char* path, char** paths)
@@ -56,16 +61,20 @@ void recursive_files_search(char* path, char** paths)
     struct dirent* dir;
     while ((dir = readdir(d)) != NULL) {
         if (dir->d_type != DT_DIR) {
-            char* f_path = (char*)calloc(100, sizeof(char));
+            char* f_path = (char*)calloc(MAX_PATH_LEN, sizeof(char));
             sprintf(f_path, "%s/%s", path, dir->d_name);
             strcpy(paths[counter], f_path);
             free(f_path);
             counter++;
+            if (counter == MAX_COUNT_OF_FILES) {
+                return;
+            }
 
         } else if (
                 dir->d_type == DT_DIR && strcmp(dir->d_name, ".") != 0
-                && strcmp(dir->d_name, "..") != 0) {
-            char d_path[255];
+                && strcmp(dir->d_name, "..") != 0
+                && dir->d_name[0] != '.') { // test
+            char d_path[MAX_PATH_LEN];
             sprintf(d_path, "%s/%s", path, dir->d_name);
             recursive_files_search(d_path, paths);
         }

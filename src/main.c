@@ -15,13 +15,16 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MAX_COUNT_OF_ARGS 5
+#define MIN_COUNT_OF_ARGS 3
+#define MAX_PATH_LEN 255
 #define MAX_COUNT_OF_FILES 30
 
 int main(int argc, char* argv[])
 {
     /// check args
-    if (argc != 5 && argc != 3) {
-        printf("%s\n", "error");
+    if (argc != MAX_COUNT_OF_ARGS && argc != MIN_COUNT_OF_ARGS) {
+        printf("%s\n", "WRONG COUNT OF ARGUMENTS");
         return 0;
     }
     char* start_folder = get_inpdir(argc, argv);

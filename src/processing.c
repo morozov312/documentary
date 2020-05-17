@@ -152,7 +152,10 @@ int document_creation(char* path)
         }
     }
     if (qty_structs == 0) {
-        printf("%s%s%s\n", "In file - ", path, "no documentary comments found");
+        printf("%s%s%s\n",
+               "In file - ",
+               path,
+               " no documentary comments found");
         return 0;
     }
     int res = html_generator(comments_array, path, qty_structs);
