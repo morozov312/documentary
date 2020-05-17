@@ -3,19 +3,20 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define max_len_inp_str 500
-#define max_quan_str 50000
-#define qty_of_extentions 3
+#define MAX_LEN_INP_STR 500
+#define MAX_QTY_STR 50000
+#define QTY_OF_EXTENSION 3
 #define MAX_PATH_LEN 255
 #define MAX_COUNT_OF_FILES 30
 
+/// recived path's count
 int counter = 0;
 
+/// replaces < and > special characters for correct display in html page
 char* exclude_html(char* str)
 {
     int len = (int)strlen(str);
-    /* in the worst case, the string is increased 3 times + end of line
-     * character*/
+    /// in the worst case, string is increased 3 times + '\0'
     char* without_html_str = (char*)calloc((len * 3) + 1, sizeof(char));
     int j = 0;
     for (int i = 0; i < len; i++, j++) {
@@ -37,22 +38,19 @@ char* exclude_html(char* str)
     free(str);
     return without_html_str;
 }
-
-// This function handles filename deleting expansion
 const char* filename_without_extension(char* path)
 {
     char* temp_path = (char*)calloc(strlen(path), sizeof(char*));
     strcpy(temp_path, path);
-    char* last_dot = strrchr(path, '.');
-    int last_dot_index = last_dot - path;
+    char* last_dot_ptr = strrchr(path, '.');
+    if (last_dot_ptr == NULL) {
+        return "";
+    }
+    int last_dot_index = last_dot_ptr - path;
     temp_path[last_dot_index] = '\0';
     temp_path = strrchr(temp_path, '/');
     return temp_path == NULL ? "" : temp_path + 1;
-    // free(temp_path);
-    // printf("????? %s ????", p_last_slash + 1);
-    // return p_last_slash == NULL ? "" : p_last_slash + 1;
 }
-
 void recursive_files_search(char* path, char** paths)
 {
     DIR* d = opendir(path);
@@ -60,6 +58,10 @@ void recursive_files_search(char* path, char** paths)
         return;
     struct dirent* dir;
     while ((dir = readdir(d)) != NULL) {
+        /// don't process hidden folders and config files
+        if (dir->d_name[0] == '.') {
+            continue;
+        }
         if (dir->d_type != DT_DIR) {
             char* f_path = (char*)calloc(MAX_PATH_LEN, sizeof(char));
             sprintf(f_path, "%s/%s", path, dir->d_name);
@@ -67,13 +69,14 @@ void recursive_files_search(char* path, char** paths)
             free(f_path);
             counter++;
             if (counter == MAX_COUNT_OF_FILES) {
+                printf("%s\n",
+                       "Warning, limit of files for this folder "
+                       "overpassed!");
                 return;
             }
-
         } else if (
                 dir->d_type == DT_DIR && strcmp(dir->d_name, ".") != 0
-                && strcmp(dir->d_name, "..") != 0
-                && dir->d_name[0] != '.') { // test
+                && strcmp(dir->d_name, "..") != 0) {
             char d_path[MAX_PATH_LEN];
             sprintf(d_path, "%s/%s", path, dir->d_name);
             recursive_files_search(d_path, paths);
@@ -81,7 +84,6 @@ void recursive_files_search(char* path, char** paths)
     }
     closedir(d);
 }
-
 char* get_inpdir(int qty, char* array_argv[])
 {
     const char input_directory[] = "-inpdir";
@@ -102,7 +104,6 @@ char* get_inpdir(int qty, char* array_argv[])
     }
     return "";
 }
-
 char* get_outdir(int qty, char* array_argv[])
 {
     const char input_directory[] = "-inpdir";
@@ -123,9 +124,8 @@ char* get_outdir(int qty, char* array_argv[])
     }
     return "";
 }
-
 // This function return array of data from file
-char** get_data_from_document(char* paths) // need memory clear
+char** get_data_from_document(char* paths)
 {
     FILE* myfile;
     myfile = fopen(paths, "r");
@@ -135,13 +135,13 @@ char** get_data_from_document(char* paths) // need memory clear
     }
     char* ptrFile;
     int quan_str = 0;
-    char** data = (char**)calloc(max_quan_str, sizeof(char*));
-    for (int i = 0; i < max_quan_str; i++) {
-        data[i] = (char*)calloc(max_len_inp_str, sizeof(char));
+    char** data = (char**)calloc(MAX_QTY_STR, sizeof(char*));
+    for (int i = 0; i < MAX_QTY_STR; i++) {
+        data[i] = (char*)calloc(MAX_LEN_INP_STR, sizeof(char));
     }
-    while (quan_str < max_quan_str) {
-        char* temp = (char*)calloc(max_len_inp_str, sizeof(char));
-        ptrFile = fgets(temp, max_len_inp_str, myfile);
+    while (quan_str < MAX_QTY_STR) {
+        char* temp = (char*)calloc(MAX_LEN_INP_STR, sizeof(char));
+        ptrFile = fgets(temp, MAX_LEN_INP_STR, myfile);
         if (ptrFile == NULL) {
             if (feof(myfile) != 0) {
                 break;
@@ -156,10 +156,8 @@ char** get_data_from_document(char* paths) // need memory clear
     fclose(myfile);
     return data;
 }
-
-// This function handles expansion from path
-char* get_file_extension(const char* file_path)
+char* get_file_extension(const char* path)
 {
-    char* dot_ptr = strrchr(file_path, '.');
-    return dot_ptr == NULL ? "" : dot_ptr + 1;
+    char* last_dot_ptr = strrchr(path, '.');
+    return last_dot_ptr == NULL ? "" : last_dot_ptr + 1;
 }

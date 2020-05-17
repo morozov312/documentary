@@ -4,8 +4,10 @@
 #include <string.h>
 #include <time.h>
 
-/*! creates a unique file name which takes
- * the name, day, number and time of creation of the documentation */
+/********************************************************************
+ * Creates a unique file name which takes
+ * the name, day, number and time of creation of the documentation
+ ********************************************************************/
 char* file_name_generator(char* path)
 {
     long int s_time = 0;
@@ -32,11 +34,10 @@ char* file_name_generator(char* path)
             ".html");
     return filename;
 }
-
-/**********************************************************
- * this function creates an HTML page from the documentation
- * in the directory - documentary/docs/
- **********************************************************/
+/********************************************************************
+ * This funtion reterned description to type of document, which will be written
+ * to the html page header
+ ********************************************************************/
 char* get_document_type(char* path)
 {
     char* extension = get_file_extension(path);
@@ -46,7 +47,6 @@ char* get_document_type(char* path)
         return "<i>Program code in language C</i></br></br>";
     } else if (!strcmp(extension, "cpp")) {
         return "<i>Program code in language C++</i></br></br>";
-    } else {
-        return "";
     }
+    return "";
 }

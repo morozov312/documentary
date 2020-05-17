@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-char* del_documentary_comment_symbols(char* string)
+char* del_documentary_comment_symbols(char* str)
 {
-    char* ptr_slash = strchr(string, '/');
+    char* ptr_slash = strchr(str, '/');
     return ptr_slash == NULL ? "" : ptr_slash + 3;
 }
 char* del_multiline_comment_begin(char* str)

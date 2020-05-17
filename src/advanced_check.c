@@ -4,44 +4,40 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define qty_of_extentions 3
+#define QTY_OF_EXTENSION 3
 
-int extension_check(char* filepath)
+int check_extension(char* path)
 {
-    char* valid_extentions[qty_of_extentions] = {"cpp", "h", "c"};
-    int flag = 0;
-    char* temp = get_file_extension(filepath);
-    for (int i = 0; i < qty_of_extentions; i++) {
-        flag = strcmp(temp, valid_extentions[i]);
-        if (flag == 0) {
+    char* valid_extentions[QTY_OF_EXTENSION] = {"cpp", "h", "c"};
+    char* temp = get_file_extension(path);
+    for (int i = 0; i < QTY_OF_EXTENSION; i++) {
+        if (strcmp(temp, valid_extentions[i]) == 0) {
             return 1;
         }
     }
     return 0;
 }
-// This function checks single comments
-
-int check_single_documentary_comment(char* string)
+int check_single_documentary_comment(char* str)
 {
-    char* ptr_slash = strchr(string, '/');
-    if (single_comment_check(string) == 1) {
-        if (ptr_slash[2] == '/' || ptr_slash[2] == '!')
+    char* ptr_slash = strchr(str, '/');
+    if (check_single_comment(str) == 1) {
+        if (ptr_slash[2] == '/' || ptr_slash[2] == '!') {
             return 1;
-        else
-            return 0;
-    }
-    return 0;
-}
-
-int check_document_multiline_commentary(char* string)
-{
-    char* ptr_first_star = strchr(string, '*');
-    if (multiline_comment_begin_check(string) == 1) {
-        if ((ptr_first_star)[1] == '*' || (ptr_first_star)[1] == '!') {
-            return 1; // valid comment
         } else {
-            return 0; // invalid comment
+            return 0;
         }
-    } else
-        return 0;
+    }
+    return 0;
+}
+int check_multiline_documentary_comment(char* str)
+{
+    char* ptr_first_star = strchr(str, '*');
+    if (check_multiline_comment_begin(str) == 1) {
+        if ((ptr_first_star)[1] == '*' || (ptr_first_star)[1] == '!') {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+    return 0;
 }

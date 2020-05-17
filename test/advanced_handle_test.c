@@ -21,4 +21,5 @@ CTEST(advanced_handle, get_document_type)
     ASSERT_STR(exp_first, res_first);
     ASSERT_STR(exp_second, res_second);
     ASSERT_STR(exp_third, res_third);
+    ASSERT_STR(exp_fourth, res_fourth);
 }

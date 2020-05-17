@@ -4,11 +4,11 @@
  * YOUR FILE TO NEW .html file
  * PROGRAM DEVELOPED BY
  * @MOSKALT AND @MOROZOV312
- * 2020
- * THE PROGRAMM IS OPENSOURCE PROJECT
- * PROJECT SOURCE CODE
+ *          2020
+ * THIS PROGRAMM IS OPENSOURCE PROJECT
  * https://github.com/morozov312/documentary
  ****************************************/
+
 #include "processing.h"
 #include "utilities.h"
 #include <stdio.h>
@@ -22,22 +22,18 @@
 
 int main(int argc, char* argv[])
 {
-    /// check args
     if (argc != MAX_COUNT_OF_ARGS && argc != MIN_COUNT_OF_ARGS) {
-        printf("%s\n", "WRONG COUNT OF ARGUMENTS");
+        printf("%s\n", "Error! Invalid number of arguments");
         return 0;
     }
     char* start_folder = get_inpdir(argc, argv);
     char** paths_array = (char**)calloc(MAX_COUNT_OF_FILES, sizeof(char*));
     for (int i = 0; i < MAX_COUNT_OF_FILES; i++) {
-        paths_array[i] = (char*)calloc(255, sizeof(char));
+        paths_array[i] = (char*)calloc(MAX_PATH_LEN, sizeof(char));
     }
     recursive_files_search(start_folder, paths_array);
     for (int i = 0; i < MAX_COUNT_OF_FILES; i++) {
-        // printf("%s\n", paths_array[i]); // here was starting documente
-        // creation
         unsigned int len = strlen(paths_array[i]);
-        // need develop func witch del invis files
         if (len > 0) {
             document_creation(paths_array[i]);
         }

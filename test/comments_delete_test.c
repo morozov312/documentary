@@ -72,7 +72,6 @@ CTEST(comments_delete, del_multiline_comment_end)
     ASSERT_STR(res_third, exp_thrid);
     ASSERT_STR(res_fourth, exp_fourth);
 }
-
 CTEST(comments_delete, del_documentary_comment_symbols)
 {
     // Given

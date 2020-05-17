@@ -6,14 +6,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #define max_len_inp_str 500
 #define max_quan_str 50 * 1000
-struct comment {
+
+typedef struct {
     char* comment_data;
     char* code_string;
-};
+} comment;
 
-int html_generator(struct comment* list, char* path, int qty_structs)
+int html_generator(comment* list, char* path, int qty_structs)
 {
     FILE *documentary, *styles;
     char* ptrFile;
@@ -26,7 +28,7 @@ int html_generator(struct comment* list, char* path, int qty_structs)
     // Header
     styles = fopen("./styles/styles.html", "r");
     if (styles == NULL) {
-        printf("%s\n", "Stylesheet not found!");
+        printf("%s\n", "Error, stylesheet not found!");
         return 0;
     }
     while (1) {
@@ -67,27 +69,26 @@ int html_generator(struct comment* list, char* path, int qty_structs)
     free(name);
     return 1;
 }
-int code_check(char* str)
+int check_code(char* str)
 {
-    int single = single_comment_check(str);
-    int m_b = multiline_comment_begin_check(str);
-    int m_e = multiline_comment_end_check(str);
+    int single = check_single_comment(str);
+    int m_b = check_multiline_comment_begin(str);
+    int m_e = check_multiline_comment_end(str);
     if (!single && !m_b && !m_e) {
         return 1;
     }
     return 0;
 }
-struct comment* create(int count, char** doc)
+comment* create(int count, char** doc)
 {
-    struct comment* comments_array
-            = (struct comment*)calloc(count, sizeof(struct comment));
+    comment* comments_array = (comment*)calloc(count, sizeof(comment));
     int qty = 0, begin = 0;
     for (int i = 0; i < count - 1; i++) {
         char* current_str = doc[i];
         char* next_str = doc[i + 1];
-        int m_b = multiline_comment_begin_check(current_str);
-        int m_e = multiline_comment_end_check(current_str);
-        if (check_document_multiline_commentary(current_str) && !begin) {
+        int m_b = check_multiline_comment_begin(current_str);
+        int m_e = check_multiline_comment_end(current_str);
+        if (check_multiline_documentary_comment(current_str) && !begin) {
             begin = 1;
             comments_array[qty].comment_data
                     = del_documentary_comment_symbols(current_str);
@@ -105,7 +106,7 @@ struct comment* create(int count, char** doc)
         if (check_single_documentary_comment(current_str) && !begin) {
             comments_array[qty].comment_data
                     = del_documentary_comment_symbols(current_str);
-            if (code_check(next_str)) {
+            if (check_code(next_str)) {
                 comments_array[qty].code_string = next_str;
             } else {
                 comments_array[qty].code_string = "";
@@ -115,7 +116,7 @@ struct comment* create(int count, char** doc)
         if (m_e) {
             comments_array[qty].comment_data
                     = del_multiline_comment_end(current_str);
-            if (code_check(next_str)) {
+            if (check_code(next_str)) {
                 comments_array[qty].code_string = next_str;
             } else {
                 comments_array[qty].code_string = "";
@@ -145,7 +146,7 @@ int document_creation(char* path)
         printf("%s\n", " too small for documentation");
         return 0;
     }
-    struct comment* comments_array = create(count_of_lines, document_data);
+    comment* comments_array = create(count_of_lines, document_data);
     for (int i = 0; i < count_of_lines; i++) {
         if (comments_array[i].comment_data != NULL) {
             qty_structs++;
