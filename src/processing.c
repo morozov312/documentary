@@ -1,137 +1,17 @@
-/***************************************
- * THIS PROGRAM GENERATES DOCUMENTARY
- * BY ANALIZING AND REWRITING COMMENTS FROM
- * YOUR FILE TO NEW .html file
- * PROGRAM DEVELOPED BY
- * @MOSKALT AND @MOROZOV312
- * 2020
- * THE PROGRAMM IS OPENSOURCE PROJECT
- * PROJECT'S SOURCE CODE
- * https://github.com/morozov312/documentary
- ****************************************/
-
-#include "handler.h"
-#include <dirent.h>
+#include "advanced_check.h"
+#include "advanced_handle.h"
+#include "comments_check.h"
+#include "comments_delete.h"
+#include "utilities.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #define max_len_inp_str 500
 #define max_quan_str 50 * 1000
 struct comment {
     char* comment_data;
     char* code_string;
 };
-/*!  removes multi-line comment characters
- * for a more understandable entry in html page */
-int counter = 0;
-
-char* del_documentary_comment_symbols(char* string)
-{
-    char* ptr_slash = strchr(string, '/');
-    return ptr_slash == NULL ? "" : ptr_slash + 3;
-}
-char* del_multiline_comment_begin(char* str)
-{
-    for (int i = 0; str[i] != '\0'; i++) {
-        if (str[i] == '/' && str[i + 1] == '*') {
-            str[i] = ' ';
-            str[i + 1] = ' ';
-        }
-    }
-    return str;
-}
-char* del_multiline_comment_end(char* str)
-{
-    for (int i = 0; str[i] != '\0'; i++) {
-        if (str[i] == '*' && str[i + 1] == '/') {
-            str[i] = ' ';
-            str[i + 1] = ' ';
-        }
-    }
-    return str;
-}
-char* del_multiline_comment_stars(char* str)
-{
-    for (unsigned int i = 0; i < strlen(str); i++) {
-        if (str[i] != ' ' && str[i] != '*') {
-            break;
-        } else if (str[i] != ' ' && str[i] == '*') {
-            str[i] = ' ';
-            break;
-        }
-    }
-    return str;
-}
-/*! creates a unique file name which takes
- * the name, day, number and time of creation of the documentation */
-char* file_name_generator(char* path)
-{
-    long int s_time = 0;
-    struct tm* m_time;
-    s_time = time(NULL);
-    m_time = localtime(&s_time);
-    char* str_time = asctime(m_time);
-    for (int i = 0; str_time[i] != '\0'; i++) {
-        if (str_time[i] == ' ') {
-            str_time[i] = '_';
-        }
-    }
-    unsigned int len = strlen(str_time) - 1;
-    if (str_time[len] == '\n') {
-        str_time[len] = '\0';
-    }
-    char* filename = (char*)calloc((strlen(path) + 30), sizeof(char));
-    sprintf(filename,
-            "%s%s%s%s%s",
-            "./docs/",
-            str_time,
-            "_",
-            filename_without_extension(path),
-            ".html");
-    return filename;
-}
-/**********************************************************
- * this function creates an HTML page from the documentation
- * in the directory - documentary/docs/
- **********************************************************/
-char* get_document_type(char* path)
-{
-    char* extension = get_file_extension(path);
-    if (!strcmp(extension, "h")) {
-        return "<i>Header file to program code on C/C++</i></br></br>";
-    } else if (!strcmp(extension, "c")) {
-        return "<i>Program code in language C</i></br></br>";
-    } else if (!strcmp(extension, "cpp")) {
-        return "<i>Program code in language C++</i></br></br>";
-    } else {
-        return "";
-    }
-}
-void recursive_files_search(char* path, char** paths)
-{
-    DIR* d = opendir(path);
-    if (d == NULL)
-        return;
-    struct dirent* dir;
-    while ((dir = readdir(d)) != NULL) {
-        if (dir->d_type != DT_DIR) {
-            char* f_path = (char*)calloc(100, sizeof(char));
-            sprintf(f_path, "%s/%s", path, dir->d_name);
-            strcpy(paths[counter], f_path);
-            free(f_path);
-            counter++;
-
-        } else if (
-                dir->d_type == DT_DIR && strcmp(dir->d_name, ".") != 0
-                && strcmp(dir->d_name, "..") != 0) {
-            char d_path[255];
-            sprintf(d_path, "%s/%s", path, dir->d_name);
-            recursive_files_search(d_path, paths);
-        }
-    }
-    closedir(d);
-}
 
 int html_generator(struct comment* list, char* path, int qty_structs)
 {
@@ -256,11 +136,10 @@ int document_creation(char* path)
     for (int i = 0; i < max_quan_str; i++) {
         if (strlen(document_data[i]) != 0) {
             document_data[i] = exclude_html(document_data[i]);
-            // printf("%s\n", document_data[i]);
             count_of_lines++;
         }
     }
-    /// this error appears if the document empty ot has 1 line
+    // this error appears if the document empty ot has 1 line
     if (count_of_lines <= 1) {
         printf("%s%s", "Error,file on path ", path);
         printf("%s\n", " too small for documentation");
@@ -273,12 +152,12 @@ int document_creation(char* path)
         }
     }
     if (qty_structs == 0) {
-        printf("%s\n", "error 1111");
+        printf("%s%s%s\n", "In file - ", path, "no documentary comments found");
         return 0;
     }
     int res = html_generator(comments_array, path, qty_structs);
     if (res) {
-        printf("%s\n", "success");
+        printf("%s%s\n", "Successfully created documentation on file - ", path);
     }
     for (int i = 0; i < max_quan_str; i++) {
         free(document_data[i]);

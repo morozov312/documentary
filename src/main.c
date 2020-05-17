@@ -9,13 +9,13 @@
  * PROJECT SOURCE CODE
  * https://github.com/morozov312/documentary
  ****************************************/
-#include "documentary.h"
-#include "handler.h"
+#include "processing.h"
+#include "utilities.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_COUNT_OF_FILES 10
+#define MAX_COUNT_OF_FILES 30
 
 int main(int argc, char* argv[])
 {
