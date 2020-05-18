@@ -22,13 +22,13 @@ This project uses Makefile to build. Command's which you can use: </br>
 $ make </br>
 Builds this project into executable files which will be located in bin folder </br>
 $ make run </br>
-runs program </br>
+runs program to generate documentation on this project surce files </br>
 $ make check </br>
 tests existing functions using the library ctest.h </br>
 $ make clean </br>
 removes assembly artifacts in folders ./bin and ./build and all html pages which you created in the folder ./docs </br>
-$ make html_clean </br>
-removes generated html files </br>
+$ make clean_html </br>
+removes generated html files in folder ./docs </br>
 compiler: gcc </br> OS you can use is Linux and MacOS </br>
 </p>
 <h1>Example</h1>
