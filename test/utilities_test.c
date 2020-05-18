@@ -75,7 +75,7 @@ CTEST(utilities, get_outdir)
     // Then
     char* exception_first = "./docs";
     char* exception_second = "-outdir";
-    char* exception_third = "";
+    char* exception_third = "./docs";
     ASSERT_STR(exception_first, res_fisrt);
     ASSERT_STR(exception_second, res_second);
     ASSERT_STR(exception_third, res_thrid);
