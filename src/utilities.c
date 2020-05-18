@@ -3,21 +3,25 @@
 #include <stdlib.h>
 #include <string.h>
 
+/** Functions in this file makes checks on simple(non-documentary) comments.
+ * These checks will be used for searching documentary comments and code lines*/
+
 #define MAX_LEN_INP_STR 500
 #define MAX_QTY_STR 50 * 1000
 #define QTY_OF_EXTENSION 3
 #define MAX_PATH_LEN 255
 #define MAX_COUNT_OF_FILES 30
 
-/// recived path's count
+/// Count of read paths
 int counter = 0;
 int recursive_exit_flag = 0;
 
-/// replaces < and > special characters for correct display in html page
+/// This function replaces < and > special characters for correct display in
+/// html page
 char* exclude_html(char* str)
 {
     int len = (int)strlen(str);
-    /// in the worst case, string is increased 3 times + '\0'
+    /// In the worst case, string is increased 3 times + '\0'
     char* without_html_str = (char*)calloc((len * 3) + 1, sizeof(char));
     int j = 0;
     for (int i = 0; i < len; i++, j++) {
@@ -39,6 +43,8 @@ char* exclude_html(char* str)
     free(str);
     return without_html_str;
 }
+
+/// This function returns file's name without its extension
 const char* filename_without_extension(char* path)
 {
     char* temp_path = (char*)calloc(strlen(path), sizeof(char*));
@@ -52,6 +58,7 @@ const char* filename_without_extension(char* path)
     temp_path = strrchr(temp_path, '/');
     return temp_path == NULL ? "" : temp_path + 1;
 }
+/// This function recursively finds paths to all files in folder
 void recursive_files_search(char* path, char** paths)
 {
     DIR* d = opendir(path);
@@ -59,7 +66,7 @@ void recursive_files_search(char* path, char** paths)
         return;
     struct dirent* dir;
     while ((dir = readdir(d)) != NULL) {
-        /// don't process hidden folders and config files
+        /// Hidden and system files check
         if (dir->d_name[0] == '.') {
             continue;
         }
@@ -90,6 +97,7 @@ void recursive_files_search(char* path, char** paths)
     }
     closedir(d);
 }
+/// This function returns input directory from command line arguments
 char* get_inpdir(int qty, char* array_argv[])
 {
     const char input_directory[] = "-inpdir";
@@ -110,6 +118,7 @@ char* get_inpdir(int qty, char* array_argv[])
     }
     return "";
 }
+/// This function returns output directory from command line arguments
 char* get_outdir(int qty, char* array_argv[])
 {
     const char input_directory[] = "-inpdir";
@@ -130,7 +139,7 @@ char* get_outdir(int qty, char* array_argv[])
     }
     return "./docs";
 }
-// This function return array of data from file
+/// This function returns array of data from file
 char** get_data_from_document(char* paths)
 {
     FILE* myfile;
@@ -162,6 +171,7 @@ char** get_data_from_document(char* paths)
     fclose(myfile);
     return data;
 }
+/// This function returns file's extention
 char* get_file_extension(const char* path)
 {
     char* last_dot_ptr = strrchr(path, '.');
