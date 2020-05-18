@@ -122,7 +122,7 @@ char* get_outdir(int qty, char* array_argv[])
             return array_argv[i + 1];
         }
     }
-    return "";
+    return "./docs";
 }
 // This function return array of data from file
 char** get_data_from_document(char* paths)

@@ -26,16 +26,17 @@ int main(int argc, char* argv[])
         printf("%s\n", "Error! Invalid number of arguments");
         return 0;
     }
-    char* start_folder = get_inpdir(argc, argv);
+    char* start_dir = get_inpdir(argc, argv);
+    char* dest_dir = get_outdir(argc, argv);
     char** paths_array = (char**)calloc(MAX_COUNT_OF_FILES, sizeof(char*));
     for (int i = 0; i < MAX_COUNT_OF_FILES; i++) {
         paths_array[i] = (char*)calloc(MAX_PATH_LEN, sizeof(char));
     }
-    recursive_files_search(start_folder, paths_array);
+    recursive_files_search(start_dir, paths_array);
     for (int i = 0; i < MAX_COUNT_OF_FILES; i++) {
         unsigned int len = strlen(paths_array[i]);
         if (len > 0) {
-            document_creation(paths_array[i]);
+            document_creation(paths_array[i], dest_dir);
         }
     }
     for (int i = 0; i < MAX_COUNT_OF_FILES; i++) {
