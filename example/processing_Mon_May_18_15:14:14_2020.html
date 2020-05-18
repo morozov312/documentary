@@ -1,0 +1,61 @@
+<!DOCTYPE html><html><head><meta charset=" UTF - 8" >
+<style type="text/css">
+#wrapper
+{
+    width: 100%;
+    height: 100%;
+    min-height: 900px;
+    margin-left: 15%;
+    padding-top: 5%;
+    padding-left: 5%;
+    border: 1px solid #3d3d3d;
+    background: #333;
+}
+body
+{
+    font: 14pt Verdana, sans-serif;
+    min-width: auto;
+    margin: 0;
+    padding: 0;
+    color: #bbb;
+    background: #202020;
+}
+p.comment
+{
+    margin: 0;
+    padding: 0;
+    color: #20871b;
+}
+code
+{
+    color: #9ccef7;
+}
+</style>
+</head><body><div id="wrapper">
+<h2>This documentation is shaped on file - processing</h2><i>Program code in language C</i></br></br><p class="comment"> if founded begin of multiline documentary comment -&gt start flag == true   
+</br></p><code>int qty_structs = 0, start_flag = 0;
+</code></br></br><p class="comment"> header
+</br></p><code>    styles = fopen("./styles/styles.html", "r");
+</code></br></br><p class="comment"> document programming language definition
+</br></p><code>    fputs(get_document_type(path), documentary);
+</code></br></br><p class="comment"> footer
+</br></p><code>    fputs("&lt/div&gt&lt/body&gt&lt/html&gt", documentary);
+</code></br></br><p class="comment"> check to begin multiline documentary comment
+</br></p><code>        if (multiline_doc_flag && !start_flag) {
+</code></br></br><p class="comment"> search lines between end and begin multiline doucumentary comment
+</br></p><code>        if (start_flag && !multiline_end_flag && !multiline_begin_flag) {
+</code></br></br><p class="comment"> checking at the end of the documentary comment
+</br></p><code>        if (multiline_end_flag) {
+</code></br></br><p class="comment"> in case if multiline comment writing in one-line
+</br></p><code>            if (multiline_begin_flag) {
+</code></br></br><p class="comment"> search singleline comment if there wasn't start of multiline comment
+</br></p><code>        if (singleline_doc_flag && !start_flag) {
+</code></br></br><p class="comment"> if file cannot be read
+</br></p><code>    if (document_data == NULL) {
+</code></br></br><p class="comment"> this error appears if the document empty ot has 1 line
+</br></p><code>    if (count_of_lines &lt= 1) {
+</code></br></br><p class="comment"> calling function of the main algorithm
+</br></p><code>    comment* comments_array = create(count_of_lines, document_data);
+</code></br></br><p class="comment"> if was a beginning of a documentary comment but there wasn't end
+</br></p><code>    if (start_flag) {
+</code></br></br></div></body></html>

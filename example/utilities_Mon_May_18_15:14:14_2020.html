@@ -1,0 +1,59 @@
+<!DOCTYPE html><html><head><meta charset=" UTF - 8" >
+<style type="text/css">
+#wrapper
+{
+    width: 100%;
+    height: 100%;
+    min-height: 900px;
+    margin-left: 15%;
+    padding-top: 5%;
+    padding-left: 5%;
+    border: 1px solid #3d3d3d;
+    background: #333;
+}
+body
+{
+    font: 14pt Verdana, sans-serif;
+    min-width: auto;
+    margin: 0;
+    padding: 0;
+    color: #bbb;
+    background: #202020;
+}
+p.comment
+{
+    margin: 0;
+    padding: 0;
+    color: #20871b;
+}
+code
+{
+    color: #9ccef7;
+}
+</style>
+</head><body><div id="wrapper">
+<h2>This documentation is shaped on file - utilities</h2><i>Program code in language C</i></br></br><p class="comment"> Functions in this file makes checks on simple(non-documentary) comments.
+</br></p><p class="comment">   These checks will be used for searching documentary comments and code lines  
+</br></p><code>
+</code></br></br><p class="comment"> Count of read paths
+</br></p><code>int counter = 0;
+</code></br></br><p class="comment"> This function replaces &lt and &gt special characters for correct display in
+</br></p><p class="comment"> html page
+</br></p><code>char* exclude_html(char* str)
+</code></br></br><p class="comment"> In the worst case, string is increased 3 times + '\0'
+</br></p><code>    char* without_html_str = (char*)calloc((len * 3) + 1, sizeof(char));
+</code></br></br><p class="comment"> This function returns file's name without its extension
+</br></p><code>const char* filename_without_extension(char* path)
+</code></br></br><p class="comment"> This function recursively finds paths to all files in folder
+</br></p><code>void recursive_files_search(char* path, char** paths)
+</code></br></br><p class="comment"> Hidden and system files check
+</br></p><code>        if (dir-&gtd_name[0] == '.') {
+</code></br></br><p class="comment"> This function returns input directory from command line arguments
+</br></p><code>char* get_inpdir(int qty, char* array_argv[])
+</code></br></br><p class="comment"> This function returns output directory from command line arguments
+</br></p><code>char* get_outdir(int qty, char* array_argv[])
+</code></br></br><p class="comment"> This function returns array of data from file
+</br></p><code>char** get_data_from_document(char* paths)
+</code></br></br><p class="comment"> This function returns file's extention
+</br></p><code>char* get_file_extension(const char* path)
+</code></br></br></div></body></html>
