@@ -29,9 +29,9 @@ char* file_name_generator(char* path, char* dest_dir)
             "%s%s%s%s%s%s",
             dest_dir,
             "/",
-            str_time,
-            "_",
             filename_without_extension(path),
+            "_",
+            str_time,
             ".html");
     return filename;
 }
