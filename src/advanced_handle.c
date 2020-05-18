@@ -8,7 +8,7 @@
  * Creates a unique file name which takes
  * the name, day, number and time of creation of the documentation
  ********************************************************************/
-char* file_name_generator(char* path)
+char* file_name_generator(char* path, char* dest_dir)
 {
     long int s_time = 0;
     struct tm* m_time;
@@ -26,8 +26,9 @@ char* file_name_generator(char* path)
     }
     char* filename = (char*)calloc((strlen(path) + 30), sizeof(char));
     sprintf(filename,
-            "%s%s%s%s%s",
-            "./docs/",
+            "%s%s%s%s%s%s",
+            dest_dir,
+            "/",
             str_time,
             "_",
             filename_without_extension(path),

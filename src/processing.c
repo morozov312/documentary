@@ -17,11 +17,11 @@ typedef struct {
     char* code_string;
 } comment;
 
-int html_generator(comment* list, char* path, int qty_structs)
+int html_generator(comment* list, char* path, int qty_structs, char* dest_dir)
 {
     FILE *documentary, *styles;
     char* ptrFile;
-    char* name = file_name_generator(path);
+    char* name = file_name_generator(path, dest_dir);
     documentary = fopen(name, "w");
     if (documentary == NULL) {
         printf("%s\n", "Error create html page!");
@@ -134,7 +134,7 @@ comment* create(int count, char** doc)
     }
     return comments_array;
 };
-int document_creation(char* path)
+int document_creation(char* path, char* dest_dir)
 {
     int valid_check = check_extension(path);
     if (!valid_check) {
@@ -166,7 +166,8 @@ int document_creation(char* path)
                " no documentary comments found");
         return 0;
     }
-    int creation_flag = html_generator(comments_array, path, qty_structs);
+    int creation_flag
+            = html_generator(comments_array, path, qty_structs, dest_dir);
     if (creation_flag) {
         printf("%s%s\n", "Successfully created documentation on file - ", path);
     }
