@@ -10,7 +10,7 @@
 #define MAX_LEN_INP_STR 500
 #define MAX_QTY_STR 50 * 1000
 
-int qty_structs = 0;
+int qty_structs = 0, start_flag = 0;
 
 typedef struct {
     char* comment_data;
@@ -81,51 +81,54 @@ int check_code(char* str)
     }
     return 0;
 }
-comment* create(int count, char** doc)
+comment* create(int qty_lines, char** document_data)
 {
-    comment* comments_array = (comment*)calloc(count, sizeof(comment));
-    int start_flag = 0;
-    qty_structs = 0;
-    for (int i = 0; i < count - 1; i++) {
-        char* current_str = doc[i];
-        char* next_str = doc[i + 1];
-        char* str_whithout_star = del_multiline_comment_stars(current_str);
-        char* str_whithout_document_comment_symb
-                = del_documentary_comment_symbols(current_str);
-        int multiline_begin_flag = check_multiline_comment_begin(current_str);
-        int multiline_end_flag = check_multiline_comment_end(current_str);
-        int multiline_document_flag
-                = check_multiline_documentary_comment(current_str);
-        int singleline_document_flag
-                = check_single_documentary_comment(current_str);
-        int code_check_flag = check_code(next_str);
-        if (multiline_document_flag && !start_flag) {
+    comment* comments_array = (comment*)calloc(qty_lines, sizeof(comment));
+    qty_structs = 0, start_flag = 0;
+    for (int i = 0; i < qty_lines - 1; i++) {
+        //=========================================================================
+        char* current_s = document_data[i];
+        char* next_s = document_data[i + 1];
+        char* str_whithout_star = del_multiline_comment_stars(current_s);
+        char* str_whithout_doc = del_documentary_comment_symbols(current_s);
+        char* s_whithout_end = del_multiline_comment_end(str_whithout_star);
+        int multiline_begin_flag = check_multiline_comment_begin(current_s);
+        int multiline_end_flag = check_multiline_comment_end(current_s);
+        int multiline_doc_flag = check_multiline_documentary_comment(current_s);
+        int singleline_doc_flag = check_single_documentary_comment(current_s);
+        int code_check_flag = check_code(next_s);
+        //========================================================================
+        /// check to begin multiline documentary comment
+        if (multiline_doc_flag && !start_flag) {
             start_flag = 1;
-            comments_array[qty_structs].comment_data
-                    = str_whithout_document_comment_symb;
+            comments_array[qty_structs].comment_data = str_whithout_doc;
             comments_array[qty_structs].code_string = "";
             if (!multiline_end_flag) {
                 qty_structs++;
             }
-        } else if (start_flag && !multiline_end_flag && !multiline_begin_flag) {
+        }
+        /// search lines between end and begin multiline doucumentary comment
+        else if (start_flag && !multiline_end_flag && !multiline_begin_flag) {
             comments_array[qty_structs].comment_data = str_whithout_star;
             comments_array[qty_structs].code_string = "";
             qty_structs++;
-        } else if (multiline_end_flag) {
-            comments_array[qty_structs].comment_data
-                    = del_multiline_comment_end(str_whithout_star);
+        }
+        /// checking at the end of the documentary comment
+        else if (multiline_end_flag) {
+            comments_array[qty_structs].comment_data = s_whithout_end;
             if (code_check_flag) {
-                comments_array[qty_structs].code_string = next_str;
+                comments_array[qty_structs].code_string = next_s;
             } else {
                 comments_array[qty_structs].code_string = "";
             }
             qty_structs++;
             start_flag = 0;
-        } else if (singleline_document_flag && !start_flag) {
-            comments_array[qty_structs].comment_data
-                    = str_whithout_document_comment_symb;
+        }
+        /// search singleline comment if there wasn't start of multiline comment
+        else if (singleline_doc_flag && !start_flag) {
+            comments_array[qty_structs].comment_data = str_whithout_doc;
             if (code_check_flag) {
-                comments_array[qty_structs].code_string = next_str;
+                comments_array[qty_structs].code_string = next_s;
             } else {
                 comments_array[qty_structs].code_string = "";
             }
@@ -143,6 +146,7 @@ int document_creation(char* path, char* dest_dir)
     }
     char** document_data = get_data_from_document(path);
     int count_of_lines = 0;
+    /// if file cannot be read
     if (document_data == NULL) {
         return 0;
     }
@@ -158,7 +162,13 @@ int document_creation(char* path, char* dest_dir)
         printf("%s\n", " too small for documentation");
         return 0;
     }
+    /// calling function of the main algorithm
     comment* comments_array = create(count_of_lines, document_data);
+    /// if was a beginning of a documentary comment but there wasn't end
+    if (start_flag) {
+        printf("%s%s\n", "Syntax error in file - ", path);
+        return 0;
+    }
     if (qty_structs == 0) {
         printf("%s%s%s\n",
                "In file - ",
@@ -171,10 +181,12 @@ int document_creation(char* path, char* dest_dir)
     if (creation_flag) {
         printf("%s%s\n", "Successfully created documentation on file - ", path);
     }
+    //======================================
     for (int i = 0; i < MAX_QTY_STR; i++) {
         free(document_data[i]);
     }
     free(document_data);
     free(comments_array);
+    //=======================================
     return 0;
 }
