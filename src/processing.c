@@ -10,6 +10,7 @@
 #define MAX_LEN_INP_STR 500
 #define MAX_QTY_STR 50 * 1000
 
+/** if founded begin of multiline documentary comment -> start flag == true */
 int qty_structs = 0, start_flag = 0;
 
 typedef struct {
@@ -27,7 +28,7 @@ int html_generator(comment* list, char* path, int qty_structs, char* dest_dir)
         printf("%s\n", "Error create html page!");
         return 0;
     }
-    /// Header
+    /// header
     styles = fopen("./styles/styles.html", "r");
     if (styles == NULL) {
         printf("%s\n", "Error, stylesheet not found!");
@@ -65,7 +66,7 @@ int html_generator(comment* list, char* path, int qty_structs, char* dest_dir)
             }
         }
     }
-    /// Footer
+    /// footer
     fputs("</div></body></html>", documentary);
     fclose(documentary);
     free(name);
@@ -108,14 +109,21 @@ comment* create(int qty_lines, char** document_data)
             }
         }
         /// search lines between end and begin multiline doucumentary comment
-        else if (start_flag && !multiline_end_flag && !multiline_begin_flag) {
+        if (start_flag && !multiline_end_flag && !multiline_begin_flag) {
             comments_array[qty_structs].comment_data = str_whithout_star;
             comments_array[qty_structs].code_string = "";
             qty_structs++;
         }
         /// checking at the end of the documentary comment
-        else if (multiline_end_flag) {
-            comments_array[qty_structs].comment_data = s_whithout_end;
+        if (multiline_end_flag) {
+            /// in case if multiline comment writing in one-line
+            if (multiline_begin_flag) {
+                char* no_symb = del_documentary_comment_symbols(s_whithout_end);
+                comments_array[qty_structs].comment_data = no_symb;
+            } else {
+                comments_array[qty_structs].comment_data = s_whithout_end;
+            }
+            //=============================================================
             if (code_check_flag) {
                 comments_array[qty_structs].code_string = next_s;
             } else {
@@ -125,7 +133,7 @@ comment* create(int qty_lines, char** document_data)
             start_flag = 0;
         }
         /// search singleline comment if there wasn't start of multiline comment
-        else if (singleline_doc_flag && !start_flag) {
+        if (singleline_doc_flag && !start_flag) {
             comments_array[qty_structs].comment_data = str_whithout_doc;
             if (code_check_flag) {
                 comments_array[qty_structs].code_string = next_s;
@@ -139,6 +147,7 @@ comment* create(int qty_lines, char** document_data)
 };
 int document_creation(char* path, char* dest_dir)
 {
+    start_flag = 0;
     int valid_check = check_extension(path);
     if (!valid_check) {
         printf("%s%s\n", "Unsupported file format on - ", path);
