@@ -188,10 +188,9 @@ int document_creation(char* path, char* dest_dir)
     int creation_flag
             = html_generator(comments_array, path, qty_structs, dest_dir);
     if (creation_flag) {
-        printf("%s%s%s\n",
-               "\x1b[32mSuccessfully created documentation on file - \x1b[34m",
-               path,
-               "\x1b[0m");
+        printf("%s%s\n",
+               "\x1b[32mSuccessfully created documentation on file -\x1b[0m",
+               path);
     }
     //======================================
     for (int i = 0; i < MAX_QTY_STR; i++) {
