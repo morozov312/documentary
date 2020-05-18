@@ -173,13 +173,16 @@ int document_creation(char* path, char* dest_dir)
         printf("%s%s%s\n",
                "In file - ",
                path,
-               " no documentary comments found");
+               " there are no documentary comments");
         return 0;
     }
     int creation_flag
             = html_generator(comments_array, path, qty_structs, dest_dir);
     if (creation_flag) {
-        printf("%s%s\n", "Successfully created documentation on file - ", path);
+        printf("%s%s%s\n",
+               "\x1b[32mSuccessfully created documentation on file - \x1b[34m",
+               path,
+               "\x1b[0m");
     }
     //======================================
     for (int i = 0; i < MAX_QTY_STR; i++) {

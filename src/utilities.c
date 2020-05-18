@@ -11,6 +11,7 @@
 
 /// recived path's count
 int counter = 0;
+int recursive_exit_flag = 0;
 
 /// replaces < and > special characters for correct display in html page
 char* exclude_html(char* str)
@@ -62,22 +63,27 @@ void recursive_files_search(char* path, char** paths)
         if (dir->d_name[0] == '.') {
             continue;
         }
+        if (recursive_exit_flag == 1) {
+            return;
+        }
+        if (counter == MAX_COUNT_OF_FILES) {
+            printf("%s\n",
+                   "\x1b[36m Warning!\x1b[0m, limit of files for this "
+                   "folder "
+                   "overpassed!");
+            recursive_exit_flag = 1;
+            return;
+        }
         if (dir->d_type != DT_DIR) {
             char* f_path = (char*)calloc(MAX_PATH_LEN, sizeof(char));
             sprintf(f_path, "%s/%s", path, dir->d_name);
             strcpy(paths[counter], f_path);
             free(f_path);
             counter++;
-            if (counter == MAX_COUNT_OF_FILES) {
-                printf("%s\n",
-                       "Warning, limit of files for this folder "
-                       "overpassed!");
-                return;
-            }
         } else if (
                 dir->d_type == DT_DIR && strcmp(dir->d_name, ".") != 0
                 && strcmp(dir->d_name, "..") != 0) {
-            char d_path[MAX_PATH_LEN];
+            char d_path[MAX_PATH_LEN * 2];
             sprintf(d_path, "%s/%s", path, dir->d_name);
             recursive_files_search(d_path, paths);
         }
