@@ -8,7 +8,7 @@ This program compiles documentation in html page format based on comments in sou
 <p>
 1) Download or clone this repository on your PC </br>
 2) Use make to build project </br>
-3) Use ./bin/documentary -inpdir "path" to run program and find all source files on path </br>
+3) Use ./bin/documentary -inpdir "path" -outdir(optional , default path is "./docs") "path" to run program and find all source files on path </br>
 4) Enjoy your documentation which is located in folder ./docs </br>
 </p>
 <b>!important</b></br>
