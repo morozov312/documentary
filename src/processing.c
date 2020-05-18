@@ -10,6 +10,8 @@
 #define MAX_LEN_INP_STR 500
 #define MAX_QTY_STR 50 * 1000
 
+int qty_structs = 0;
+
 typedef struct {
     char* comment_data;
     char* code_string;
@@ -71,10 +73,10 @@ int html_generator(comment* list, char* path, int qty_structs)
 }
 int check_code(char* str)
 {
-    int single = check_single_comment(str);
-    int m_b = check_multiline_comment_begin(str);
-    int m_e = check_multiline_comment_end(str);
-    if (!single && !m_b && !m_e) {
+    int single_flag = check_single_comment(str);
+    int multiline_begin_flag = check_multiline_comment_begin(str);
+    int multiline_end_flag = check_multiline_comment_end(str);
+    if (!single_flag && !multiline_begin_flag && !multiline_end_flag) {
         return 1;
     }
     return 0;
@@ -82,47 +84,52 @@ int check_code(char* str)
 comment* create(int count, char** doc)
 {
     comment* comments_array = (comment*)calloc(count, sizeof(comment));
-    int qty = 0, begin = 0;
+    int start_flag = 0;
+    qty_structs = 0;
     for (int i = 0; i < count - 1; i++) {
         char* current_str = doc[i];
         char* next_str = doc[i + 1];
-        int m_b = check_multiline_comment_begin(current_str);
-        int m_e = check_multiline_comment_end(current_str);
-        if (check_multiline_documentary_comment(current_str) && !begin) {
-            begin = 1;
-            comments_array[qty].comment_data
-                    = del_documentary_comment_symbols(current_str);
-            comments_array[qty].code_string = "";
-            if (!m_e) {
-                qty++;
+        char* str_whithout_star = del_multiline_comment_stars(current_str);
+        char* str_whithout_document_comment_symb
+                = del_documentary_comment_symbols(current_str);
+        int multiline_begin_flag = check_multiline_comment_begin(current_str);
+        int multiline_end_flag = check_multiline_comment_end(current_str);
+        int multiline_document_flag
+                = check_multiline_documentary_comment(current_str);
+        int singleline_document_flag
+                = check_single_documentary_comment(current_str);
+        int code_check_flag = check_code(next_str);
+        if (multiline_document_flag && !start_flag) {
+            start_flag = 1;
+            comments_array[qty_structs].comment_data
+                    = str_whithout_document_comment_symb;
+            comments_array[qty_structs].code_string = "";
+            if (!multiline_end_flag) {
+                qty_structs++;
             }
-        }
-        if (begin && !m_e && !m_b) {
-            comments_array[qty].comment_data
-                    = del_multiline_comment_stars(current_str);
-            comments_array[qty].code_string = "";
-            qty++;
-        }
-        if (check_single_documentary_comment(current_str) && !begin) {
-            comments_array[qty].comment_data
-                    = del_documentary_comment_symbols(current_str);
-            if (check_code(next_str)) {
-                comments_array[qty].code_string = next_str;
+        } else if (start_flag && !multiline_end_flag && !multiline_begin_flag) {
+            comments_array[qty_structs].comment_data = str_whithout_star;
+            comments_array[qty_structs].code_string = "";
+            qty_structs++;
+        } else if (multiline_end_flag) {
+            comments_array[qty_structs].comment_data
+                    = del_multiline_comment_end(str_whithout_star);
+            if (code_check_flag) {
+                comments_array[qty_structs].code_string = next_str;
             } else {
-                comments_array[qty].code_string = "";
+                comments_array[qty_structs].code_string = "";
             }
-            qty++;
-        }
-        if (m_e) {
-            comments_array[qty].comment_data
-                    = del_multiline_comment_end(current_str);
-            if (check_code(next_str)) {
-                comments_array[qty].code_string = next_str;
+            qty_structs++;
+            start_flag = 0;
+        } else if (singleline_document_flag && !start_flag) {
+            comments_array[qty_structs].comment_data
+                    = str_whithout_document_comment_symb;
+            if (code_check_flag) {
+                comments_array[qty_structs].code_string = next_str;
             } else {
-                comments_array[qty].code_string = "";
+                comments_array[qty_structs].code_string = "";
             }
-            qty++;
-            begin = 0;
+            qty_structs++;
         }
     }
     return comments_array;
@@ -135,7 +142,7 @@ int document_creation(char* path)
         return 0;
     }
     char** document_data = get_data_from_document(path);
-    int count_of_lines = 0, qty_structs = 0;
+    int count_of_lines = 0;
     if (document_data == NULL) {
         return 0;
     }
@@ -152,11 +159,6 @@ int document_creation(char* path)
         return 0;
     }
     comment* comments_array = create(count_of_lines, document_data);
-    for (int i = 0; i < count_of_lines; i++) {
-        if (comments_array[i].comment_data != NULL) {
-            qty_structs++;
-        }
-    }
     if (qty_structs == 0) {
         printf("%s%s%s\n",
                "In file - ",
@@ -164,8 +166,8 @@ int document_creation(char* path)
                " no documentary comments found");
         return 0;
     }
-    int res = html_generator(comments_array, path, qty_structs);
-    if (res) {
+    int creation_flag = html_generator(comments_array, path, qty_structs);
+    if (creation_flag) {
         printf("%s%s\n", "Successfully created documentation on file - ", path);
     }
     for (int i = 0; i < MAX_QTY_STR; i++) {
