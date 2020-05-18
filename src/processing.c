@@ -84,19 +84,19 @@ int check_code(char* str)
 comment* create(int qty_lines, char** document_data)
 {
     comment* comments_array = (comment*)calloc(qty_lines, sizeof(comment));
-    qty_structs = 0, start_flag = 0;
+    qty_structs = 0;
     for (int i = 0; i < qty_lines - 1; i++) {
         //=========================================================================
         char* current_s = document_data[i];
         char* next_s = document_data[i + 1];
-        char* str_whithout_star = del_multiline_comment_stars(current_s);
-        char* str_whithout_doc = del_documentary_comment_symbols(current_s);
-        char* s_whithout_end = del_multiline_comment_end(str_whithout_star);
         int multiline_begin_flag = check_multiline_comment_begin(current_s);
         int multiline_end_flag = check_multiline_comment_end(current_s);
         int multiline_doc_flag = check_multiline_documentary_comment(current_s);
         int singleline_doc_flag = check_single_documentary_comment(current_s);
         int code_check_flag = check_code(next_s);
+        char* str_whithout_star = del_multiline_comment_stars(current_s);
+        char* str_whithout_doc = del_documentary_comment_symbols(current_s);
+        char* s_whithout_end = del_multiline_comment_end(str_whithout_star);
         //========================================================================
         /// check to begin multiline documentary comment
         if (multiline_doc_flag && !start_flag) {
