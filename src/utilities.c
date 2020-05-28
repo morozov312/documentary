@@ -16,7 +16,7 @@ int recursive_exit_flag = 0;
 /// html page
 char* Escape_html(char* str)
 {
-    size_t len = (int)strlen(str);
+    int len = (int)strlen(str);
     /// In the worst case, string is increased 3 times + '\0'
     char* without_html_str = (char*)calloc((len * 3) + 1, sizeof(char));
     int j = 0;
