@@ -34,7 +34,15 @@ int main(int argc, char* argv[])
     for (int i = 0; i < MAX_COUNT_OF_FILES; i++) {
         paths_array[i] = (char*)calloc(MAX_PATH_LEN, sizeof(char));
     }
-    Search_files_recursive(start_dir, paths_array);
+    int recursive_exit_flag = 0;
+    int recursive_res = Search_files_recursive(
+            start_dir, paths_array, &recursive_exit_flag);
+    if (recursive_res == -1) {
+        printf("%s\n",
+               "\x1b[36mWarning!\x1b[0m limit of files for this "
+               "folder "
+               "overpassed!");
+    }
     for (int i = 0; i < MAX_COUNT_OF_FILES; i++) {
         size_t len = strlen(paths_array[i]);
         if (len > 0) {
