@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-char* del_documentary_comment_symbols(char* str)
+char* Del_documentary_comment_symbols(char* str)
 {
     char* ptr_slash = strchr(str, '/');
     return ptr_slash == NULL ? "" : ptr_slash + 3;
 }
-char* del_multiline_comment_begin(char* str)
+char* Del_multiline_comment_begin(char* str)
 {
     for (int i = 0; str[i] != '\0'; i++) {
         if (str[i] == '/' && str[i + 1] == '*') {
@@ -17,7 +17,7 @@ char* del_multiline_comment_begin(char* str)
     }
     return str;
 }
-char* del_multiline_comment_end(char* str)
+char* Del_multiline_comment_end(char* str)
 {
     for (int i = 0; str[i] != '\0'; i++) {
         if (str[i] == '*' && str[i + 1] == '/') {
@@ -27,7 +27,7 @@ char* del_multiline_comment_end(char* str)
     }
     return str;
 }
-char* del_multiline_comment_stars(char* str)
+char* Del_multiline_comment_stars(char* str)
 {
     for (unsigned int i = 0; i < strlen(str); i++) {
         if (str[i] != ' ' && str[i] != '*') {

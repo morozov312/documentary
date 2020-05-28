@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-CTEST(utilities, get_inpdir)
+CTEST(utilities, Get_inpdir)
 {
     // Given
     char* argv_first[] = {"./documentary ", "-inpdir", "./src"};
@@ -12,9 +12,9 @@ CTEST(utilities, get_inpdir)
     char* argv_third[] = {"./documentary ", "-l", "./src"};
     int qty_for_three = 3;
     // When
-    char* res_fisrt = get_inpdir(qty_for_three, argv_first);
-    char* res_second = get_inpdir(qty_for_three, argv_second);
-    char* res_thrid = get_inpdir(qty_for_three, argv_third);
+    char* res_fisrt = Get_inpdir(qty_for_three, argv_first);
+    char* res_second = Get_inpdir(qty_for_three, argv_second);
+    char* res_thrid = Get_inpdir(qty_for_three, argv_third);
     // Then
     char* exception_first = "./src";
     char* exception_second = "-inpdir";
@@ -23,7 +23,7 @@ CTEST(utilities, get_inpdir)
     ASSERT_STR(exception_second, res_second);
     ASSERT_STR(exception_third, res_thrid);
 }
-CTEST(utilities, get_outdir)
+CTEST(utilities, Get_outdir)
 {
     // Given
     char* argv_first[] = {"./documentary ", "-outdir", "./docs"};
@@ -31,9 +31,9 @@ CTEST(utilities, get_outdir)
     char* argv_third[] = {"./documentary ", "-l", "./src"};
     int qty_for_three = 3;
     // When
-    char* res_fisrt = get_outdir(qty_for_three, argv_first);
-    char* res_second = get_outdir(qty_for_three, argv_second);
-    char* res_thrid = get_outdir(qty_for_three, argv_third);
+    char* res_fisrt = Get_outdir(qty_for_three, argv_first);
+    char* res_second = Get_outdir(qty_for_three, argv_second);
+    char* res_thrid = Get_outdir(qty_for_three, argv_third);
     // Then
     char* exception_first = "./docs";
     char* exception_second = "-outdir";

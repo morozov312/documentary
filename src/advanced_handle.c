@@ -8,7 +8,7 @@
  * Creates a unique file name which takes
  * the name, day, number and time of creation of the documentation
  ********************************************************************/
-char* file_name_generator(char* path, char* dest_dir)
+char* Generate_filename(char* path, char* dest_dir)
 {
     long int s_time = 0;
     struct tm* m_time;
@@ -20,7 +20,7 @@ char* file_name_generator(char* path, char* dest_dir)
             str_time[i] = '_';
         }
     }
-    unsigned int len = strlen(str_time) - 1;
+    size_t len = strlen(str_time) - 1;
     if (str_time[len] == '\n') {
         str_time[len] = '\0';
     }
@@ -29,7 +29,7 @@ char* file_name_generator(char* path, char* dest_dir)
             "%s%s%s%s%s%s",
             dest_dir,
             "/",
-            filename_without_extension(path),
+            Get_filename_without_extension(path),
             "_",
             str_time,
             ".html");
@@ -39,9 +39,9 @@ char* file_name_generator(char* path, char* dest_dir)
  * This funtion reterned description to type of document, which will be written
  * to the html page header
  ********************************************************************/
-char* get_document_type(char* path)
+char* Get_document_type(char* path)
 {
-    char* extension = get_file_extension(path);
+    char* extension = Get_file_extension(path);
     if (!strcmp(extension, "h")) {
         return "<i>Header file to program code on C/C++</i></br></br>";
     } else if (!strcmp(extension, "c")) {
