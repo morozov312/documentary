@@ -144,8 +144,8 @@ comment* create(int qty_lines, char** document_data)
         }
     }
     return comments_array;
-};
-int document_creation(char* path, char* dest_dir)
+}
+int document_creation(char* path, char* dest_dir);
 {
     start_flag = 0;
     int valid_check = check_extension(path);
