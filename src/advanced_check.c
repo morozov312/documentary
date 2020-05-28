@@ -33,7 +33,7 @@ int check_multiline_documentary_comment(char* str)
 {
     char* ptr_first_star = strchr(str, '*');
     if (check_multiline_comment_begin(str) == 1) {
-        if ((ptr_first_star)[1] == '*' || (ptr_first_star)[1] == '!') {
+        if (ptr_first_star[1] == '*' || ptr_first_star[1] == '!') {
             return 1;
         } else {
             return 0;

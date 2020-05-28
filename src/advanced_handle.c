@@ -20,7 +20,7 @@ char* file_name_generator(char* path, char* dest_dir)
             str_time[i] = '_';
         }
     }
-    unsigned int len = strlen(str_time) - 1;
+    size_t len = strlen(str_time) - 1;
     if (str_time[len] == '\n') {
         str_time[len] = '\0';
     }

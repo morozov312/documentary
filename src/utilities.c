@@ -20,7 +20,7 @@ int recursive_exit_flag = 0;
 /// html page
 char* exclude_html(char* str)
 {
-    int len = (int)strlen(str);
+    size_t len = (int)strlen(str);
     /// In the worst case, string is increased 3 times + '\0'
     char* without_html_str = (char*)calloc((len * 3) + 1, sizeof(char));
     int j = 0;
@@ -160,8 +160,6 @@ char** get_data_from_document(char* paths)
         if (ptrFile == NULL) {
             if (feof(myfile) != 0) {
                 break;
-            } else {
-                continue;
             }
         }
         strcpy(data[quan_str], temp);

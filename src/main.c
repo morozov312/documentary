@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
     }
     recursive_files_search(start_dir, paths_array);
     for (int i = 0; i < MAX_COUNT_OF_FILES; i++) {
-        unsigned int len = strlen(paths_array[i]);
+        size_t len = strlen(paths_array[i]);
         if (len > 0) {
             document_creation(paths_array[i], dest_dir);
         }
