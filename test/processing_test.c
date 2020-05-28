@@ -1,7 +1,7 @@
 #include "processing.h"
 #include <ctest.h>
 
-CTEST(processing, check_code)
+CTEST(processing, Check_code)
 {
     // Given
     char str_first[] = "code /// comment";
@@ -9,10 +9,10 @@ CTEST(processing, check_code)
     char str_third[] = "/* begin of comment";
     char str_fourth[] = "int a =0;";
     // When
-    int res_first = check_code(str_first);
-    int res_second = check_code(str_second);
-    int res_third = check_code(str_third);
-    int res_fourth = check_code(str_fourth);
+    int res_first = Check_code(str_first);
+    int res_second = Check_code(str_second);
+    int res_third = Check_code(str_third);
+    int res_fourth = Check_code(str_fourth);
     // Then
     int exp_first = 0;
     int exp_second = 0;

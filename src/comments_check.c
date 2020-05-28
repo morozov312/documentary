@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int check_single_comment(char* str)
+int Check_single_comment(char* str)
 {
     size_t len = strlen(str);
     for (unsigned int i = 0; i < len; i++) {
@@ -12,7 +12,7 @@ int check_single_comment(char* str)
     }
     return 0;
 }
-int check_multiline_comment_begin(char* str)
+int Check_multiline_comment_begin(char* str)
 {
     size_t len = strlen(str);
     for (unsigned int i = 0; i < len; i++) {
@@ -22,7 +22,7 @@ int check_multiline_comment_begin(char* str)
     }
     return 0;
 }
-int check_multiline_comment_end(char* str)
+int Check_multiline_comment_end(char* str)
 {
     size_t len = strlen(str);
     for (unsigned int i = 0; i < len; i++) {

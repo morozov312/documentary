@@ -1,7 +1,7 @@
 #include "advanced_handle.h"
 #include <ctest.h>
 
-CTEST(advanced_handle, get_document_type)
+CTEST(advanced_handle, Get_document_type)
 {
     // Given
     char str_first[] = "./folder/src/main.cpp";
@@ -9,10 +9,10 @@ CTEST(advanced_handle, get_document_type)
     char str_third[] = "./fake/depth.c";
     char str_fourth[] = "./fake/main.py";
     // When
-    char* res_first = get_document_type(str_first);
-    char* res_second = get_document_type(str_second);
-    char* res_third = get_document_type(str_third);
-    char* res_fourth = get_document_type(str_fourth);
+    char* res_first = Get_document_type(str_first);
+    char* res_second = Get_document_type(str_second);
+    char* res_third = Get_document_type(str_third);
+    char* res_fourth = Get_document_type(str_fourth);
     // Then
     char exp_first[] = "<i>Program code in language C++</i></br></br>";
     char exp_second[] = "<i>Header file to program code on C/C++</i></br></br>";

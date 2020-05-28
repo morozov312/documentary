@@ -18,7 +18,7 @@ int recursive_exit_flag = 0;
 
 /// This function replaces < and > special characters for correct display in
 /// html page
-char* exclude_html(char* str)
+char* Escape_html(char* str)
 {
     size_t len = (int)strlen(str);
     /// In the worst case, string is increased 3 times + '\0'
@@ -45,7 +45,7 @@ char* exclude_html(char* str)
 }
 
 /// This function returns file's name without its extension
-const char* filename_without_extension(char* path)
+const char* Get_filename_without_extension(char* path)
 {
     char* temp_path = (char*)calloc(strlen(path), sizeof(char*));
     strcpy(temp_path, path);
@@ -59,7 +59,7 @@ const char* filename_without_extension(char* path)
     return temp_path == NULL ? "" : temp_path + 1;
 }
 /// This function recursively finds paths to all files in folder
-void recursive_files_search(char* path, char** paths)
+void Search_files_recursive(char* path, char** paths)
 {
     DIR* d = opendir(path);
     if (d == NULL)
@@ -92,13 +92,13 @@ void recursive_files_search(char* path, char** paths)
                 && strcmp(dir->d_name, "..") != 0) {
             char d_path[MAX_PATH_LEN * 2];
             sprintf(d_path, "%s/%s", path, dir->d_name);
-            recursive_files_search(d_path, paths);
+            Search_files_recursive(d_path, paths);
         }
     }
     closedir(d);
 }
 /// This function returns input directory from command line arguments
-char* get_inpdir(int qty, char* array_argv[])
+char* Get_inpdir(int qty, char* array_argv[])
 {
     const char input_directory[] = "-inpdir";
     const char output_directory[] = "-outdir";
@@ -119,7 +119,7 @@ char* get_inpdir(int qty, char* array_argv[])
     return "";
 }
 /// This function returns output directory from command line arguments
-char* get_outdir(int qty, char* array_argv[])
+char* Get_outdir(int qty, char* array_argv[])
 {
     const char input_directory[] = "-inpdir";
     const char output_directory[] = "-outdir";
@@ -140,7 +140,7 @@ char* get_outdir(int qty, char* array_argv[])
     return "./docs";
 }
 /// This function returns array of data from file
-char** get_data_from_document(char* paths)
+char** Get_data_from_document(char* paths)
 {
     FILE* myfile;
     myfile = fopen(paths, "r");
@@ -170,7 +170,7 @@ char** get_data_from_document(char* paths)
     return data;
 }
 /// This function returns file's extention
-char* get_file_extension(const char* path)
+char* Get_file_extension(const char* path)
 {
     char* last_dot_ptr = strrchr(path, '.');
     return last_dot_ptr == NULL ? "" : last_dot_ptr + 1;
