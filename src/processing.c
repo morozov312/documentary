@@ -9,7 +9,6 @@
 #include <string.h>
 
 /** if founded begin of multiline documentary comment -> start flag == true */
-int qty_structs = 0, start_flag = 0;
 
 typedef struct {
     char* comment_data;
@@ -23,7 +22,7 @@ int Generate_html(comment* list, char* path, int qty_structs, char* dest_dir)
     char* name = Generate_filename(path, dest_dir);
     documentary = fopen(name, "w");
     if (documentary == NULL) {
-        printf("%s\n", "Error Create_struct_of_data html page!");
+        printf("%s\n", "Error create html page!");
         return 0;
     }
     /// header
@@ -80,10 +79,11 @@ int Check_code(char* str)
     }
     return 0;
 }
-comment* Create_struct_of_data(int qty_lines, char** document_data)
+comment* Create_struct_of_data(
+        int qty_lines, char** document_data, int* qty_structs, int* start_flag)
 {
     comment* comments_array = (comment*)calloc(qty_lines, sizeof(comment));
-    qty_structs = 0;
+    *qty_structs = 0;
     for (int i = 0; i < qty_lines - 1; i++) {
         //=========================================================================
         char* current_s = document_data[i];
@@ -98,54 +98,56 @@ comment* Create_struct_of_data(int qty_lines, char** document_data)
         char* s_whithout_end = Del_multiline_comment_end(str_whithout_star);
         //========================================================================
         /// Check to begin multiline documentary comment
-        if (multiline_doc_flag && !start_flag) {
-            start_flag = 1;
-            comments_array[qty_structs].comment_data = str_whithout_doc;
-            comments_array[qty_structs].code_string = "";
+        if (multiline_doc_flag && !*start_flag) {
+            *start_flag = 1;
+            comments_array[*qty_structs].comment_data = str_whithout_doc;
+            comments_array[*qty_structs].code_string = "";
             if (!multiline_end_flag) {
-                qty_structs++;
+                *qty_structs = *qty_structs + 1;
             }
         }
         /// search lines between end and begin multiline doucumentary comment
-        if (start_flag && !multiline_end_flag && !multiline_begin_flag) {
-            comments_array[qty_structs].comment_data = str_whithout_star;
-            comments_array[qty_structs].code_string = "";
-            qty_structs++;
+        if (*start_flag && !multiline_end_flag && !multiline_begin_flag) {
+            comments_array[*qty_structs].comment_data = str_whithout_star;
+            comments_array[*qty_structs].code_string = "";
+            *qty_structs = *qty_structs + 1;
         }
         /// Checking at the end of the documentary comment
         if (multiline_end_flag) {
             /// in case if multiline comment writing in one-line
             if (multiline_begin_flag) {
                 char* no_symb = Del_documentary_comment_symbols(s_whithout_end);
-                comments_array[qty_structs].comment_data = no_symb;
+                comments_array[*qty_structs].comment_data = no_symb;
             } else {
-                comments_array[qty_structs].comment_data = s_whithout_end;
+                comments_array[*qty_structs].comment_data = s_whithout_end;
             }
             //=============================================================
             if (code_Check_flag) {
-                comments_array[qty_structs].code_string = next_s;
+                comments_array[*qty_structs].code_string = next_s;
             } else {
-                comments_array[qty_structs].code_string = "";
+                comments_array[*qty_structs].code_string = "";
             }
-            qty_structs++;
-            start_flag = 0;
+            *qty_structs = *qty_structs + 1;
+            *start_flag = 0;
         }
         /// search singleline comment if there wasn't start of multiline comment
-        if (singleline_doc_flag && !start_flag) {
-            comments_array[qty_structs].comment_data = str_whithout_doc;
+        if (singleline_doc_flag && !*start_flag) {
+            comments_array[*qty_structs].comment_data = str_whithout_doc;
             if (code_Check_flag) {
-                comments_array[qty_structs].code_string = next_s;
+                comments_array[*qty_structs].code_string = next_s;
             } else {
-                comments_array[qty_structs].code_string = "";
+                comments_array[*qty_structs].code_string = "";
             }
-            qty_structs++;
+            *qty_structs = *qty_structs + 1;
         }
     }
     return comments_array;
 }
 int Create_document(char* path, char* dest_dir)
 {
-    start_flag = 0;
+    /** if founded begin of multiline documentary comment -> start flag == true
+     */
+    int qty_structs = 0, start_flag = 0;
     int valid_Check = Check_extension(path);
     if (!valid_Check) {
         printf("%s%s\n", "Unsupported file format on - ", path);
@@ -170,8 +172,8 @@ int Create_document(char* path, char* dest_dir)
         return 0;
     }
     /// calling function of the main algorithm
-    comment* comments_array
-            = Create_struct_of_data(count_of_lines, document_data);
+    comment* comments_array = Create_struct_of_data(
+            count_of_lines, document_data, &qty_structs, &start_flag);
     /// if was a beginning of a documentary comment but there wasn't end
     if (start_flag) {
         printf("%s%s\n", "Syntax error in file - ", path);
@@ -188,8 +190,7 @@ int Create_document(char* path, char* dest_dir)
             = Generate_html(comments_array, path, qty_structs, dest_dir);
     if (creation_flag) {
         printf("%s%s\n",
-               "\x1b[32mSuccessfully Create_struct_of_datad documentation on "
-               "file -\x1b[0m",
+               "\x1b[32mSuccessfully created documentation on file - \x1b[0m",
                path);
     }
     //======================================

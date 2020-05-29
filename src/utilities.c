@@ -7,16 +7,13 @@
  * These checks will be used for searching documentary comments and code lines*/
 
 #define QTY_OF_EXTENSION 3
-
-/// Count of read paths
-int counter = 0;
-int recursive_exit_flag = 0;
+#define PROGRAM_VERSION "alpha1.0"
 
 /// This function replaces < and > special characters for correct display in
 /// html page
 char* Escape_html(char* str)
 {
-    size_t len = (int)strlen(str);
+    int len = (int)strlen(str);
     /// In the worst case, string is increased 3 times + '\0'
     char* without_html_str = (char*)calloc((len * 3) + 1, sizeof(char));
     int j = 0;
@@ -39,7 +36,6 @@ char* Escape_html(char* str)
     free(str);
     return without_html_str;
 }
-
 /// This function returns file's name without its extension
 const char* Get_filename_without_extension(char* path)
 {
@@ -55,43 +51,37 @@ const char* Get_filename_without_extension(char* path)
     return temp_path == NULL ? "" : temp_path + 1;
 }
 /// This function recursively finds paths to all files in folder
-void Search_files_recursive(char* path, char** paths)
+int Search_files_recursive(char* path, char** paths, int* recursive_exit_flag)
 {
     DIR* d = opendir(path);
-    if (d == NULL)
-        return;
+    if (d == NULL) {
+        return 0;
+    }
     struct dirent* dir;
     while ((dir = readdir(d)) != NULL) {
         /// Hidden and system files check
         if (dir->d_name[0] == '.') {
             continue;
         }
-        if (recursive_exit_flag == 1) {
-            return;
-        }
-        if (counter == MAX_COUNT_OF_FILES) {
-            printf("%s\n",
-                   "\x1b[36m Warning!\x1b[0m, limit of files for this "
-                   "folder "
-                   "overpassed!");
-            recursive_exit_flag = 1;
-            return;
+        if (*recursive_exit_flag == MAX_COUNT_OF_FILES) {
+            return -1;
         }
         if (dir->d_type != DT_DIR) {
             char* f_path = (char*)calloc(MAX_PATH_LEN, sizeof(char));
             sprintf(f_path, "%s/%s", path, dir->d_name);
-            strcpy(paths[counter], f_path);
+            strcpy(paths[*recursive_exit_flag], f_path);
             free(f_path);
-            counter++;
+            *recursive_exit_flag = *recursive_exit_flag + 1;
         } else if (
                 dir->d_type == DT_DIR && strcmp(dir->d_name, ".") != 0
                 && strcmp(dir->d_name, "..") != 0) {
             char d_path[MAX_PATH_LEN * 2];
             sprintf(d_path, "%s/%s", path, dir->d_name);
-            Search_files_recursive(d_path, paths);
+            Search_files_recursive(d_path, paths, recursive_exit_flag);
         }
     }
     closedir(d);
+    return 0;
 }
 /// This function returns input directory from command line arguments
 char* Get_inpdir(int qty, char* array_argv[])
@@ -170,4 +160,88 @@ char* Get_file_extension(const char* path)
 {
     char* last_dot_ptr = strrchr(path, '.');
     return last_dot_ptr == NULL ? "" : last_dot_ptr + 1;
+}
+void Print_help()
+{
+    printf("%s\n%s\n",
+           "usage: documentary [--version] [--help]",
+           "\t  [-inpdir <path>] [-outdir <path>]");
+    printf("%s\n", "Available commands");
+    printf("\t%s\n", "-inpdir");
+    printf("\t%s\n", "-outdir");
+    printf("\t%s\n", "--help");
+    printf("\t%s\n", "--version");
+}
+int Check_argc(int argc)
+{
+    if (argc == 1) {
+        printf("%s\n%s\n",
+               "usage: documentary [--version] [--help]",
+               "\t  [-inpdir <path>] [-outdir <path>]");
+        return 0;
+    }
+    if (argc > 5 || argc == 4) {
+        printf("\x1b[31m Error! \x1b[0m Invalid number of arguments");
+        return 0;
+    }
+    return 1;
+}
+int Check_argv(int argc, char** array_argv, char** inpdir, char** outdir)
+{
+    const char input_directory[] = "-inpdir";
+    const char output_directory[] = "-outdir";
+    const char help_flag[] = "--help";
+    const char version_flag[] = "--version";
+    *inpdir = "";
+    *outdir = "./docs";
+    if (argc == 2) {
+        if (strcmp(array_argv[1], help_flag) == 0) {
+            Print_help();
+            return 0;
+        }
+        if (strcmp(array_argv[1], version_flag) == 0) {
+            printf("%s\n", PROGRAM_VERSION);
+            return 0;
+        }
+    } else {
+        for (int i = 1; i < argc; i++) {
+            char* current_str = array_argv[i];
+            char* next_str = array_argv[i + 1];
+            int check_inp = strcmp(current_str, input_directory);
+            int check_out = strcmp(current_str, output_directory);
+            int check_help = strcmp(current_str, help_flag);
+            int check_version = strcmp(current_str, version_flag);
+            if (check_inp * check_out * check_help * check_version) {
+                printf("\'%s\'%s \n",
+                       array_argv[i],
+                       " is not a command. See \'--help\'");
+                return 0;
+            }
+            if (!check_inp) {
+                if (!strcmp(next_str, help_flag)) {
+                    printf("%s\n", "path to source dir");
+                    return 0;
+                } else {
+                    if (array_argv[i + 1][0] != '.') {
+                        printf("\'%s\'%s\n",
+                               array_argv[i + 1],
+                               " is wrong path");
+                        return 0;
+                    }
+                    *inpdir = array_argv[i + 1];
+                    i++;
+                }
+            }
+            if (!check_out) {
+                if (!strcmp(next_str, help_flag)) {
+                    printf("%s\n", "path to output dir (default - )");
+                    return 0;
+                } else {
+                    *outdir = array_argv[i + 1];
+                    i++;
+                }
+            }
+        }
+    }
+    return 1;
 }
