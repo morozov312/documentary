@@ -7,6 +7,7 @@
  * These checks will be used for searching documentary comments and code lines*/
 
 #define QTY_OF_EXTENSION 3
+#define PROGRAM_VERSION "alpha1.0"
 
 /// This function replaces < and > special characters for correct display in
 /// html page
@@ -159,4 +160,63 @@ char* Get_file_extension(const char* path)
 {
     char* last_dot_ptr = strrchr(path, '.');
     return last_dot_ptr == NULL ? "" : last_dot_ptr + 1;
+}
+int Check_argv(int argc, char** array_argv, char** inpdir, char** outdir)
+{
+    const char input_directory[] = "-inpdir";
+    const char output_directory[] = "-outdir";
+    const char help_flag[] = "--help";
+    const char version_flag[] = "--version";
+    *inpdir = "";
+    *outdir = "./docs";
+    if (argc == 2) {
+        if (strcmp(array_argv[1], help_flag) == 0) {
+            Print_help();
+            return 0;
+        }
+        if (strcmp(array_argv[1], version_flag) == 0) {
+            printf("%s\n", PROGRAM_VERSION);
+            return 0;
+        }
+    } else {
+        for (int i = 1; i < argc; i++) {
+            char* current_str = array_argv[i];
+            char* next_str = array_argv[i + 1];
+            int check_inp = strcmp(current_str, input_directory);
+            int check_out = strcmp(current_str, output_directory);
+            int check_help = strcmp(current_str, help_flag);
+            int check_version = strcmp(current_str, version_flag);
+            if (check_inp * check_out * check_help * check_version) {
+                printf("\'%s\'%s \n",
+                       array_argv[i],
+                       " is not a command. See \'--help\'");
+                return 0;
+            }
+            if (!check_inp) {
+                if (!strcmp(next_str, help_flag)) {
+                    printf("%s\n", "path to source dir");
+                    return 0;
+                } else {
+                    if (array_argv[i + 1][0] != '.') {
+                        printf("\'%s\'%s\n",
+                               array_argv[i + 1],
+                               " is wrong path");
+                        return 0;
+                    }
+                    *inpdir = array_argv[i + 1];
+                    i++;
+                }
+            }
+            if (!check_out) {
+                if (!strcmp(next_str, help_flag)) {
+                    printf("%s\n", "path to output dir (default - )");
+                    return 0;
+                } else {
+                    *outdir = array_argv[i + 1];
+                    i++;
+                }
+            }
+        }
+    }
+    return 1;
 }

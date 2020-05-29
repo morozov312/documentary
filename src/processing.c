@@ -9,7 +9,6 @@
 #include <string.h>
 
 /** if founded begin of multiline documentary comment -> start flag == true */
-int qty_structs = 0, start_flag = 0;
 
 typedef struct {
     char* comment_data;
