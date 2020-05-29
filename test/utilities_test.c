@@ -3,18 +3,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-CTEST(advanced_Check, Check_argc)
+CTEST(Utilites, Check_argc)
 {
     // Given
     int first = 1;
     int second = 10;
     int third = 3;
     int fourth = 5;
+    char* arr[] = {"./documentary", "-inpdir", "./src", "-outdir", "./docs"};
     // When
-    int res_first = Check_argc(first);
-    int res_second = Check_argc(second);
-    int res_third = Check_argc(third);
-    int res_fourth = Check_argc(fourth);
+    int res_first = Check_argc(first, arr);
+    int res_second = Check_argc(second, arr);
+    int res_third = Check_argc(third, arr);
+    int res_fourth = Check_argc(fourth, arr);
     // Then
     int exception_first = 0;
     int exception_second = 0;
@@ -25,7 +26,7 @@ CTEST(advanced_Check, Check_argc)
     ASSERT_EQUAL(res_third, exception_third);
     ASSERT_EQUAL(res_fourth, exception_fourth);
 }
-CTEST(advanced_Check, Check_argv)
+CTEST(Utilites, Check_argv)
 {
     // Given
     char* start_folder;
@@ -42,8 +43,8 @@ CTEST(advanced_Check, Check_argv)
     int res_fourth = Check_argv(3, arr3, &start_folder, &dest_dir);
     int res_fifth = Check_argv(3, arr4, &start_folder, &dest_dir);
     // Then
-    int exception_first = 0;
-    int exception_second = 0;
+    int exception_first = 1;
+    int exception_second = 1;
     int exception_third = 1;
     int exception_fourth = 0;
     int exception_fifth = 1;
