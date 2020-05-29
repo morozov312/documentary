@@ -54,3 +54,22 @@ CTEST(Utilites, Check_argv)
     ASSERT_EQUAL(res_fourth, exception_fourth);
     ASSERT_EQUAL(res_fifth, exception_fifth);
 }
+
+CTEST(Utilies, Get_file_extension)
+{
+    // Given
+    char first[] = "./src/main.cpp";
+    char second[] = "./src/bad.h";
+    char third[] = "/main";
+    // When
+    char* res_first = Get_file_extension(first);
+    char* res_second = Get_file_extension(second);
+    char* res_third = Get_file_extension(third);
+    // Then
+    char* exception_first = "cpp";
+    char* exception_second = "h";
+    char* exception_third = "";
+    ASSERT_STR(res_first, exception_first);
+    ASSERT_STR(res_second, exception_second);
+    ASSERT_STR(res_third, exception_third);
+}
