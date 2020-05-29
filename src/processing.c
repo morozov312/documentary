@@ -8,8 +8,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-/** if founded begin of multiline documentary comment -> start flag == true */
-
 typedef struct {
     char* comment_data;
     char* code_string;
@@ -28,8 +26,12 @@ int Generate_html(comment* list, char* path, int qty_structs, char* dest_dir)
     /// header
     styles = fopen("/usr/share/documentary/styles/styles.html", "r");
     if (styles == NULL) {
-        printf("%s\n", "Error, stylesheet not found!");
-        return 0;
+        /// in case when app not installed
+        styles = fopen("./styles/styles.html", "r");
+        if (styles == NULL) {
+            printf("%s\n", "Error, stylesheet not found!");
+            return 0;
+        }
     }
     while (1) {
         char* temp = (char*)calloc(MAX_LEN_INP_STR, sizeof(char));
