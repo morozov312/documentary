@@ -7,7 +7,7 @@ This program compiles documentation in html page format based on comments in sou
 # How it works?
 <p>
 1)Installation </br>
-  git clone https://github.com/morozov312/documentary.git && cd documentary && make install </br>
+  $ git clone https://github.com/morozov312/documentary.git && cd documentary && make install </br>
 2)Running: </br>
   Running from local git repository: make run(default src and out dir)</br>
   Running from anywhere: documentary <args> </br>
@@ -38,11 +38,11 @@ $ make clean </br>
 Removes assembly artifacts in folders ./bin and ./build and all html pages which you created in the folder ./docs </br>
 $ make clean_html </br>
 Removes generated html files in folder ./docs </br>
-Compiler: gcc </br> OS you can use is Linux and MacOS </br>
+Compiler: gcc </br> OS you can use is Linux</br>
 </p>
 <h1>Example</h1>
 Example of work and finished documentation developed by this program you can find in folder ./example </br></br> 
 <p align="center">
-  <img alt="example" src="./img/example.png">
+  <img alt="example" src="./img/ex.png">
 </p>
 
