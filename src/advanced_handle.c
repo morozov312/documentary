@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-
 /********************************************************************
  * Creates a unique file name which takes
  * the name, day, number and time of creation of the documentation
