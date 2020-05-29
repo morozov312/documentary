@@ -29,7 +29,8 @@ int main(int argc, char** argv)
         return 0;
     }
     if (strcmp(start_dir, "") == 0) {
-        printf("\x1b[31m Error! \x1b[0m Wrong source directory\n");
+        printf("\x1b[31m Error! \x1b[0m\n");
+        Print_help();
         return 0;
     }
     char** paths_array = (char**)calloc(MAX_COUNT_OF_FILES, sizeof(char*));

@@ -64,21 +64,18 @@ clean:
 clean_html:
 	rm ./docs/*.html
 run:
-	$(BIN_DIR)/documentary -inpdir ./src 
+	$(BIN_DIR)/documentary -inpdir ./src -outdir ./docs
 
-install:
+install: all
 	sudo mkdir /usr/share/documentary
 	sudo mkdir /usr/share/documentary/styles
-	sudo mkdir /usr/share/documentary/docs
 	sudo cp ./bin/documentary /usr/bin/documentary
 	sudo cp -a ./styles/* /usr/share/documentary/styles
-	sudo cp -a ./docs/* /usr/share/documentary/docs
-
 
 uninstall:
 	sudo rm /usr/bin/documentary
 	sudo rm -r /usr/share/documentary
-	
+reinstall:uninstall install
 check: 
 	$(BIN_DIR)/testing
 
