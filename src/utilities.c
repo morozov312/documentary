@@ -140,7 +140,7 @@ int Check_argc(int argc)
         return 0;
     }
     if (argc > 5 || argc == 4) {
-        printf("\x1b[31m Error! \x1b[0m Invalid number of arguments");
+        printf("Error! Invalid number of arguments");
         return 0;
     }
     return 1;
