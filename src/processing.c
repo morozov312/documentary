@@ -26,7 +26,7 @@ int Generate_html(comment* list, char* path, int qty_structs, char* dest_dir)
         return 0;
     }
     /// header
-    styles = fopen("./styles/styles.html", "r");
+    styles = fopen("/usr/share/documentary/styles/styles.html", "r");
     if (styles == NULL) {
         printf("%s\n", "Error, stylesheet not found!");
         return 0;

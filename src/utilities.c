@@ -151,7 +151,7 @@ int Check_argv(int argc, char** array_argv, char** inpdir, char** outdir)
     const char help_flag[] = "--help";
     const char version_flag[] = "--version";
     *inpdir = "";
-    *outdir = "./docs";
+    *outdir = "./";
     if (argc == 2) {
         if (strcmp(array_argv[1], help_flag) == 0) {
             Print_help();
