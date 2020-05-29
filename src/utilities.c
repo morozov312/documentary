@@ -5,10 +5,10 @@
 #include <string.h>
 /** Functions in this file makes checks on simple(non-documentary) comments.
  * These checks will be used for searching documentary comments and code lines*/
-
 #define QTY_OF_EXTENSION 3
 #define PROGRAM_VERSION "alpha1.0"
-
+#define HELP_FLAG "--help"
+#define VERSION_FLAG "--version"
 /// This function replaces < and > special characters for correct display in
 /// html page
 char* Escape_html(char* str)
@@ -131,7 +131,8 @@ void Print_help()
     printf("\t%s\n", "--help");
     printf("\t%s\n", "--version");
 }
-int Check_argc(int argc)
+/// This function handles arguments and checks their quantity
+int Check_argc(int argc, char** array_argv)
 {
     if (argc == 1) {
         printf("%s\n%s\n",
@@ -143,64 +144,62 @@ int Check_argc(int argc)
         printf("Error! Invalid number of arguments");
         return 0;
     }
+    if (argc == 2) {
+        if (strcmp(array_argv[1], HELP_FLAG) == 0) {
+            Print_help();
+            return 0;
+        }
+        if (strcmp(array_argv[1], VERSION_FLAG) == 0) {
+            printf("%s\n", PROGRAM_VERSION);
+            return 0;
+        }
+    }
     return 1;
 }
 int Check_argv(int argc, char** array_argv, char** inpdir, char** outdir)
 {
     const char input_directory[] = "-inpdir";
     const char output_directory[] = "-outdir";
-    const char help_flag[] = "--help";
-    const char version_flag[] = "--version";
+    /// Default input dir
     *inpdir = "";
-    *outdir = "./";
-    if (argc == 2) {
-        if (strcmp(array_argv[1], help_flag) == 0) {
-            Print_help();
+    /// Default output dir
+    *outdir = ".";
+    for (int i = 1; i < argc; i++) {
+        char* current_str = array_argv[i];
+        char* next_str = array_argv[i + 1];
+        int check_inp = strcmp(current_str, input_directory);
+        int check_out = strcmp(current_str, output_directory);
+        int check_help = strcmp(current_str, HELP_FLAG);
+        int check_version = strcmp(current_str, VERSION_FLAG);
+        if (check_inp && check_out && check_help && check_version) {
+            printf("\'%s\'%s \n",
+                   array_argv[i],
+                   " Is not a command. See \'--help\'");
             return 0;
         }
-        if (strcmp(array_argv[1], version_flag) == 0) {
-            printf("%s\n", PROGRAM_VERSION);
-            return 0;
-        }
-    } else {
-        for (int i = 1; i < argc; i++) {
-            char* current_str = array_argv[i];
-            char* next_str = array_argv[i + 1];
-            int check_inp = strcmp(current_str, input_directory);
-            int check_out = strcmp(current_str, output_directory);
-            int check_help = strcmp(current_str, help_flag);
-            int check_version = strcmp(current_str, version_flag);
-            if (check_inp && check_out && check_help && check_version) {
-                printf("\'%s\'%s \n",
-                       array_argv[i],
-                       " Is not a command. See \'--help\'");
+        if (!check_inp) {
+            /// --help for -inpdir
+            if (!strcmp(next_str, HELP_FLAG)) {
+                printf("%s\n", "Path to source dir");
                 return 0;
-            }
-            if (!check_inp) {
-                if (!strcmp(next_str, help_flag)) {
-                    printf("%s\n", "Path to source dir");
+            } else {
+                if (array_argv[i + 1][0] != '.') {
+                    printf("\'%s\'%s\n", array_argv[i + 1], " Is wrong path");
                     return 0;
-                } else {
-                    if (array_argv[i + 1][0] != '.') {
-                        printf("\'%s\'%s\n",
-                               array_argv[i + 1],
-                               " Is wrong path");
-                        return 0;
-                    }
-                    *inpdir = array_argv[i + 1];
-                    i++;
                 }
+                *inpdir = next_str;
+                i++;
             }
-            if (!check_out) {
-                if (!strcmp(next_str, help_flag)) {
-                    printf("%s\n",
-                           "Path to output dir (default dir is your current "
-                           "dir)");
-                    return 0;
-                } else {
-                    *outdir = array_argv[i + 1];
-                    i++;
-                }
+        }
+        if (!check_out) {
+            /// --help for -outdir
+            if (!strcmp(next_str, HELP_FLAG)) {
+                printf("%s\n",
+                       "Path to output dir (default - your current dir)");
+                return 0;
+            } else {
+                *outdir = next_str;
+                i++;
             }
         }
     }

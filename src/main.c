@@ -18,9 +18,8 @@
 
 int main(int argc, char** argv)
 {
-    char* start_dir;
-    char* dest_dir;
-    int argc_flag = Check_argc(argc);
+    char *start_dir, *dest_dir;
+    int argc_flag = Check_argc(argc, argv);
     if (!argc_flag) {
         return 0;
     }
