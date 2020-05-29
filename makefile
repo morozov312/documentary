@@ -67,6 +67,7 @@ run:
 	$(BIN_DIR)/documentary -inpdir ./src 
 
 install:
+	sudo mkdir /usr/share/documentary
 	sudo mkdir /usr/share/documentary/styles
 	sudo mkdir /usr/share/documentary/docs
 	sudo cp ./bin/documentary /usr/bin/documentary
@@ -76,8 +77,7 @@ install:
 
 uninstall:
 	sudo rm /usr/bin/documentary
-	sudo rm -r /usr/share/documentary/styles
-	sudo rm -r /usr/share/documentary/docs
+	sudo rm -r /usr/share/documentary
 	
 check: 
 	$(BIN_DIR)/testing
