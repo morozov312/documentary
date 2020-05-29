@@ -1,16 +1,12 @@
+#include "macro.h"
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 /** Functions in this file makes checks on simple(non-documentary) comments.
  * These checks will be used for searching documentary comments and code lines*/
 
-#define MAX_LEN_INP_STR 500
-#define MAX_QTY_STR 50 * 1000
 #define QTY_OF_EXTENSION 3
-#define MAX_PATH_LEN 255
-#define MAX_COUNT_OF_FILES 30
 
 /// Count of read paths
 int counter = 0;

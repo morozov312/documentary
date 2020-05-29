@@ -2,13 +2,11 @@
 #include "advanced_handle.h"
 #include "comments_check.h"
 #include "comments_delete.h"
+#include "macro.h"
 #include "utilities.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#define MAX_LEN_INP_STR 500
-#define MAX_QTY_STR 50 * 1000
 
 /** if founded begin of multiline documentary comment -> start flag == true */
 int qty_structs = 0, start_flag = 0;

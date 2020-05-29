@@ -9,6 +9,7 @@
  * https://github.com/morozov312/documentary
  ****************************************/
 
+#include "macro.h"
 #include "processing.h"
 #include "utilities.h"
 #include <stdio.h>
@@ -16,10 +17,6 @@
 #include <string.h>
 #define MAX_COUNT_OF_ARGS 5
 #define MIN_COUNT_OF_ARGS 3
-/// Maximum path length
-#define MAX_PATH_LEN 255
-/// Maximum count of files
-#define MAX_COUNT_OF_FILES 30
 
 int main(int argc, char* argv[])
 {
