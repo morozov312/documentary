@@ -66,6 +66,19 @@ clean_html:
 run:
 	$(BIN_DIR)/documentary -inpdir ./src 
 
+install:
+	sudo mkdir /usr/share/documentary/styles
+	sudo mkdir /usr/share/documentary/docs
+	sudo cp ./bin/documentary /usr/bin/documentary
+	sudo cp -a ./styles/* /usr/share/documentary/styles
+	sudo cp -a ./docs/* /usr/share/documentary/docs
+
+
+uninstall:
+	sudo rm /usr/bin/documentary
+	sudo rm -r /usr/share/documentary/styles
+	sudo rm -r /usr/share/documentary/docs
+	
 check: 
 	$(BIN_DIR)/testing
 
