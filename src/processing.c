@@ -23,7 +23,7 @@ int Generate_html(comment* list, char* path, int qty_structs, char* dest_dir)
     char* name = Generate_filename(path, dest_dir);
     documentary = fopen(name, "w");
     if (documentary == NULL) {
-        printf("%s\n", "Error Create_struct_of_data html page!");
+        printf("%s\n", "Error create html page!");
         return 0;
     }
     /// header
@@ -191,8 +191,7 @@ int Create_document(char* path, char* dest_dir)
             = Generate_html(comments_array, path, qty_structs, dest_dir);
     if (creation_flag) {
         printf("%s%s\n",
-               "\x1b[32mSuccessfully Create_struct_of_datad documentation on "
-               "file -\x1b[0m",
+               "\x1b[32mSuccessfully created documentation on file - \x1b[0m",
                path);
     }
     //======================================

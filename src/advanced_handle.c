@@ -24,7 +24,8 @@ char* Generate_filename(char* path, char* dest_dir)
     if (str_time[len] == '\n') {
         str_time[len] = '\0';
     }
-    char* filename = (char*)calloc((strlen(path) + 30), sizeof(char));
+    int max_time_len = 50;
+    char* filename = (char*)calloc((strlen(path) + max_time_len), sizeof(char));
     sprintf(filename,
             "%s%s%s%s%s%s",
             dest_dir,
