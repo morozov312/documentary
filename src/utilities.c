@@ -83,48 +83,6 @@ int Search_files_recursive(char* path, char** paths, int* recursive_exit_flag)
     closedir(d);
     return 0;
 }
-/// This function returns input directory from command line arguments
-char* Get_inpdir(int qty, char* array_argv[])
-{
-    const char input_directory[] = "-inpdir";
-    const char output_directory[] = "-outdir";
-    for (int i = 1; i < qty; i++) {
-        if (strcmp(array_argv[i], input_directory) != 0
-            && strcmp(array_argv[i], output_directory) != 0) {
-            printf("%s%s\n", "Unknown option: ", array_argv[i]);
-            continue;
-        }
-        if (strcmp(array_argv[i], output_directory) == 0) {
-            i++;
-            continue;
-        }
-        if (strcmp(array_argv[i], input_directory) == 0) {
-            return array_argv[i + 1];
-        }
-    }
-    return "";
-}
-/// This function returns output directory from command line arguments
-char* Get_outdir(int qty, char* array_argv[])
-{
-    const char input_directory[] = "-inpdir";
-    const char output_directory[] = "-outdir";
-    for (int i = 1; i < qty; i++) {
-        if (strcmp(array_argv[i], input_directory) != 0
-            && strcmp(array_argv[i], output_directory) != 0) {
-            printf("%s%s\n", "Unknown option: ", array_argv[i]);
-            continue;
-        }
-        if (strcmp(array_argv[i], input_directory) == 0) {
-            i++;
-            continue;
-        }
-        if (strcmp(array_argv[i], output_directory) == 0) {
-            return array_argv[i + 1];
-        }
-    }
-    return "./docs";
-}
 /// This function returns array of data from file
 char** Get_data_from_document(char* paths)
 {

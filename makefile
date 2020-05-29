@@ -1,4 +1,4 @@
-.PHONY: clean all run check rebuild html_clean
+.PHONY: clean all run check rebuild html_clean install uninstall
 FLAGS := -std=c99 -D_BSD_SOURCE
 FLAG := -std=c11
 SRC_DIR := ./src
