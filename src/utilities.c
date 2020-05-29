@@ -161,6 +161,31 @@ char* Get_file_extension(const char* path)
     char* last_dot_ptr = strrchr(path, '.');
     return last_dot_ptr == NULL ? "" : last_dot_ptr + 1;
 }
+void Print_help()
+{
+    printf("%s\n%s\n",
+           "usage: documentary [--version] [--help]",
+           "\t  [-inpdir <path>] [-outdir <path>]");
+    printf("%s\n", "Available commands");
+    printf("\t%s\n", "-inpdir");
+    printf("\t%s\n", "-outdir");
+    printf("\t%s\n", "--help");
+    printf("\t%s\n", "--version");
+}
+int Check_argc(int argc)
+{
+    if (argc == 1) {
+        printf("%s\n%s\n",
+               "usage: documentary [--version] [--help]",
+               "\t  [-inpdir <path>] [-outdir <path>]");
+        return 0;
+    }
+    if (argc > 5 || argc == 4) {
+        printf("\x1b[31m Error! \x1b[0m Invalid number of arguments");
+        return 0;
+    }
+    return 1;
+}
 int Check_argv(int argc, char** array_argv, char** inpdir, char** outdir)
 {
     const char input_directory[] = "-inpdir";

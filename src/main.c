@@ -16,21 +16,22 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_COUNT_OF_ARGS 5
-#define MIN_COUNT_OF_ARGS 3
-
-int main(int argc, char* argv[])
+int main(int argc, char** argv)
 {
-    if (argc != MAX_COUNT_OF_ARGS && argc != MIN_COUNT_OF_ARGS) {
-        printf("\x1b[31m Error! \x1b[0m Invalid number of arguments");
+    char* start_dir;
+    char* dest_dir;
+    int argc_flag = Check_argc(argc);
+    if (!argc_flag) {
         return 0;
     }
-    char* start_dir = Get_inpdir(argc, argv);
+    int argv_flag = Check_argv(argc, argv, &start_dir, &dest_dir);
+    if (!argv_flag) {
+        return 0;
+    }
     if (strcmp(start_dir, "") == 0) {
         printf("\x1b[31m Error! \x1b[0m Wrong source directory\n");
         return 0;
     }
-    char* dest_dir = Get_outdir(argc, argv);
     char** paths_array = (char**)calloc(MAX_COUNT_OF_FILES, sizeof(char*));
     for (int i = 0; i < MAX_COUNT_OF_FILES; i++) {
         paths_array[i] = (char*)calloc(MAX_PATH_LEN, sizeof(char));
