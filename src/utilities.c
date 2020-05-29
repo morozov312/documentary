@@ -55,6 +55,7 @@ int Search_files_recursive(char* path, char** paths, int* recursive_exit_flag)
 {
     DIR* d = opendir(path);
     if (d == NULL) {
+        printf("\x1b[31m Error! \x1b[0m Wrong path\n");
         return 0;
     }
     struct dirent* dir;
@@ -169,21 +170,21 @@ int Check_argv(int argc, char** array_argv, char** inpdir, char** outdir)
             int check_out = strcmp(current_str, output_directory);
             int check_help = strcmp(current_str, help_flag);
             int check_version = strcmp(current_str, version_flag);
-            if (check_inp * check_out * check_help * check_version) {
+            if (check_inp && check_out && check_help && check_version) {
                 printf("\'%s\'%s \n",
                        array_argv[i],
-                       " is not a command. See \'--help\'");
+                       " Is not a command. See \'--help\'");
                 return 0;
             }
             if (!check_inp) {
                 if (!strcmp(next_str, help_flag)) {
-                    printf("%s\n", "path to source dir");
+                    printf("%s\n", "Path to source dir");
                     return 0;
                 } else {
                     if (array_argv[i + 1][0] != '.') {
                         printf("\'%s\'%s\n",
                                array_argv[i + 1],
-                               " is wrong path");
+                               " Is wrong path");
                         return 0;
                     }
                     *inpdir = array_argv[i + 1];
@@ -192,7 +193,9 @@ int Check_argv(int argc, char** array_argv, char** inpdir, char** outdir)
             }
             if (!check_out) {
                 if (!strcmp(next_str, help_flag)) {
-                    printf("%s\n", "path to output dir (default - )");
+                    printf("%s\n",
+                           "Path to output dir (default dir is your current "
+                           "dir)");
                     return 0;
                 } else {
                     *outdir = array_argv[i + 1];
